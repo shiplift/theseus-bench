@@ -1,0 +1,17 @@
+#!/bin/sh
+
+ml-build sml_filter.cm SMLFilter.main sml_filter_image
+ml-build sml_append.cm SMLAppend.main sml_append_image
+ml-build sml_map.cm SMLMap.main sml_map_image
+ml-build sml_reverse.cm SMLReverse.main sml_reverse_image
+
+echo <<END
+To execute:
+
+   sml @SMLload sml_????_image.*
+END 
+
+mlton sml_filter.mlb
+mlton sml_append.mlb
+mlton sml_map.mlb
+mlton sml_reverse.mlb
