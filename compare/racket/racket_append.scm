@@ -1,0 +1,28 @@
+(define-syntax time
+  (lambda (stx)
+    (syntax-case stx ()
+      [(_ expr1 expr ...)
+       (syntax/loc
+           stx
+         (let-values ([(v cpu user gc) (time-apply (lambda () expr1 expr ...) null)])
+           (printf "RESULT-cpu: ~a.0\nRESULT-total: ~a.0\nRESULT-gc: ~a.0\n"
+                   cpu user gc)
+           (apply values v)))])))
+(letrec 
+    ([E    'E]
+     [head car]
+     [tail cdr]
+     [racket-append (lambda (a b)
+                      (if (null? a) 
+                          b
+                          (cons (head a) (racket-append (tail a) b))))]
+     [make-list (lambda (n)
+                  (letrec ((aux (lambda (m acc)
+                                 (if (= 0 m)
+                                     acc
+                                     (aux (- m 1 )(cons E acc))))))
+                    (aux n '())))]
+     [l (make-list 10000000)]
+     [m (make-list 10000000)]
+     )
+  (time (racket-append l m)))
