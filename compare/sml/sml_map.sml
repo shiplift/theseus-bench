@@ -42,16 +42,19 @@ fun make_list num =
         aux [] num
     end;
 
+fun time_string t =
+    Real.toString ((Time.toReal t) * 1000.0);
+
 fun time (action, arg) = let
     (* val tot_timer = Timer.startRealTimer () *)
     val cpu_timer = Timer.startCPUTimer ()
     val res = action arg
     val cpu_times = Timer.checkCPUTimer cpu_timer
     (* val tot_times = Timer.checkRealTimer tot_timer *)
-    val _ = print ("RESULT-cpu: " ^ (Time.toString (Time.+ (#usr cpu_times, #sys cpu_times))) ^ "\n")
+    val _ = print ("RESULT-cpu: " ^ (time_string (Time.+ (#usr cpu_times, #sys cpu_times))) ^ "\n")
     (* Cheat here, the total thing seems bogus *)
-    val _ = print ("RESULT-total: " ^ (Time.toString (Time.+ (#usr cpu_times, #sys cpu_times))) ^ "\n")
-    (* val _ = print ("RESULT-total: " ^ (Time.toString tot_times) ^ "\n") *)
+    val _ = print ("RESULT-total: " ^ (time_string (Time.+ (#usr cpu_times, #sys cpu_times))) ^ "\n")
+    (* val _ = print ("RESULT-total: " ^ (time_string tot_times) ^ "\n") *)
 in
     res
 end
