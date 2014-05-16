@@ -45,6 +45,9 @@ flt ≔ λ.
 
 main$cont ≔ λ. 1. Box(fun, l) ↦ μ(filter, fun, l)
 
-l ≔ μ(make_list, 5000000)
+num ≔ μ(λ.
+        1. nil()      ↦ 5000000
+        2. cons(h, _) ↦ μ(⟪strtol⟫, h), arguments)
+l ≔ μ(make_list, num)
 # l ≔ μ(make_list, 20000000)
 μ(time, main$cont, Box(flt, l))

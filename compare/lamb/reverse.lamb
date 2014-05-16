@@ -39,5 +39,8 @@ lamb_reverse$aux ≔ λ.
 
 lamb_reverse ≔ λ. 1. l ↦ μ(lamb_reverse$aux, Nil(), l)
 
-l ≔ μ(make_list, 20000000)
+num ≔ μ(λ.
+        1. nil()      ↦ 20000000
+        2. cons(h, _) ↦ μ(⟪strtol⟫, h), arguments)
+l ≔ μ(make_list, num)
 μ(time, lamb_reverse, l)
