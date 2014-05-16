@@ -1,0 +1,10 @@
+#!/bin/sh
+
+FIL="$1.lamb"
+shift
+
+if [ ! -x lamb ]; then
+  exit 1
+fi
+LAMB=./lamb
+exec $LAMB -E -R -W $FIL "$@"
