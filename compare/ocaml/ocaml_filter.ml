@@ -66,11 +66,19 @@ let len lst =
 
 let flt = function
   | E -> true
-  | F -> false;;
+  | F -> false
+;;
+
+(**)
+
+let listnum a =
+  try
+    int_of_string (Array.get a 1)
+  with _ -> 5000000
 
 let _ =
-  (* let l = (make_list 20000000) in *)
-  let l = (make_list 5000000) in
+  let num = (listnum Sys.argv) in
+  let l = (make_list num) in
   let res = time ocaml_filter1 (Box (flt, l)) in
   let _ = (len res) in
   0

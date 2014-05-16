@@ -67,9 +67,15 @@ let time f x =
   in
   res
 
+let listnum a =
+  try
+    int_of_string (Array.get a 1)
+  with _ -> 10000000
+
 let _ =
-  let l = (make_list 10000000) in
-  let m = (make_list 10000000) in
+  let num = (listnum Sys.argv) in
+  let l = (make_list num) in
+  let m = (make_list num) in
   let _ = time ocaml_append1 (Box (l, m)) in
   0
 ;;

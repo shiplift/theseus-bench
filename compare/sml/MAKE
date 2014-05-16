@@ -10,9 +10,3 @@ ml-build sml_append.cm SMLAppend.main sml_append_image
 ml-build sml_map.cm SMLMap.main sml_map_image
 ml-build sml_reverse.cm SMLReverse.main sml_reverse_image
 
-cat <<EOS
-To execute:
-
-   sml @SMLload=sml_????_image.*
-EOS
-

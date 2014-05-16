@@ -50,9 +50,16 @@ let time f x =
                          ((tot_stop -. tot_start) *. 1000.0)
   in
   res
+;;
+
+let listnum a =
+  try
+    int_of_string (Array.get a 1)
+  with _ -> 20000000
 
 let _ =
-  let l = (make_list 20000000) in
+  let num = (listnum Sys.argv) in
+  let l = (make_list num) in
   let _ = time ocaml_reverse l in
   0
 ;;

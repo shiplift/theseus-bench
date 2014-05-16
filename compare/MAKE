@@ -1,0 +1,10 @@
+#!/bin/sh
+
+cd ocaml
+./MAKE
+cd ..
+
+cd sml
+./MAKE
+cd ..
+

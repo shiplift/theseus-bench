@@ -1,0 +1,7 @@
+#!/bin/sh
+
+
+IMG=`ls sml_$1_image.*`
+shift
+
+exec sml @SMLload=${IMG} "$@"
