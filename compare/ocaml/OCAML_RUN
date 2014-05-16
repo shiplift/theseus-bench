@@ -1,5 +1,9 @@
 #!/bin/sh
 
+if [ "`basename $PWD`" = "compare" ]; then
+    cd ocaml
+fi
+
 OS=`uname -s`
 if [ "$OS" = "Darwin" ]; then
   :
