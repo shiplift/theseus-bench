@@ -1,2 +1,2 @@
 open SMLFilter
-val _ = main ("", [])
+val _ = main ("mlton", CommandLine.arguments())

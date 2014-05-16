@@ -13,6 +13,6 @@ ml-build sml_reverse.cm SMLReverse.main sml_reverse_image
 cat <<EOS
 To execute:
 
-   sml @SMLload sml_????_image.*
+   sml @SMLload=sml_????_image.*
 EOS
 

@@ -1,2 +1,2 @@
 open SMLMap
-val _ = main ("", [])
+val _ = main ("mlton", CommandLine.arguments())
