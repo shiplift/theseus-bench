@@ -1,6 +1,13 @@
 #!/bin/sh
 
+ARGS=""
+while [ "${1:0:2}" = "-A" ]; do
+  ARG=`printf '%s' "${1:2}" | sed -e 's!,!\ !g'`
+  ARGS="$ARGS $ARG"
+  shift
+done
+
 FIL="./racket_$1.scm"
 shift
 
-exec racket -r $FIL "$@"
+exec racket $ARGS -r $FIL "$@"

@@ -1,5 +1,12 @@
 #!/bin/sh
 
+ARGS=""
+while [ "${1:0:2}" = "-A" ]; do
+  ARG=`printf '%s' "${1:2}" | sed -e 's!,!\ !g'`
+  ARGS="$ARGS $ARG"
+  shift
+done
+
 FIL="./racket_$1.scm"
 shift
 
@@ -7,4 +14,4 @@ if [ ! -h pycket ]; then
   exit 1
 fi
 PYCKET=pycket/../pycket-c
-exec $PYCKET $FIL "$@"
+exec $PYCKET $ARGS $FIL "$@"

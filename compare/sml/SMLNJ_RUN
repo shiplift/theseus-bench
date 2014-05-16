@@ -1,7 +1,13 @@
 #!/bin/sh
 
+ARGS=""
+while [ "${1:0:2}" = "-A" ]; do
+  ARG=`printf '%s' "${1:2}" | sed -e 's!,!\ !g'`
+  ARGS="$ARGS $ARG"
+  shift
+done
 
 IMG=`ls sml_$1_image.*`
 shift
 
-exec sml @SMLload=${IMG} "$@"
+exec sml $ARGS @SMLload=${IMG} "$@"

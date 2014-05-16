@@ -1,5 +1,12 @@
 #!/bin/sh
 
+ARGS="-E"
+while [ "${1:0:2}" = "-A" ]; do
+  ARG=`printf '%s' "${1:2}" | sed -e 's!,!\ !g'`
+  ARGS="$ARGS $ARG"
+  shift
+done
+
 FIL="$1.lamb"
 shift
 
@@ -7,4 +14,7 @@ if [ ! -x lamb ]; then
   exit 1
 fi
 LAMB=./lamb
-exec $LAMB -E -R -W $FIL "$@"
+
+
+
+exec $LAMB -R -W $ARGS $FIL "$@"
