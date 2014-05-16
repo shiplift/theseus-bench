@@ -3,6 +3,11 @@
 FILE=$1
 BASE=`echo "$FILE" | sed -e 's/\.ml$//'`
 
-exec ocamlopt.opt -o $BASE unix.cmxa $FILE  -ccopt -Wl,-stack_size,0x40000000,-stack_addr,0xf0000000
+OS=`uname -s`
+if [ "$OS" = "Darwin" ]; then
+  exec ocamlopt.opt -o $BASE unix.cmxa $FILE  -ccopt -Wl,-stack_size,0x40000000,-stack_addr,0xf0000000
+else
+  exec ocamlopt.opt -o $BASE unix.cmxa $FILE
+fi
 #exec ocamlopt.opt -o $BASE unix.cmxa $FILE  -ccopt -Wl,-stack_size,0x10000000,-stack_addr,0xc0000000
 

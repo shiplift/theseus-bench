@@ -1,0 +1,10 @@
+#!/bin/sh
+
+FIL="./racket_$1.scm"
+shift
+
+if [ ! -h pycket ]; then
+  exit 1
+fi
+PYCKET=pycket/../pycket-c
+exec $PYCKET $FIL "$@"

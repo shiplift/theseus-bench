@@ -1,0 +1,6 @@
+#!/bin/sh
+
+FIL="./racket_$1.scm"
+shift
+
+exec racket -r $FIL "$@"
