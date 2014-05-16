@@ -1,8 +1,8 @@
 #!/bin/sh
 
 ARGS="-E"
-while [ "${1:0:2}" = "-A" ]; do
-  ARGS="$ARGS ${1:2}"
+while [ "`expr \"x$1\" : \"x\(.\{2\}\)\"`" = "-A" ]; do
+  ARGS="$ARGS `expr \"x$1\" : \"x.\{2\}\(.*\)\"`"
   shift
 done
 
