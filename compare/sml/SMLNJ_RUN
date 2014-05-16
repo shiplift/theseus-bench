@@ -2,8 +2,7 @@
 
 ARGS=""
 while [ "${1:0:2}" = "-A" ]; do
-  ARG=`printf '%s' "${1:2}" | sed -e 's!,!\ !g'`
-  ARGS="$ARGS $ARG"
+  ARGS="$ARGS ${1:2}"
   shift
 done
 
