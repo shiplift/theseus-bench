@@ -13,4 +13,11 @@ fi
 FIL="./racket_$1.scm"
 shift
 
-exec racket $ARGS -r $FIL "$@"
+OS=`uname -s`
+if [ "$OS" = "Linux" ]; then
+  ulimit -s 1048576
+  export TIME="RESULT-mem: %M"
+  DOIT=/usr/bin/time
+fi
+
+exec $DOIT racket $ARGS -r $FIL "$@"

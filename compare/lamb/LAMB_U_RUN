@@ -18,6 +18,13 @@ if [ ! -x lamb ]; then
 fi
 LAMB=./lamb
 
+OS=`uname -s`
+if [ "$OS" = "Linux" ]; then
+  ulimit -s 1048576
+  export TIME="RESULT-mem: %M"
+  DOIT=/usr/bin/time
+fi
 
 
-exec $LAMB -R -W $ARGS $FIL "$@"
+
+exec $DOIT $LAMB -R -W $ARGS $FIL "$@"
