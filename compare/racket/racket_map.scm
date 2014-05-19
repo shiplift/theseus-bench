@@ -8,7 +8,7 @@
            (printf "RESULT-cpu: ~a.0\nRESULT-total: ~a.0\nRESULT-gc: ~a.0\n"
                    cpu user gc)
            (apply values v)))])))
-(letrec 
+(letrec
     ([E    'E]
      [F    'F]
      [head car]
@@ -25,6 +25,12 @@
                     (aux n '())))]
      [swap (lambda (x)
              (if (eq? x E) F E))]
-     [l (make-list 5000000)]
+     [listnum (lambda (l)
+                (let*
+                    ([pairish (pair? l)]
+                     [numberish (if pairish (string->number (car l)) pairish)])
+                  (if numberish numberish 5000000)))]
+     [num (listnum (vector->list (current-command-line-arguments)))]
+     [l (make-list num)]
      )
   (time (racket-map swap l)))

@@ -25,6 +25,12 @@
                     (aux n '())))]
      [flt (lambda (x)
              (eq? x E))]
-     [l (make-list 5000000)]
+     [listnum (lambda (l)
+                (let*
+                    ([pairish (pair? l)]
+                     [numberish (if pairish (string->number (car l)) pairish)])
+                  (if numberish numberish 5000000)))]
+     [num (listnum (vector->list (current-command-line-arguments)))]
+     [l (make-list num)]
      )
   (time (racket-filter flt l)))
