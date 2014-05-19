@@ -7,7 +7,7 @@ fi
 OS=`uname -s`
 if [ "$OS" = "Linux" ]; then
   ulimit -s 1048576
-  export TIME="RESULT-mem: %M"
+  export TIME="RESULT-mem: %M.0"
   DOIT=/usr/bin/time
 fi
 
