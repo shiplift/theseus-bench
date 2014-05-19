@@ -45,7 +45,7 @@ let time f x =
   let res = f x in
   let cpu_stop = Sys.time() in
   let tot_stop = Unix.gettimeofday () in
-  let () = Printf.printf "RESULT-cpu: %f\nRESULT-total: %f\n"
+  let () = Printf.printf "0:RESULT-cpu:ms: %f\n0:RESULT-total:ms: %f\n"
                          ((cpu_stop -. cpu_start) *. 1000.0)
                          ((tot_stop -. tot_start) *. 1000.0)
   in

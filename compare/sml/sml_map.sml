@@ -51,12 +51,12 @@ fun time (mlton, action, arg) = let
     val res = action arg
     val cpu_times = Timer.checkCPUTimer cpu_timer
     val tot_times = Timer.checkRealTimer tot_timer
-    val _ = print ("RESULT-cpu: " ^ (time_string (Time.+ (#usr cpu_times, #sys cpu_times))) ^ "\n")
+    val _ = print ("0:RESULT-cpu:ms: " ^ (time_string (Time.+ (#usr cpu_times, #sys cpu_times))) ^ "\n")
     val _ = if mlton then
-                print ("RESULT-total: " ^ (time_string tot_times) ^ "\n")
+                print ("0:RESULT-total:ms: " ^ (time_string tot_times) ^ "\n")
             else
                 (* Cheat here, the total thing seems bogus on SML/NJ *)
-                print ("RESULT-total: " ^ (time_string (Time.+ (#usr cpu_times, #sys cpu_times))) ^ "\n")
+                print ("0:RESULT-total:ms: " ^ (time_string (Time.+ (#usr cpu_times, #sys cpu_times))) ^ "\n")
 in
     res
 end
