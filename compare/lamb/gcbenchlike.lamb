@@ -1,0 +1,104 @@
+#!/usr/bin/env lamb
+
+currentmilliseconds ≔ ⟪currentmilliseconds⟫
+print_int ≔ ⟪print_int⟫
+- ≔ ⟪-⟫
++ ≔ ⟪+⟫
+/ ≔ ⟪/⟫
+* ≔ ⟪*⟫
+
+
+p ≔ ⟪print_result_string⟫
+clock ≔ ⟪clock⟫
+
+fromToByDo$cont0 ≔ λ.
+                   1. _,    _ , _ , _ , Result, 0 ↦ Result
+                   2. From, To, By, Do, Result, _ ↦ μ(fromToByDo$cont0,
+                                                      μ(⟪+⟫, From, By), To, By, Do,
+                                                      μ(Do, Result, From), μ(-, To, From))
+
+fromToByDo ≔ λ.
+             1. From, To, By, Do ↦ μ(fromToByDo$cont0,
+                                      From, To, By, Do,
+                                      nil(), μ(-, To, From))
+
+fromToDo ≔ λ.
+           1. From, To, Do ↦ μ(fromToByDo, From, To, 1, Do)
+
+
+time$cont4 ≔ λ.
+             1. res, _           ↦ res
+time$cont3 ≔ λ.
+             1. res, diff        ↦ μ(time$cont4, res, μ(p, diff))
+time$cont2 ≔ λ.
+             1. res, start, stop ↦ μ(time$cont3,
+                                     res,
+                                     μ(⟪minus_float⟫, stop, start))
+time$cont1 ≔ λ.
+             1. res, start       ↦ μ(time$cont2, res, start, μ(clock))
+time$cont0 ≔ λ.
+             1. fun, arg, start  ↦ μ(time$cont1, μ(fun, arg), start)
+time       ≔ λ.
+             1. fun, arg         ↦ μ(time$cont0, fun, arg, μ(clock))
+
+
+###############################################################################
+
+kStretchTreeDepth ≔ 18
+kMinTreeDepth ≔ 4
+kMaxTreeDepth ≔ 16
+
+MakeTree ≔ λ.
+           1. 0      ↦ Node(nil(), nil())
+           2. iDepth ↦ Node(μ(MakeTree, μ(-, iDepth, 1)),
+                            μ(MakeTree, μ(-, iDepth, 1)))
+
+<< ≔ λ.
+     1. X, 0 ↦ X
+     2. X, Y ↦ μ(<<, μ(*, X, 2), μ(-, Y, 1))
+
+TreeSize ≔ λ. 1. i ↦ μ(-, μ(<<, 1, μ(+, i, 1)), 1)
+
+NumIters ≔ λ. 1. i ↦ μ(/,
+                        μ(*,
+                          2,
+                          μ(TreeSize, kStretchTreeDepth)),
+                        μ(TreeSize, i))
+
+
+TimeConstruction$cont2 ≔ λ.
+                         1. 1,    iNumIters, depth, _ ↦ nil()
+                         2. Diff, iNumIters, depth, _ ↦ μ(TimeConstruction$cont2,
+                                                          μ(-, iNumIters, Diff), μ(-, iNumIters, 1), depth,
+                                                          μ(MakeTree, depth))
+
+# TimeConstruction$cont1 ≔ λ.
+#                          1. iNumIters, depth, _, _ ↦ μ(TimeConstruction$cont2, iNumIters, iNumIters, depth, nil())
+# 
+# TimeConstruction$cont0 ≔ λ.
+#                          1. iNumIters, depth ↦ μ(TimeConstruction$cont1,
+#                                                  iNumIters, depth,
+#                                                  μ(print_int, iNumIters),
+#                                                  μ(print_int, depth))
+
+TimeConstruction$cont0 ≔ λ.
+                         1. iNumIters, depth ↦ μ(TimeConstruction$cont2, iNumIters, iNumIters, depth, nil())
+
+TimeConstruction ≔ λ.
+                   1. depth ↦ μ(TimeConstruction$cont0,  μ(NumIters, depth), depth)
+
+mTimeConstruction ≔ λ.
+                    1. _, depth ↦ μ(TimeConstruction, depth)
+
+tree$cont0 ≔ λ.
+             1. depth, _ ↦ μ(fromToByDo, kMinTreeDepth, depth, 2, mTimeConstruction)
+
+tree ≔ λ.
+       1. stretch, depth ↦ μ(tree$cont0, depth, μ(MakeTree, stretch))
+
+tree$1 ≔ λ.
+         1. num ↦  μ(tree, μ(+, kStretchTreeDepth, num), μ(+, kMaxTreeDepth, num))
+tree$0 ≔ λ.
+         1. num ↦  μ(tree$1, μ(-, num, 1))
+
+μ(time, tree$0, 1)

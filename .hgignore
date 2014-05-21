@@ -6,6 +6,7 @@ syntax: glob
 *.cmi
 *.cmx
 *.x86-darwin
+*.json
 
 syntax: regexp
 \.cm/

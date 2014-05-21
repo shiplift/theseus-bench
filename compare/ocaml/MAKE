@@ -4,3 +4,4 @@
 ./OCAML ocaml_filter.ml
 ./OCAML ocaml_map.ml
 ./OCAML ocaml_reverse.ml
+./OCAML ocaml_tree.ml

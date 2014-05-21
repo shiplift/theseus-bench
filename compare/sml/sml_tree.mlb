@@ -1,0 +1,6 @@
+local
+    $(SML_LIB)/basis/basis.mlb
+    sml_tree.sml
+in
+    sml_tree_mlton.sml
+end
