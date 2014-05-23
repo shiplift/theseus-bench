@@ -8,6 +8,25 @@ print_int ≔ ⟪print_int⟫
 % ≔ ⟪mod_int⟫
 * ≔ ⟪mult_int⟫
 
+
+
+p ≔ ⟪print_result_string⟫
+clock ≔ ⟪clock⟫
+time$cont4 ≔ λ.
+             1. res, _           ↦ res
+time$cont3 ≔ λ.
+             1. res, diff        ↦ μ(time$cont4, res, μ(p, diff))
+time$cont2 ≔ λ.
+             1. res, start, stop ↦ μ(time$cont3,
+                                     res,
+                                     μ(⟪minus_float⟫, stop, start))
+time$cont1 ≔ λ.
+             1. res, start       ↦ μ(time$cont2, res, start, μ(clock))
+time$cont0 ≔ λ.
+             1. fun, arg, start  ↦ μ(time$cont1, μ(fun, arg), start)
+time       ≔ λ.
+             1. fun, arg         ↦ μ(time$cont0, fun, arg, μ(clock))
+
 # Eon(): end of a number
 
 arpn-as-int ≔ λ. 
@@ -50,6 +69,18 @@ int-as-arbitrary-precision-number ≔ λ. 1. X ↦ μ(int-as-arpn, μ(/, X, 2), 
       
 +. ≔ λ. 1. X, Y ↦ μ(+.0, X, Y, Zero(Eon()))
 
+p_$0 ≔ λ. 1. X, _ ↦ X
+p_ ≔ λ. 1. X ↦ μ(p_$0, X, μ(print_int, μ(arbitrary-precision-number-as-int, X)))
+p__ ≔ λ. 1. X ↦ μ(p_$0, X, μ(print_int, X))
+
+*. ≔ λ.
+     2. Zero(Eon()), X ↦ Zero(Eon())
+     2. X, Zero(Eon()) ↦ Zero(Eon())
+     2.  One(Eon()), X ↦ X
+     2. X,  One(Eon()) ↦ X
+     3. X,      One(Y) ↦ μ(+., X, μ(*., Zero(X), Y))
+     3. X,     Zero(Y) ↦ μ(*., Zero(X), Y)
+
 #μ(int-as-arbitrary-precision-number, 2)
 # μ(print_int,
 #   μ(arbitrary-precision-number-as-int,
@@ -82,6 +113,23 @@ int-as-arbitrary-precision-number ≔ λ. 1. X ↦ μ(int-as-arpn, μ(/, X, 2), 
 #  μ(+.,
 #    μ(int-as-arbitrary-precision-number, 32793),
 #    μ(int-as-arbitrary-precision-number, 393242)))
-μ(+.,
-  One(Zero(Zero(One(One(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(One(Eon())))))))))))))))),
-  Zero(One(Zero(One(One(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(One(One(Eon()))))))))))))))))))))
+# μ(+.,
+#   One(Zero(Zero(One(One(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(One(Eon())))))))))))))))),
+#   Zero(One(Zero(One(One(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(One(One(Eon()))))))))))))))))))))
+
+main ≔ λ. 1. Box(a, b) ↦ μ(*., a, b)
+
+widen$0 ≔ λ.
+          1. m, 0, _ ↦ m
+          2. m, n, 1 ↦ μ(widen$0, One(m), μ(-, n, 1), 0)
+          3. m, n, 0 ↦ μ(widen$0, Zero(m), μ(-, n, 1), 1)
+
+widen ≔ λ. 1. X, Y ↦ μ(widen$0, X, Y, 0)
+
+
+# 200000000000
+num ≔ μ(λ.
+        1. nil()      ↦ 400
+        2. cons(h, _) ↦  μ(/, μ(⟪strtol⟫, h), 40000), arguments)
+μ(time, main, Box(μ(widen, μ(int-as-arbitrary-precision-number, 47), num),
+                  μ(widen, μ(int-as-arbitrary-precision-number, 53), μ(+, num, 17))))
