@@ -12,7 +12,7 @@ tail ≔ λ. 1. Cons(A, B) ↦ B
 make_list$aux ≔ λ.
                 1. acc, 0 ↦ acc
                 2. acc, n ↦ μ(make_list$aux,
-                              μ(cons, E(), acc),
+                              Cons(1, acc),
                               μ(⟪minus_int⟫, n, 1))
 make_list ≔ λ. 1. n ↦ μ(make_list$aux, Nil(), n)
 
