@@ -32,9 +32,9 @@ time       ≔ λ.
 kMinTreeDepth ≔ 3
 
 MakeTree ≔ λ.
-           1. 0      ↦ Leaf(1)
+           1. 0      ↦ Leaf(E())
            2. iDepth ↦ Node(μ(MakeTree, μ(-, iDepth, 1)),
-                            1,
+                            E(),
                             μ(MakeTree, μ(-, iDepth, 1)))
 
 #debug
@@ -67,7 +67,7 @@ loop_depths$0 ≔ λ.
 loop_depths ≔ λ. 1. d, max_depth ↦ μ(loop_depths$0, d, max_depth, nil(), nil(), nil())
 
 check$0 ≔ λ.
-          1. Leaf(X),       nil() ↦ 1
+          1. Leaf(X),       nil() ↦ E()
           2. Node(l, X, r), nil() ↦ μ(check$0, μ(check$0, l, nil()), r)
           3. _,             r     ↦ μ(check$0, r, nil())
 check ≔ λ. 1. X ↦ μ(check$0, X, nil())
