@@ -5999,7 +5999,6 @@
 [2014-06-03T04:11:15]	8532.533000	ms	cpu	map	Lamb	MicroBenches		0	1	18000000	
 [2014-06-03T04:11:15]	8532.533000	ms	total	map	Lamb	MicroBenches		0	1	18000000	
 [2014-06-03T04:11:15]	4098384.000000	kbyte	mem	map	Lamb	MicroBenches		0	1	18000000	
-#!/usr/local/bin/rebench -d -v rebench.conf
 [2014-05-30T23:08:41]	1608.101000	ms	cpu	append	OCaml	MicroBenches		0	1	4000000	
 [2014-05-30T23:08:41]	1607.641935	ms	total	append	OCaml	MicroBenches		0	1	4000000	
 [2014-05-30T23:08:41]	1414864.000000	kbyte	mem	append	OCaml	MicroBenches		0	1	4000000	
