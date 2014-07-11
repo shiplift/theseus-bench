@@ -36,7 +36,19 @@ arpn-as-int ≔ λ.
 
 arbitrary-precision-number-as-int ≔ λ. 1. X ↦ μ(arpn-as-int, X, 0, 1)
 
+arpn-as-bint ≔ λ. 
+              1. Eon(),   Result, _    ↦ Result
+              2. One(X),  Result, Rank ↦ μ(arpn-as-bint, X, μ(⟪plus_bignumber⟫, Result, Rank), μ(⟪mult_bignumber⟫, μ(⟪int_to_bignumber⟫, 2), Rank))
+              3. Zero(X), Result, Rank ↦ μ(arpn-as-bint, X, Result, μ(⟪mult_bignumber⟫, μ(⟪int_to_bignumber⟫, 2), Rank))
 
+arbitrary-precision-number-as-bint ≔ λ. 1. X ↦ μ(arpn-as-bint, X,
+                                                  μ(⟪int_to_bignumber⟫, 0),
+                                                  μ(⟪int_to_bignumber⟫, 1))
+
+#
+# Trace ME
+#
+#
 int-as-arpn ≔ λ. 
               1. 0,      1 ↦ One(Eon())
               2. 0,      0 ↦ Zero(Eon())
@@ -46,7 +58,7 @@ int-as-arbitrary-precision-number ≔ λ. 1. X ↦ μ(int-as-arpn, μ(/, X, 2), 
 
 +.$0 ≔ λ.
        0. Eon(),    Eon(),  X ↦ X
-       
+
        1. Eon(),   Zero(Y), Zero(_) ↦ Zero(μ(+.$0, Eon(), Y, Zero(Eon())))
        2. Zero(X),  Eon(),  Zero(_) ↦ Zero(μ(+.$0, X, Eon(), Zero(Eon())))
        3. Eon(),   Zero(Y),  One(_) ↦  One(μ(+.$0, Eon(), Y, Zero(Eon())))
@@ -74,12 +86,12 @@ p_ ≔ λ. 1. X ↦ μ(p_$0, X, μ(print_int, μ(arbitrary-precision-number-as-i
 p__ ≔ λ. 1. X ↦ μ(p_$0, X, μ(print_int, X))
 
 *. ≔ λ.
-     2. Zero(Eon()), X ↦ Zero(Eon())
+     1. Zero(Eon()), X ↦ Zero(Eon())
      2. X, Zero(Eon()) ↦ Zero(Eon())
-     2.  One(Eon()), X ↦ X
-     2. X,  One(Eon()) ↦ X
-     3. X,      One(Y) ↦ μ(+., X, μ(*., Zero(X), Y))
-     3. X,     Zero(Y) ↦ μ(*., Zero(X), Y)
+     3.  One(Eon()), X ↦ X
+     4. X,  One(Eon()) ↦ X
+     5. X,      One(Y) ↦ μ(+., X, μ(*., Zero(X), Y))
+     6. X,     Zero(Y) ↦ μ(*., Zero(X), Y)
 
 #μ(int-as-arbitrary-precision-number, 2)
 # μ(print_int,
@@ -131,5 +143,7 @@ widen ≔ λ. 1. X, Y ↦ μ(widen$0, X, Y, 0)
 num ≔ μ(λ.
         1. nil()      ↦ 400
         2. cons(h, _) ↦  μ(/, μ(⟪strtol⟫, h), 40000), arguments)
-μ(time, main, Box(μ(widen, μ(int-as-arbitrary-precision-number, 47), num),
-                  μ(widen, μ(int-as-arbitrary-precision-number, 53), μ(+, num, 17))))
+μ(⟪print_bignumber⟫,
+  μ(arbitrary-precision-number-as-bint,
+    μ(time, main, Box(μ(widen, μ(int-as-arbitrary-precision-number, 47), num),
+                      μ(widen, μ(int-as-arbitrary-precision-number, 53), μ(+, num, 17))))))
