@@ -1,0 +1,6 @@
+local
+    $(SML_LIB)/basis/basis.mlb
+    expr.sml
+in
+    expr_mlton.sml
+end
