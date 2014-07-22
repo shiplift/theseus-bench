@@ -1,0 +1,141 @@
+#!/usr/bin/env lamb
+
+print_int ≔ ⟪print_int⟫
+print ≔ ⟪print_string⟫
++ ≔ ⟪+⟫
+* ≔ ⟪*⟫
+
+# option:
+# Some of *
+# None
+#nn
+# expr:
+# NUM of int
+# Expr of expr
+# Num of expr
+# Add of expr * expr option
+# Mul of expr * expr option,,
+
+# time$cont4 ≔ λ.
+#              1. res, _           ↦ res
+# time$cont3 ≔ λ.
+#              1. res, diff        ↦ μ(time$cont4, res, μ(p, diff))
+# time$cont2 ≔ λ.
+#              1. res, start, stop ↦ μ(time$cont3,
+#                                      res,
+#                                      μ(⟪minus_float⟫, stop, start))
+# time$cont1 ≔ λ.
+#              1. res, start       ↦ μ(time$cont2, res, start, μ(clock))
+# time$cont0 ≔ λ.
+#              1. fun, arg, start  ↦ μ(time$cont1, μ(fun, arg), start)
+# time       ≔ λ.
+#              1. fun, arg         ↦ μ(time$cont0, fun, arg, μ(clock))
+
+append ≔ λ.
+         1. nil(),      B ↦ B
+         2. cons(h, t), B ↦ cons(h, μ(append, t, B))
+
+filter$0 ≔ λ.
+           1. _,    nil(),     _ ↦ nil()
+           2. pred, cons(h,t), 1 ↦ cons(h, μ(filter$0, pred, t, nil()))
+           3. pred, cons(h,t), 0 ↦ μ(filter$0, pred, t, nil())
+           4. pred, cons(h,t), _ ↦ μ(filter$0, pred, cons(h, t), μ(pred, h))
+filter ≔ λ. 1. pred, lst ↦ μ(filter$0, pred, lst, nil())
+
+###############################################################################
+# Tuple: T(a,b)
+
+expr       ≔ Λ.
+
+number$0   ≔ λ.
+             1. cons(“0”, r), X    ↦ μ(number$0, r, μ(+, μ(*, X, 10), 0))
+             2. cons(“1”, r), X    ↦ μ(number$0, r, μ(+, μ(*, X, 10), 1))
+             3. cons(“2”, r), X    ↦ μ(number$0, r, μ(+, μ(*, X, 10), 2))
+             4. cons(“3”, r), X    ↦ μ(number$0, r, μ(+, μ(*, X, 10), 3))
+             5. cons(“4”, r), X    ↦ μ(number$0, r, μ(+, μ(*, X, 10), 4))
+             6. cons(“5”, r), X    ↦ μ(number$0, r, μ(+, μ(*, X, 10), 5))
+             7. cons(“6”, r), X    ↦ μ(number$0, r, μ(+, μ(*, X, 10), 6))
+             8. cons(“7”, r), X    ↦ μ(number$0, r, μ(+, μ(*, X, 10), 7))
+             9. cons(“8”, r), X    ↦ μ(number$0, r, μ(+, μ(*, X, 10), 8))
+            10. cons(“9”, r), X    ↦ μ(number$0, r, μ(+, μ(*, X, 10), 9))
+            11.            r, X    ↦ T(NUM(X), r)
+number     ≔ λ. 1. r               ↦ μ(number$0, r, 0)
+
+num_expr$1 ≔ λ. 
+             1. T(x, cons(“)”, r)) ↦ T(Num(x), r)
+             2. _                  ↦ nil()
+num_expr$0 ≔ λ. 1. T(x, r)         ↦ T(Num(x), r)
+num_expr   ≔ λ. 
+             0. cons(“(”, r)       ↦ μ(num_expr$1, μ(expr, r))
+             1. cons(“0”, r)       ↦ μ(num_expr$0, μ(number, cons(“0”, r)))
+             2. cons(“1”, r)       ↦ μ(num_expr$0, μ(number, cons(“1”, r)))
+             3. cons(“2”, r)       ↦ μ(num_expr$0, μ(number, cons(“2”, r)))
+             4. cons(“3”, r)       ↦ μ(num_expr$0, μ(number, cons(“3”, r)))
+             5. cons(“4”, r)       ↦ μ(num_expr$0, μ(number, cons(“4”, r)))
+             6. cons(“5”, r)       ↦ μ(num_expr$0, μ(number, cons(“5”, r)))
+             7. cons(“6”, r)       ↦ μ(num_expr$0, μ(number, cons(“6”, r)))
+             8. cons(“7”, r)       ↦ μ(num_expr$0, μ(number, cons(“7”, r)))
+             9. cons(“8”, r)       ↦ μ(num_expr$0, μ(number, cons(“8”, r)))
+            10. cons(“9”, r)       ↦ μ(num_expr$0, μ(number, cons(“9”, r)))
+            11. _                  ↦ nil()
+
+add_expr$1 ≔ λ. 1. x, T(y, r)      ↦ T(Add(x, Some(y)), r)
+add_expr$0 ≔ λ.
+             1. T(x, cons(“+”, r)) ↦ μ(add_expr$1, x, μ(num_expr, r))
+             2. T(x, r)            ↦ T(Add(x, None()), r)
+add_expr   ≔ λ. 1. t               ↦ μ(add_expr$0, μ(num_expr, t))
+
+mul_expr$1 ≔ λ. 1. x, T(y, r)      ↦ T(Mul(x, Some(y)), r)
+mul_expr$0 ≔ λ.
+             1. T(x, cons(“*”, r)) ↦ μ(mul_expr$1, x, μ(add_expr, r))
+             2. T(x, r)            ↦ T(Mul(x, None()), r)             
+mul_expr   ≔ λ. 1. t               ↦ μ(mul_expr$0, μ(add_expr, t))
+
+expr$0     ≔ λ. 1. T(x, r)         ↦ T(Expr(x), r)
+expr       ≔ λ. 1. t               ↦ μ(expr$0, μ(mul_expr, t))
+
+tree_s ≔ λ.
+         1. NUM(x)          ↦ cons(“NUM(” , cons(μ(⟪ltostr⟫, x), cons(“)”, nil())))
+         1. Num(x)          ↦ cons(“Num(” , μ(append, μ(tree_s, x), cons(“)”, nil())))
+         1. Expr(x)         ↦ cons(“Expr(”, μ(append, μ(tree_s, x), cons(“)”, nil())))
+         1. Add(x, None())  ↦ cons(“Add(” , μ(append, μ(tree_s, x), cons(“)”, nil())))
+         1. Add(x, Some(y)) ↦ cons(“Add(” , μ(append, μ(tree_s, x), cons(“, ”, μ(append, μ(tree_s, y), cons(“)”, nil())))))
+         1. Mul(x, None())  ↦ cons(“Mul(” , μ(append, μ(tree_s, x), cons(“)”, nil())))
+         1. Mul(x, Some(y)) ↦ cons(“Mul(” , μ(append, μ(tree_s, x), cons(“, ”, μ(append, μ(tree_s, y), cons(“)”, nil())))))
+         1. X               ↦ X
+
+
+#print_tree ≔ λ. 1. tree ↦ μ(λ. 1. X, _ ↦ X, tree, μ(print, μ(⟪implode⟫, μ(tree_s, tree))))
+print_tree ≔ λ. 1. tree ↦ tree
+
+
+
+evaluate ≔ λ. 
+           1. NUM(x)          ↦ x
+           1. Expr(x)         ↦ μ(evaluate, x)
+           1. Num(x)          ↦ μ(evaluate, x)
+           1. Add(x, None())  ↦ μ(evaluate, x)
+           1. Add(x, Some(y)) ↦ μ(+, μ(evaluate, x), μ(evaluate, y))
+           1. Mul(x, None())  ↦ μ(evaluate, x)
+           1. Mul(x, Some(y)) ↦ μ(*, μ(evaluate, x), μ(evaluate, y))
+
+
+transform ≔ λ. 1. X ↦ X
+
+parse$0    ≔ λ. 1. T(x, nil())     ↦ x
+parse      ≔ λ. 1. t               ↦ μ(parse$0, μ(expr, t))
+
+flt ≔ λ.
+      1. “ ” ↦ 0
+      2. “
+”            ↦ 0
+      3. “	”  ↦ 0
+      4. _   ↦ 1
+
+# inp ≔ “11 + (1+(1 * (1+1)))”
+# μ(print_int, μ(evaluate, μ(transform, μ(print_tree, μ(parse, μ(filter, flt, μ(⟪explode⟫, inp)))))))
+
+μ(print_int, μ(evaluate, μ(transform, μ(print_tree, μ(parse, μ(filter, flt, μ(⟪explode⟫, μ(⟪inputstring⟫))))))))
+
+
+

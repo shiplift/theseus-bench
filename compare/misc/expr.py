@@ -4,6 +4,7 @@
 import sys
 import operator
 
+sys.setrecursionlimit(1000 * sys.getrecursionlimit())
 
 class ParseError(Exception):
     pass
@@ -18,7 +19,7 @@ def accept(tok, toks):
     return len(toks) and tok == toks[0]
 
 class Node(object):
-    def __str__(self):
+    def __repr__(self):
         return "%s" % self.__class__.__name__
     def evaluate(self):
         raise NotImplementedError("Abstract Base Class")
@@ -30,12 +31,18 @@ class Expr(Node):
         self.left = l
         self.right = r
 
-    def __str__(self):
-        s = super(Expr, self).__str__()
+    def __repr__(self):
+        s = super(Expr, self).__repr__()
         if self.right is None:
-            return s + "(%s)" % self.left
+            return s + "(%r)" % self.left
         else:
-            return s + "(%s, %s)" % (self.left, self.right)
+            return s + "(%r, %r)" % (self.left, self.right)
+
+    def __str__(self):
+        if self.right is None:
+            return "(%s)" % self.left
+        else:
+            return "(%s %s %s)" % (self.left, self.op[0], self.right)
 
     def evaluate(self):
         if self.right is None:
@@ -77,9 +84,11 @@ class Num(Expr):
         return cls(e), lstrip(rest)
 
 class NUM(Node):
-    def __str__(self):
-        s = super(NUM, self).__str__()
+    def __repr__(self):
+        s = super(NUM, self).__repr__()
         return s + "(%i)" % self.value
+    def __str__(self):
+        return "%i" % self.value
 
     def __init__(self, val):
         self.value = val
@@ -97,11 +106,13 @@ def lstrip(toks):
     return toks
 
 def evaluate(ast):
-    print "ast>>", ast
+    # print "ast>>", ast
+    # print "ast>>", repr(ast)
     return ast.evaluate()
 
 def transform(st):
-    print "st>>", st
+    # print "st>>", st
+    # print "ast>>", repr(st)
     return st
 
 def parse(string):
@@ -110,7 +121,37 @@ def parse(string):
         raise ParseError
     return expr
 
+from random import random, randint, choice
+
+decay = 1.05
+def randomExpression(prob):
+    p = random()
+    if p > prob:
+        return NUM(randint(1, 9))
+    elif randint(0, 1) == 0:
+        return Expr(randomExpression(prob / decay))
+    else:
+        left = randomExpression(prob / decay)
+        op = choice([Mul, Add])
+        right = randomExpression(prob / decay)
+        return op(left, right)
+
+    
+def generate_main(argv):
+    size = int(argv[1]) if len(argv) > 1 else 100
+    
+    r = transform(randomExpression(1))
+    while len(str(r)) < size:
+        r = transform(Add(r, randomExpression(1)))
+    
+    print r
+    return 0
+
 def main(argv):
+    if len(argv) > 1 and argv[1] == "--generate":
+        return generate_main(argv[1:])
+        
+    
     if len(argv) > 1:
         with open(argv[1]) as f:
             inp = f.read()

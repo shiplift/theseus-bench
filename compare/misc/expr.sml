@@ -124,9 +124,9 @@ fun main (prog_name, args) =
                 explode (input_from_args args))
         (* val _ = print ((implode char_list) ^ "\n") *)
         val st = parse char_list
-        val _ = (print_tree st; print "\n")
+        (*val _ = (print_tree st; print "\n")*)
         val ast = transform st
-        val _ = (print_tree ast; print "\n")
+        (*val _ = (print_tree ast; print "\n")*)
         val value = evaluate ast
         val _ = (print ((Int.toString value) ^ "\n"))
     in

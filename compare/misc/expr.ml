@@ -97,9 +97,9 @@ let _ =
     in
     let char_list = List.filter relevant_char chars in
     let st = parse char_list in
-    let () = print_tree st; Printf.printf "\n" in
+    (* let () = print_tree st; Printf.printf "\n" in *)
     let ast = transform st in
-    let () = print_tree ast; Printf.printf "\n" in
+    (* let () = print_tree ast; Printf.printf "\n" in *)
     let value = evaluate ast in
     let () = Printf.printf "%i\n" value in
     0
