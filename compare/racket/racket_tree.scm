@@ -16,20 +16,8 @@
                    cpu user gc)
            (apply values v)))])))
 
-(define (node left val right)
-  (let ((v (make-vector 3 #f)))
-        (vector-set! v 0 left)
-        (vector-set! v 1 val)
-        (vector-set! v 2 right)
-        v))
-(define (node-left n) (vector-ref n 0))
-(define (node-val n) (vector-ref n 1))
-(define (node-right n) (vector-ref n 2))
-
-;; Instead of (define-struct leaf (val)):
-(define (leaf val) (node #f val #f))
-(define (leaf? l) (not (node-left l)))
-(define (leaf-val l) (node-val l))
+(struct node (left val right))
+(struct leaf (val))
 
 (define (make item d)
   (if (= d 0)
