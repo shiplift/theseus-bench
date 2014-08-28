@@ -16,20 +16,20 @@ print ≔ ⟪print_string⟫
 # Add of expr * expr option
 # Mul of expr * expr option,,
 
-# time$cont4 ≔ λ.
-#              1. res, _           ↦ res
-# time$cont3 ≔ λ.
-#              1. res, diff        ↦ μ(time$cont4, res, μ(p, diff))
-# time$cont2 ≔ λ.
-#              1. res, start, stop ↦ μ(time$cont3,
-#                                      res,
-#                                      μ(⟪minus_float⟫, stop, start))
-# time$cont1 ≔ λ.
-#              1. res, start       ↦ μ(time$cont2, res, start, μ(clock))
-# time$cont0 ≔ λ.
-#              1. fun, arg, start  ↦ μ(time$cont1, μ(fun, arg), start)
-# time       ≔ λ.
-#              1. fun, arg         ↦ μ(time$cont0, fun, arg, μ(clock))
+time$cont4 ≔ λ.
+             1. res, _           ↦ res
+time$cont3 ≔ λ.
+             1. res, diff        ↦ μ(time$cont4, res, μ(⟪print_result_string⟫, diff))
+time$cont2 ≔ λ.
+             1. res, start, stop ↦ μ(time$cont3,
+                                     res,
+                                     μ(⟪minus_float⟫, stop, start))
+time$cont1 ≔ λ.
+             1. res, start       ↦ μ(time$cont2, res, start, μ(⟪clock⟫))
+time$cont0 ≔ λ.
+             1. fun, arg, start  ↦ μ(time$cont1, μ(fun, arg), start)
+time       ≔ λ.
+             1. fun, arg         ↦ μ(time$cont0, fun, arg, μ(⟪clock⟫))
 
 append ≔ λ.
          1. nil(),      B ↦ B
@@ -102,25 +102,34 @@ tree_s ≔ λ.
          1. Add(x, Some(y)) ↦ cons(“Add(” , μ(append, μ(tree_s, x), cons(“, ”, μ(append, μ(tree_s, y), cons(“)”, nil())))))
          1. Mul(x, None())  ↦ cons(“Mul(” , μ(append, μ(tree_s, x), cons(“)”, nil())))
          1. Mul(x, Some(y)) ↦ cons(“Mul(” , μ(append, μ(tree_s, x), cons(“, ”, μ(append, μ(tree_s, y), cons(“)”, nil())))))
-         1. X               ↦ X
 
+tree_cs ≔ λ.
+          1. Mul(x, y)       ↦ cons(“(” , μ(append, μ(tree_cs, x), cons(“ * ”, μ(append, μ(tree_cs, y), cons(“)”, nil())))))
+          1. Add(x, y)       ↦ cons(“(” , μ(append, μ(tree_cs, x), cons(“ + ”, μ(append, μ(tree_cs, y), cons(“)”, nil())))))
+          1. x               ↦ cons(μ(⟪ltostr⟫, x), nil())
 
-#print_tree ≔ λ. 1. tree ↦ μ(λ. 1. X, _ ↦ X, tree, μ(print, μ(⟪implode⟫, μ(tree_s, tree))))
-print_tree ≔ λ. 1. tree ↦ tree
+print_tree ≔ λ. 1. tree ↦ μ(λ. 1. X, _ ↦ X, tree, μ(print, μ(⟪implode⟫, μ(tree_s, tree))))
+print_ctree ≔ λ. 1. tree ↦ μ(λ. 1. X, _ ↦ X, tree, μ(print, μ(⟪implode⟫, μ(tree_cs, tree))))
+#print_tree ≔ λ. 1. tree ↦ tree
 
 
 
 evaluate ≔ λ. 
-           1. NUM(x)          ↦ x
-           1. Expr(x)         ↦ μ(evaluate, x)
-           1. Num(x)          ↦ μ(evaluate, x)
-           1. Add(x, None())  ↦ μ(evaluate, x)
-           1. Add(x, Some(y)) ↦ μ(+, μ(evaluate, x), μ(evaluate, y))
-           1. Mul(x, None())  ↦ μ(evaluate, x)
-           1. Mul(x, Some(y)) ↦ μ(*, μ(evaluate, x), μ(evaluate, y))
+           1. Add(x, y) ↦ μ(+, μ(evaluate, x), μ(evaluate, y))
+           1. Mul(x, y) ↦ μ(*, μ(evaluate, x), μ(evaluate, y))
+           1. x         ↦ x
 
 
-transform ≔ λ. 1. X ↦ X
+transf ≔ λ. 
+         1. Num(NUM(x))     ↦ x
+         1. Num(Expr(x))    ↦ μ(transf, x)
+         1. Expr(x)         ↦ μ(transf, x)
+         1. Add(x, None())  ↦ μ(transf, x)
+         1. Add(x, Some(y)) ↦ Add(μ(transf, x), μ(transf, y))
+         1. Mul(x, None())  ↦ μ(transf, x)
+         1. Mul(x, Some(y)) ↦ Mul(μ(transf, x), μ(transf, y))
+
+transform ≔ λ. 1. X ↦ μ(time, transf, X)
 
 parse$0    ≔ λ. 1. T(x, nil())     ↦ x
 parse      ≔ λ. 1. t               ↦ μ(parse$0, μ(expr, t))
@@ -134,8 +143,11 @@ flt ≔ λ.
 
 # inp ≔ “11 + (1+(1 * (1+1)))”
 # μ(print_int, μ(evaluate, μ(transform, μ(print_tree, μ(parse, μ(filter, flt, μ(⟪explode⟫, inp)))))))
+# μ(print_int, μ(evaluate,  μ(print_tree, μ(transform, μ(print_tree, μ(parse, μ(filter, flt, μ(⟪explode⟫, inp))))))))
 
-μ(print_int, μ(evaluate, μ(transform, μ(print_tree, μ(parse, μ(filter, flt, μ(⟪explode⟫, μ(⟪inputstring⟫))))))))
+#μ(print_int, μ(evaluate, μ(transform, μ(parse, μ(filter, flt, μ(⟪explode⟫, μ(⟪inputstring⟫)))))))
+#μ(print_int, μ(evaluate, μ(print_tree, μ(transform, μ(print_tree, μ(parse, μ(filter, flt, μ(⟪explode⟫, μ(⟪inputstring⟫)))))))))
+μ(print_int, μ(evaluate, μ(print_ctree, μ(transform, μ(parse, μ(filter, flt, μ(⟪explode⟫, μ(⟪inputstring⟫))))))))
 
 
 

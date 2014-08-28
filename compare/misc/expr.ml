@@ -3,12 +3,35 @@ type expr = NUM of int
           | Num of expr
           | Add of expr * expr option
           | Mul of expr * expr option;;
+(* Concrete tree parts *)
+type cexpr = CNUM of int
+           | CAdd of cexpr * cexpr
+           | CMul of cexpr * cexpr;;
 
 exception ParseError of char list;;
+exception TransformError of expr;;
 
 let rec implode = function
   | [] -> ""
   | x::xs -> (String.make 1 x) ^ (implode xs)
+
+let rec print_tree = function
+  | NUM(x)         -> Printf.printf "NUM(%i)" x
+  | Num(x)         -> Printf.printf "Num("; print_tree (x); Printf.printf ")";
+  | Expr(x)        -> Printf.printf "Expr("; print_tree (x); Printf.printf ")";
+  | Add(x, None)   -> Printf.printf "Add("; print_tree (x); Printf.printf ")";
+  | Add(x, Some y) -> Printf.printf "Add("; print_tree (x);
+                      Printf.printf ", ";   print_tree (y); Printf.printf ")"
+  | Mul(x, None)   -> Printf.printf "Mul("; print_tree (x); Printf.printf ")";
+  | Mul(x, Some y) -> Printf.printf "Mul("; print_tree (x);
+                      Printf.printf ", ";   print_tree (y); Printf.printf ")"
+
+let rec print_ctree = function
+  | CNUM(x)        -> Printf.printf "%i" x
+  | CAdd(x, y)     -> Printf.printf "("; print_ctree (x);
+                      Printf.printf " + ";   print_ctree (y); Printf.printf ")"
+  | CMul(x, y)     -> Printf.printf "("; print_ctree (x);
+                      Printf.printf " * ";   print_ctree (y); Printf.printf ")"
 
 let relevant_char = function
   | ' ' | '\n' | '\t' -> false
@@ -52,16 +75,19 @@ and expr l =
 
 
 let rec evaluate = function
-  | NUM(x)         -> x
-  | Expr(x)        -> evaluate (x)
-  | Num(x)         -> evaluate (x)
-  | Add(x, None)   -> evaluate (x)
-  | Add(x, Some y) -> evaluate (x) + evaluate (y)
-  | Mul(x, None)   -> evaluate (x)
-  | Mul(x, Some y) -> evaluate (x) * evaluate (y)
+  | CAdd(x, y) -> evaluate (x) + evaluate (y)
+  | CMul(x, y) -> evaluate (x) * evaluate (y)
+  | CNUM(x)    -> x
 
-let transform l =
-  l
+let rec transform = function
+  | Num(NUM(x))     -> CNUM(x)
+  | Num(Expr(x))    -> transform (x)
+  | Expr(x)         -> transform (x)
+  | Add(x, None)    -> transform (x)
+  | Add(x, Some y)  -> CAdd(transform (x), transform (y))
+  | Mul(x, None)    -> transform (x)
+  | Mul(x, Some y)  -> CMul(transform (x), transform (y))
+  | x               -> raise (TransformError(x))
 
 
 let parse l =
@@ -71,20 +97,22 @@ let parse l =
   | _  -> raise (ParseError(r))
 
 
-let rec print_tree = function
-  | NUM(x)         -> Printf.printf "NUM(%i)" x
-  | Num(x)         -> Printf.printf "Num("; print_tree (x); Printf.printf ")";
-  | Expr(x)        -> Printf.printf "Expr("; print_tree (x); Printf.printf ")";
-  | Add(x, None)   -> Printf.printf "Add("; print_tree (x); Printf.printf ")";
-  | Add(x, Some y) -> Printf.printf "Add("; print_tree (x);
-                      Printf.printf ", ";   print_tree (y); Printf.printf ")"
-  | Mul(x, None)   -> Printf.printf "Mul("; print_tree (x); Printf.printf ")";
-  | Mul(x, Some y) -> Printf.printf "Mul("; print_tree (x);
-                      Printf.printf ", ";   print_tree (y); Printf.printf ")"
 let rec read inchar char_list =
   try
     read inchar ((input_char inchar)::char_list)
   with End_of_file -> List.rev char_list
+
+let time f x =
+  let tot_start = Unix.gettimeofday () in
+  let cpu_start = Sys.time() in
+  let res = f x in
+  let cpu_stop = Sys.time() in
+  let tot_stop = Unix.gettimeofday () in
+  let () = Printf.printf "0:RESULT-cpu:ms: %f\n0:RESULT-total:ms: %f\n"
+                         ((cpu_stop -. cpu_start) *. 1000.0)
+                         ((tot_stop -. tot_start) *. 1000.0)
+  in
+  res
 
 let _ =
   try
@@ -98,8 +126,8 @@ let _ =
     let char_list = List.filter relevant_char chars in
     let st = parse char_list in
     (* let () = print_tree st; Printf.printf "\n" in *)
-    let ast = transform st in
-    (* let () = print_tree ast; Printf.printf "\n" in *)
+    let ast = time transform st in
+    let () = print_ctree ast; Printf.printf "\n" in
     let value = evaluate ast in
     let () = Printf.printf "%i\n" value in
     0
