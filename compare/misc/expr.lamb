@@ -98,10 +98,10 @@ tree_s ≔ λ.
          1. NUM(x)          ↦ cons(“NUM(” , cons(μ(⟪ltostr⟫, x), cons(“)”, nil())))
          1. Num(x)          ↦ cons(“Num(” , μ(append, μ(tree_s, x), cons(“)”, nil())))
          1. Expr(x)         ↦ cons(“Expr(”, μ(append, μ(tree_s, x), cons(“)”, nil())))
-         1. Add(x, None())  ↦ cons(“Add(” , μ(append, μ(tree_s, x), cons(“)”, nil())))
-         1. Add(x, Some(y)) ↦ cons(“Add(” , μ(append, μ(tree_s, x), cons(“, ”, μ(append, μ(tree_s, y), cons(“)”, nil())))))
-         1. Mul(x, None())  ↦ cons(“Mul(” , μ(append, μ(tree_s, x), cons(“)”, nil())))
-         1. Mul(x, Some(y)) ↦ cons(“Mul(” , μ(append, μ(tree_s, x), cons(“, ”, μ(append, μ(tree_s, y), cons(“)”, nil())))))
+         1. Add(x, None())  ↦ cons(“Add(” , μ(append, μ(tree_s, x), cons(“, None())”, nil())))
+         1. Add(x, Some(y)) ↦ cons(“Add(” , μ(append, μ(tree_s, x), cons(“, Some(”, μ(append, μ(tree_s, y), cons(“))”, nil())))))
+         1. Mul(x, None())  ↦ cons(“Mul(” , μ(append, μ(tree_s, x), cons(“, None())”, nil())))
+         1. Mul(x, Some(y)) ↦ cons(“Mul(” , μ(append, μ(tree_s, x), cons(“, Some(”, μ(append, μ(tree_s, y), cons(“))”, nil())))))
 
 tree_cs ≔ λ.
           1. Mul(x, y)       ↦ cons(“(” , μ(append, μ(tree_cs, x), cons(“ * ”, μ(append, μ(tree_cs, y), cons(“)”, nil())))))
@@ -142,12 +142,13 @@ flt ≔ λ.
       4. _   ↦ 1
 
 # inp ≔ “11 + (1+(1 * (1+1)))”
-# μ(print_int, μ(evaluate, μ(transform, μ(print_tree, μ(parse, μ(filter, flt, μ(⟪explode⟫, inp)))))))
-# μ(print_int, μ(evaluate,  μ(print_tree, μ(transform, μ(print_tree, μ(parse, μ(filter, flt, μ(⟪explode⟫, inp))))))))
+# μ(print_int, μ(evaluate,                μ(transform, μ(print_tree, μ(parse, μ(filter, flt, μ(⟪explode⟫, inp)))))))
+# μ(print_int, μ(evaluate, μ(print_ctree, μ(transform, μ(print_tree, μ(parse, μ(filter, flt, μ(⟪explode⟫, inp))))))))
 
-#μ(print_int, μ(evaluate, μ(transform, μ(parse, μ(filter, flt, μ(⟪explode⟫, μ(⟪inputstring⟫)))))))
-#μ(print_int, μ(evaluate, μ(print_tree, μ(transform, μ(print_tree, μ(parse, μ(filter, flt, μ(⟪explode⟫, μ(⟪inputstring⟫)))))))))
-μ(print_int, μ(evaluate, μ(print_ctree, μ(transform, μ(parse, μ(filter, flt, μ(⟪explode⟫, μ(⟪inputstring⟫))))))))
+μ(print_int, μ(evaluate,                μ(transform, μ(print_tree, μ(parse, μ(filter, flt, μ(⟪explode⟫, μ(⟪inputstring⟫))))))))
+# μ(print_int, μ(evaluate,                μ(transform,               μ(parse, μ(filter, flt, μ(⟪explode⟫, μ(⟪inputstring⟫)))))))
+# μ(print_int, μ(evaluate, μ(print_ctree, μ(transform, μ(print_tree, μ(parse, μ(filter, flt, μ(⟪explode⟫, μ(⟪inputstring⟫)))))))))
+# μ(print_int, μ(evaluate, μ(print_ctree, μ(transform,               μ(parse, μ(filter, flt, μ(⟪explode⟫, μ(⟪inputstring⟫))))))))
 
 
 
