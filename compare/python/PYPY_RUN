@@ -1,0 +1,23 @@
+#!/bin/sh
+
+ARGS=""
+while [ "`expr \"x$1\" : \"x\(.\{2\}\)\"`" = "-A" ]; do
+  ARGS="$ARGS `expr \"x$1\" : \"x.\{2\}\(.*\)\"`"
+  shift
+done
+
+if [ "`basename $PWD`" = "compare" ]; then
+    cd python
+fi
+
+FIL="./python_$1.py"
+shift
+
+OS=`uname -s`
+if [ "$OS" = "Linux" ]; then
+  # ulimit -s 1048576
+  export TIME="0:RESULT-mem:kbyte: %M.0"
+  DOIT=/usr/bin/time
+fi
+
+exec $DOIT pypy $ARGS $FIL "$@"
