@@ -75,7 +75,10 @@ def python_tree(num):
     return check(long_lived_tree)
 
 def main(args):
-    num = (int(args[1]) / 1000000) if len(args) > 1 else 18
+    if len(args) > 1:
+        num = (min_depth - 1) + (int(args[1]) / 1000000)
+    else:
+        18
     t1 = time.clock()
     res = python_tree(num)
     t2 = time.clock()

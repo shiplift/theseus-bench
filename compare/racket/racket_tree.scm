@@ -1,3 +1,5 @@
+#lang racket/base
+(require (for-syntax racket/base))
 ;;; The Computer Language Benchmarks Game
 ;;; http://benchmarksgame.alioth.debian.org/
 
@@ -58,7 +60,9 @@
      [treenum (lambda (l)
                 (let* ([pairish (pair? l)]
                        [numberish (if pairish (string->number (car l)) pairish)])
-                  (if numberish (/ numberish 1000000) 18)))]
+                  (if numberish 
+                      (+ (- min-depth 1) (/ numberish 1000000))
+                      18)))]
      [num (treenum (vector->list (current-command-line-arguments)))]
      )
   (time (racket-tree num)))

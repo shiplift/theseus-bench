@@ -1,3 +1,5 @@
+#lang racket/base
+(require (for-syntax racket/base))
 (define-syntax time
   (lambda (stx)
     (syntax-case stx ()
