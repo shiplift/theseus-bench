@@ -20,6 +20,8 @@
 
 (struct node (left val right))
 (struct leaf (val))
+(struct element ())
+(define E (element))
 
 (define (make item d)
   (if (= d 0)
@@ -29,7 +31,7 @@
 
 (define (check t)
   (if (leaf? t)
-      'E
+      E
       (begin
         (check (node-left t))
         (check (node-right t)))))
@@ -37,8 +39,7 @@
 (define min-depth 3)
 
 (letrec
-    ([E    'E]
-     [racket-tree
+    ([racket-tree
       (lambda (num)
         (letrec ((max-depth num)
                  (stretch-depth (+ max-depth 1))
@@ -65,4 +66,4 @@
                       18)))]
      [num (treenum (vector->list (current-command-line-arguments)))]
      )
-  (time (racket-tree num)))
+  (time (void (racket-tree num))))

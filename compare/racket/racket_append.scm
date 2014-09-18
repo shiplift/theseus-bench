@@ -1,5 +1,6 @@
 #lang racket/base
 (require (for-syntax racket/base))
+(require racket/list)
 (define-syntax time
   (lambda (stx)
     (syntax-case stx ()
@@ -10,27 +11,22 @@
            (printf "0:RESULT-cpu:ms: ~a.0\n0:RESULT-total:ms: ~a.0\n0:RESULT-gc:ms: ~a.0\n"
                    cpu user gc)
            (apply values v)))])))
+(struct element ())
 (letrec
-    ([E    'E]
+    ([E    (element)]
      [head car]
      [tail cdr]
      [racket-append (lambda (a b)
                       (if (null? a) 
                           b
                           (cons (head a) (racket-append (tail a) b))))]
-     [make-list (lambda (n)
-                  (letrec ((aux (lambda (m acc)
-                                 (if (= 0 m)
-                                     acc
-                                     (aux (- m 1 )(cons E acc))))))
-                    (aux n '())))]
      [listnum (lambda (l)
                 (let*
                     ([pairish (pair? l)]
                      [numberish (if pairish (string->number (car l)) pairish)])
                   (if numberish numberish 10000000)))]
      [num (listnum (vector->list (current-command-line-arguments)))]
-     [l (make-list num)]
-     [m (make-list num)]
+     [l (make-list num E)]
+     [m (make-list num E)]
      )
-  (time (racket-append l m)))
+  (time (void (racket-append l m))))
