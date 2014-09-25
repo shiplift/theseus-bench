@@ -1,0 +1,384 @@
+#! /usr/bin/env Rscript
+
+pkgs = c(
+  "reshape2",
+  "plyr",
+  #"beanplot",
+  "boot",
+  "Hmisc",
+  "ggplot2",
+  "tools",
+  "quantreg",
+  "locfit",
+  "xlsx"
+)
+
+use <- function(pkg) {
+  if (!require(pkg, character.only=TRUE)) { install.packages(pkg) }
+  library(pkg,character.only=TRUE)
+}
+sapply(pkgs, use)
+if (!require(extrafont)) {
+  install.packages("devtools")
+  library(devtools)
+  install_github("Rttf2pt1", "wch")
+  install_github("extrafont", "wch")
+}
+library(extrafont)
+loadfonts(quiet=TRUE)
+if (length(fonts()) == 0) {
+  font_import(prompt=FALSE)
+}
+
+pdf.embed.options <- "-dEmbedAllFonts=true -dPDFSETTINGS=/prepress -dCompatibilityLevel=1.4 -dSubsetFonts=true -dHaveTrueTypeFonts=true"
+# ---- cmd line ----
+
+if (FALSE) {
+  setwd("/Users/tobias/dev/pypy/lamb-bench")
+}
+
+if (length(commandArgs(trailingOnly=TRUE)) > 0) {
+  tsv_name = commandArgs(trailingOnly=TRUE)[1]
+} else {
+  tsv_name <- "output/current-report.tsv"
+}
+
+if (!file.exists(tsv_name)) {
+  stop("Cannot open input file ", tsv_name)
+}
+
+input.basename = file_path_sans_ext(tsv_name)
+
+bench <- read.delim(tsv_name, comment.char = "#", header=FALSE,
+                    col.names=c('timestamp', 'value', 'unit', 'criterion', 'benchmark', 'vm', 'suite', 'extra_args', 'warump', 'cores', 'input_sizes', 'variable_values'))
+
+figure.width <- 3.5
+figure.height <- 2
+
+
+
+# ------ functions -----
+confInterval095Error <- function (samples) {
+  if (length(sample) < 30)
+    qnorm(0.975) * sd(samples) / sqrt(length(samples))
+  else
+    qt(0.975, df=length(samples)-1) * sd(samples) / sqrt(length(samples))
+}
+
+div_mean_x_y = function(data, indices, extraid) {
+  indexx = indices[extraid == "x"]
+  indexy = indices[extraid == "y"]
+  mean(data[indexx]) / mean(data[indexy])
+}
+
+normalize_value_bootstrap_confidence = function(x, y, R=1000) {
+  # x and y need to be *vectors* of all the values
+  # the result is the confidence interval of mean(x) / mean(y)
+  total <- c(x,y)
+  id <- as.factor(c(rep("x",length(x)),rep("y",length(y))))
+  
+  b <- boot(total, div_mean_x_y, strata=id, R=R, extraid=id)
+  norm <- boot.ci(b, type=c("norm"))$normal
+  dimnames(norm) <- list(NULL,c("conf", "upper", "lower"))
+  norm
+}
+
+bootstrapTo <- function(df, supergroup, group, val, var) {
+  cmp <- df[(df[[group]] == val),]
+  doIt <- function(X) {
+    ident <- (X[[supergroup]])[[1]]
+    subs <- cmp[(cmp[[supergroup]] == ident),]
+    comparee <- subs[[var]]
+    normalize_value_bootstrap_confidence(X[[var]], comparee)
+  }
+  ddply(df, c(supergroup,group), doIt)  
+}
+
+normalizeTo <- function(df, supergroup, group, val, var, vars=c(var)) {
+  data <- df
+  sg <- droplevels(df[[supergroup]])
+  indexes <- which(df[[group]] == val)
+  norm.factor <- (df[[var]])[indexes]
+  names(norm.factor) <- sg[indexes]
+  for (normvar in vars) {
+    divis <- norm.factor[ sg ]
+    res <- df[[normvar]]/divis
+    data[[paste0(normvar,".norm")]] <- res
+  }
+  data
+}
+
+# --- shaping data
+
+bench <- droplevels(bench[c('criterion','vm','benchmark','value', 'unit', 'input_sizes')])
+bench.tot <- droplevels(bench[bench$criterion == 'total',,drop=TRUE])
+bench.cpu <- droplevels(bench[bench$criterion == "cpu",,drop=TRUE])
+bench.mem <- droplevels(bench[bench$criterion == "mem",,drop=TRUE])
+
+bench.tree <- bench[(bench$criterion == "cpu" | bench$criterion == "mem") & bench$benchmark == "tree",,drop=TRUE]
+
+
+error_processing = (nrow(bench[bench$vm == 'Lamb' & bench$criterion=="total" & bench$benchmark == "map",]) != 1)
+
+
+#--------------------------------------------------------------------------------------------------------
+
+if (error_processing) {
+  bench.cpu$vm <- factor(bench.cpu$vm, levels = c("Lamb","LambUncached",
+                                      "MLton","SMLNJ","OCaml",
+                                      "Racket", "Pycket",
+                                      "Python", "Pypy"))
+  levels(bench.cpu$vm)[levels(bench.cpu$vm) == "Lamb"] <- "Prototype"
+  bench.mem$vm <- factor(bench.mem$vm, levels = c("Lamb","LambUncached",
+                                                  "MLton","SMLNJ","OCaml",
+                                                  "Racket", "Pycket",
+                                                  "Python", "Pypy"))
+  levels(bench.mem$vm)[levels(bench.mem$vm) == "Lamb"] <- "Prototype"
+  bench.tree$vm <- factor(bench.tree$vm, levels = c("Lamb","LambUncached",
+                                                  "MLton","SMLNJ","OCaml",
+                                                  "Racket", "Pycket",
+                                                  "Python", "Pypy"))
+  levels(bench.tree$vm)[levels(bench.tree$vm) == "Lamb"] <- "Prototype"
+  
+  #bench.err <- bootstrapTo(bench.tot, 'benchmark', 'vm', 'Racket', 'value')
+  bench.summary <- ddply(bench.cpu, .(benchmark,vm), summarise,
+                         mean=mean(value),
+                         median=median(value),
+                         stdev=sd(value),
+                         err095=confInterval095Error(value),
+                         cnfIntHigh = mean(value) + (confInterval095Error(value)),
+                         cnfIntLow = mean(value) - (confInterval095Error(value))
+  )
+  
+  bench.summary.mem <- ddply(bench.mem, .(benchmark,vm), summarise,
+                         mean=mean(value),
+                         median=median(value),
+                         stdev=sd(value),
+                         err095=confInterval095Error(value),
+                         cnfIntHigh = mean(value) + (confInterval095Error(value)),
+                         cnfIntLow = mean(value) - (confInterval095Error(value))
+  )
+  
+  bench.summary.tree <- ddply(bench.tree, .(criterion,vm), summarise,
+                             mean=mean(value),
+                             median=median(value),
+                             stdev=sd(value),
+                             err095=confInterval095Error(value),
+                             cnfIntHigh = mean(value) + (confInterval095Error(value)),
+                             cnfIntLow = mean(value) - (confInterval095Error(value))
+  )
+  
+  yformat <- function(x, max.order, min.order) {
+    if (x <= 0 | is.na(x))
+      "0"
+    else {
+      start.vs.min <- x %/% 10^min.order
+      start.vs.max <- x %/% 10^max.order
+      if (
+          (start.vs.min %% 2 == 1)
+#           (start.vs.max < 1 & start.vs.min %% 2 == 1) |
+#           (start.vs.min %% 5 == 0)
+        ) {
+        if (x < 1e6) {
+          format(x/1e6, scientific=FALSE) 
+        } else {
+          paste0(as.integer(x/1e6))
+        }
+      } else {
+        ""
+      }
+    }
+  }
+  
+  ylabsformat <- function(x) {
+    max.order <- floor(log10(max(x)))
+    min.order <- floor(log10(min(x[x != 0.0])))
+    labels <- sapply(x, function(y) yformat(y, max.order, min.order))
+    labels
+  }
+
+  dat <- bench.summary[bench.summary$vm != "SMLNJ" & bench.summary$vm != "LambUncached",]
+  if (nrow(dat) > 0) {
+    dodge <- position_dodge(width=.8)
+    ymax <- round_any(max(bench.summary$mean), 1000, ceiling)
+    ggplot(data = dat, aes(x=benchmark,y=mean,group=interaction(benchmark,vm),fill=vm,)) + 
+      geom_bar(stat="identity", position=dodge, width=.75, aes(fill = vm))+
+      #geom_errorbar(aes(ymin=cnfIntLow, ymax=cnfIntHigh),  position=dodge, color=I("black"), size=.2, width=.6) +  
+      geom_point(position=dodge,aes(y=max(500,min(mean)), ymax=ymax, shape=vm),size=2, color="grey90",stat="identity") +
+      # xlab("Benchmark") +
+      ylab("Execution time (s)") +
+      coord_cartesian() +    
+      theme_bw(base_size=8, base_family="Helvetica") +
+      theme(
+        rect = element_rect(),
+        axis.title.x =  element_blank(),
+        #   axis.text.x  = element_text(size=8, angle=45, hjust=1),
+        axis.text.x  = element_text(size=8),
+        axis.title.y = element_text(face="bold", size=8),
+        axis.text.y  = element_text(size=8), #angle=45, hjust=0.2, vjust=0.5,
+        legend.position=c(0.40, .65),
+        plot.margin = unit(c(1,-0.1,-2,-1),"mm"),
+        legend.text = element_text(size=7),
+        legend.title = element_text(size=7, face="bold"),
+        legend.background = element_rect(fill="gray90", size=0),
+        legend.margin = unit(-.5, "cm"),
+        legend.key=element_rect(fill="white"),
+        legend.key.size=unit(3,"mm")
+      ) +
+      scale_y_continuous(
+          labels=function(x) x / 1000,
+          breaks=seq(0,ymax, 2000),
+          limits=c(0,ymax),
+          expand=c(0,0)) +
+      scale_fill_brewer(name = "Implementation", type="qual", palette="Set1") +
+      scale_shape(name = "Implementation", solid = FALSE) +
+      facet_null()  
+      
+    gg.file <- paste0(input.basename, "-cpu.pdf")
+    ggsave(gg.file, width=figure.width, height=figure.height, units=c("in"), colormodel='rgb')
+    embed_fonts(gg.file, options=pdf.embed.options)  
+  }
+  
+  #dat <- subset(bench.cpu, vm == "ulamb-c" | vm == "ulambi-c")
+  dat <- bench.summary.mem[bench.summary.mem$vm != "SMLNJ" & bench.summary.mem$vm != "LambUncached",]
+  if (nrow(dat) > 0) {
+    dodge <- position_dodge(width=.8)
+    ymax <- round_any(max(dat$mean), 1e6, ceiling)
+    ggplot(data = dat, aes(x=benchmark,y=mean,group=interaction(benchmark,vm),fill=vm,)) + 
+      geom_bar(stat="identity", position=dodge, width=.75, aes(fill = vm))+
+      #geom_errorbar(aes(ymin=cnfIntLow, ymax=cnfIntHigh),  position=dodge, color=I("black"), size=.33) +
+      geom_point(position=dodge,aes(y=max(4e5,min(mean)), ymax=ymax, shape=vm),size=2, color="grey90",stat="identity") +
+      ylab("Memory consumption (GB)") +
+      coord_cartesian() +    
+      theme_bw(base_size=8, base_family="Helvetica") +
+      theme(
+        rect = element_rect(),
+        axis.title.x =  element_blank(),
+        #   axis.text.x  = element_text(size=8, angle=45, hjust=1),
+        axis.text.x  = element_text(size=8),
+        axis.title.y = element_text(face="bold", size=8),
+        axis.text.y  = element_text(size=8), #angle=45, hjust=0.2, vjust=0.5,
+        legend.position=c(0.40, .65),
+        plot.margin = unit(c(1,-0.1,-2,-1),"mm"),
+        legend.text = element_text(size=7),
+        legend.title = element_text(size=7, face="bold"),
+        legend.background = element_rect(fill="gray90", size=0),
+        legend.margin = unit(-.5, "cm"),
+        legend.key=element_rect(fill="white"),
+        legend.key.size=unit(3,"mm")
+      ) +
+      scale_y_continuous(
+        labels=ylabsformat,
+         breaks=seq(0,ymax, 1e6), 
+         limits=c(0,ymax),
+        expand=c(0,0)) +
+      scale_fill_brewer(name = "Implementation", type="qual", palette="Set1") +
+      scale_shape(name = "Implementation", solid = FALSE) +
+      facet_null()  
+    
+    gg.file <- paste0(input.basename, "-mem.pdf")
+    ggsave(gg.file, width=figure.width, height=figure.height, units=c("in"), colormodel='rgb')
+    embed_fonts(gg.file, options=pdf.embed.options)
+  }
+
+  f <- (function() {
+    c <- bench.summary[bench.summary$vm != "SMLNJ" & bench.summary$vm != "LambUncached",]
+    m <- bench.summary.mem[bench.summary.mem$vm != "SMLNJ" & bench.summary.mem$vm != "LambUncached",]
+    m$mean = m$mean / 1024
+    data.frame(benchmark=c$benchmark, vm=droplevels(c$vm), time_mean=c$mean, time_error=c$err095,memory_mean=m$mean, memory_error=m$err095) })()
+  
+  g <- dcast(melt(f, id.vars=c('benchmark','vm')), benchmark ~ vm + variable)
+  d <- g[2:length(g)]
+  rownames(d) <- g$benchmark
+  colnames(d) <- sapply(colnames(d), function(x) {sedit(x, '_', ' ')})
+
+
+  (function() {
+    len <- length(d)/2
+    out <- latex(d
+                ,file=paste0(input.basename, "-numbers.tex")
+                ,rowlabel="Benchmark"
+                ,rowlabel.just="@{}l"
+                ,booktabs=TRUE
+                ,table.env=FALSE, center="none"
+                #,size="footnotesize"
+                ,size="scriptsize"
+                ,colheads=rep(c('time', '', 'memory', ''), len/2)
+                ,col.just=rep(c('@{}r','@{}>{\\smaller\\ensuremath{\\pm}}r','@{\\,\\si{\\milli\\second}}r','@{\\,\\si{\\mega\\byte}}>{\\smaller\\ensuremath{\\pm}}r@{\\,\\si{\\kilo\\byte}}'), len/2)
+                ,cgroup=levels(f$vm)
+                ,cdec=rep(0, len*2)
+    )})()
+} else { # ERROR CORRECTION
+
+  bench.summary <- ddply(bench.cpu, .(benchmark,vm))
+  bench.summary.mem <- ddply(bench.mem, .(benchmark,vm))
+  bench.summary.tree <- ddply(bench.tree, .(criterion,input_sizes,vm))
+
+  dat <- bench.summary[
+    bench.summary$vm != "SMLNJ" 
+    & bench.summary$vm != "MLton" 
+    & bench.summary$vm != "LambUncached"
+    & bench.summary$vm != "Python"
+  ,]
+  dat$vm <- factor(dat$vm, levels = c("Lamb","LambUncached",
+                                      "MLton","SMLNJ","OCaml",
+                                      "Racket", "Pycket",
+                                      "Python", "Pypy"))
+  levels(dat$vm)[levels(dat$vm) == "Lamb"] <- "Prototype"
+
+  dodge <- position_dodge(width=.8)
+  ymax <- round_any(max(dat$value), 1000, ceiling)
+#   ymax <- 26000
+   dat$v <- dat$value
+#   dat[dat$v > ymax,]$v <- ymax
+  ggplot(data=dat,
+         aes(x=benchmark,y=v,group=interaction(benchmark,vm),fill=vm)
+  ) +
+    geom_bar(stat="identity", position=dodge, width=.75, aes(fill = vm))+
+    geom_point(position=dodge,aes(y=mean/2, shape=vm),size=2, color="grey90") +
+  
+  #   xlab("Benchmark") +
+    ylab("Execution time (ms)") +
+    theme_bw(base_size=8, base_family="Helvetica") +
+    theme(
+      rect = element_rect(),
+      axis.title.x =  element_blank(),
+      #   axis.text.x  = element_text(size=8, angle=45, hjust=1),
+      axis.text.x  = element_text(size=8),
+      axis.title.y = element_text(face="bold", size=8),
+      axis.text.y  = element_text(size=8), #angle=45, hjust=0.2, vjust=0.5,
+      legend.position=c(0.30, .65),
+      plot.margin = unit(c(-2,-0.1,-2,-1),"mm"),
+      legend.text = element_text(size=7),
+      legend.title = element_text(size=7, face="bold"),
+      legend.background = element_rect(fill="gray90", size=0),
+      legend.margin = unit(0, "cm"),
+      legend.key=element_rect(fill="white"),
+      legend.key.size=unit(5,"mm")
+    ) +
+    scale_y_continuous(
+      breaks=seq(0,ymax, 1000), 
+      limits=c(0,ymax),
+      expand=c(0,0)) +
+    scale_fill_brewer(name = "Implementation", type="qual", palette="Set1") +
+    scale_shape(name = "Implementation", solid = FALSE) +
+#     scale_fill_manual(name = "Implementation", values=c(
+#       "#377eb8",
+#       "#4daf4a",
+#       "#f781bf",  "#e41a1c",
+#       #"#ff7f00",
+#       "#a65628"
+#       )) +
+    #scale_fill_grey(name = "Virtual Machine") +
+    facet_null()
+
+  gg.file <- paste0(input.basename, "-norm-col.pdf")
+  ggsave(gg.file, width=figure.width, height=figure.height, units=c("in"), colormodel='rgb')
+  embed_fonts(gg.file, options="-dPDFSETTINGS=/prepress")
+
+}
+  
+  
+#
+# EOF
+#
