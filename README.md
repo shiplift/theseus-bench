@@ -1,12 +1,11 @@
-Das λ macht μ
-
 Contents
 ========
 
  * compare — Comparison benchmarks for 
-     * lamb
-     * ocaml
-     * sml (mlton, sml/nj)
-     * racket
+     * prototype with lamb
+     * racket with rackert and pycket
+     * python with pypy (and cpython)
+     * ocaml with ocaml
+     * (sml with mlton and sml/nj)
 
-See krono/lamb for the real stuff
+See krono/lamb for the implementation of the prototype
