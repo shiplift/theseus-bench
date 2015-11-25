@@ -1,6 +1,7 @@
 #lang racket/base
 (require (for-syntax racket/base))
-(require racket/list)
+(require (prefix-in r: racket/base))
+(require "cons-emulation.rktl")
 (define-syntax time
   (lambda (stx)
     (syntax-case stx ()
@@ -22,8 +23,8 @@
                          (aux l '())))]
      [listnum (lambda (l)
                 (let*
-                    ([pairish (pair? l)]
-                     [numberish (if pairish (string->number (car l)) pairish)])
+                    ([pairish (r:pair? l)]
+                     [numberish (if pairish (string->number (r:car l)) pairish)])
                   (if numberish numberish 20000000)))]
      [num (listnum (vector->list (current-command-line-arguments)))]
      [l (make-list num 1)])
