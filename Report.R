@@ -37,10 +37,17 @@ if (FALSE) {
   setwd("/Users/tobias/dev/pypy/lamb-bench")
 }
 
+
 if (length(commandArgs(trailingOnly=TRUE)) > 0) {
   tsv_name = commandArgs(trailingOnly=TRUE)[1]
+  if (length(commandArgs(trailingOnly=TRUE)) > 1) {
+    CAPPING <- as.numeric(commandArgs(trailingOnly=TRUE)[2])
+  } else {
+    CAPPING <- Inf
+  }
 } else {
   tsv_name <- "output/current-report.tsv"
+  CAPPING <- 10000
 }
 
 if (!file.exists(tsv_name)) {
@@ -48,12 +55,15 @@ if (!file.exists(tsv_name)) {
 }
 
 input.basename = file_path_sans_ext(tsv_name)
+print(paste0(">> ", input.basename))
 
 bench <- read.delim(tsv_name, comment.char = "#", header=FALSE,
                     col.names=c('timestamp', 'value', 'unit', 'criterion', 'benchmark', 'vm', 'suite', 'extra_args', 'warump', 'cores', 'input_sizes', 'variable_values'))
 
-figure.width <- 3.5
-figure.height <- 2
+# figure.width <- 3.5
+# figure.height <- 2
+figure.width <- 7
+figure.height <- 3
 
 
 
@@ -124,6 +134,7 @@ error_processing = (nrow(bench[bench$vm == 'Lamb' & bench$criterion=="total" & b
 #--------------------------------------------------------------------------------------------------------
 
 if (error_processing) {
+  print(">> with ep")
   bench.cpu$vm <- factor(bench.cpu$vm, levels = c("Lamb","LambUncached",
                                       "MLton","SMLNJ","OCaml",
                                       "Racket", "Pycket",
@@ -309,7 +320,7 @@ if (error_processing) {
                 ,cdec=rep(0, len*2)
     )})()
 } else { # ERROR CORRECTION
-
+  print(">> w/o ep")
   bench.summary <- ddply(bench.cpu, .(benchmark,vm))
   bench.summary.mem <- ddply(bench.mem, .(benchmark,vm))
   bench.summary.tree <- ddply(bench.tree, .(criterion,input_sizes,vm))
@@ -328,18 +339,32 @@ if (error_processing) {
                                       "Python", "Pypy"))
   levels(dat$vm)[levels(dat$vm) == "Lamb"] <- "Prototype"
 
+  if (mean(dat$value) > 1000) {
+    .scale = 1/1000
+    .ylab <- "Execution time (s)"
+  } else {
+    .scale = 1
+    .ylab <- "Execution time (ms)"
+  }
+  
+  .y.icon.max <- 500
+  .y.max.steps <- 1000
+  dat$isCapped <- " "
+  .needs.cap <- dat[!is.na(dat$value) & dat$value > CAPPING,]
+  if (nrow(.needs.cap) > 0) {
+    dat[!is.na(dat$value) & dat$value > CAPPING,]$isCapped <- paste0("> ", format(.needs.cap$value * .scale,digits=0))
+    dat[!is.na(dat$value) & dat$value > CAPPING,]$value <- CAPPING
+  }
+  
   dodge <- position_dodge(width=.8)
-  ymax <- round_any(max(dat$value), 1000, ceiling)
-#   ymax <- 26000
-   dat$v <- dat$value
-#   dat[dat$v > ymax,]$v <- ymax
-  ggplot(data=dat,
-         aes(x=benchmark,y=v,group=interaction(benchmark,vm),fill=vm)
+  ymax <- (round_any(max(dat$value), .y.max.steps, ceiling) * .scale)
+  p <-  ggplot(data=dat,
+         aes(x=benchmark,y=value * .scale,group=interaction(benchmark,vm),fill=vm)
   ) +
     geom_bar(stat="identity", position=dodge, width=.75, aes(fill = vm))+
-    # geom_point(position=dodge,aes(y=mean/2, shape=vm),size=2, color="grey90") +
+    geom_point(position=dodge,aes(y=max(.y.icon.max * .scale,min(value * .scale)), ymax=ymax, shape=vm),size=2, color="grey90",stat="identity") +
   #   xlab("Benchmark") +
-    ylab("Execution time (ms)") +
+    ylab(.ylab) +
     theme_bw(base_size=8, base_family="Helvetica") +
     theme(
       rect = element_rect(),
@@ -348,7 +373,7 @@ if (error_processing) {
       axis.text.x  = element_text(size=8),
       axis.title.y = element_text(face="bold", size=8),
       axis.text.y  = element_text(size=8), #angle=45, hjust=0.2, vjust=0.5,
-      legend.position=c(0.30, .65),
+      legend.position=c(0.60, .7),
       plot.margin = unit(c(-2,-0.1,-2,-1),"mm"),
       legend.text = element_text(size=7),
       legend.title = element_text(size=7, face="bold"),
@@ -358,7 +383,7 @@ if (error_processing) {
       legend.key.size=unit(5,"mm")
     ) +
     scale_y_continuous(
-      breaks=seq(0,ymax, 1000), 
+      breaks=seq(0, ymax, .y.max.steps * .scale), 
       limits=c(0,ymax),
       expand=c(0,0)) +
     scale_fill_brewer(name = "Implementation", type="qual", palette="Set1") +
@@ -372,14 +397,20 @@ if (error_processing) {
 #       )) +
     #scale_fill_grey(name = "Virtual Machine") +
     facet_null()
+  if (nrow(.needs.cap) > 0){
+    p <- p + 
+      geom_text(position=position_dodge(width=.9), angle=90,aes(y=((CAPPING * .scale) *.9), ymax=ymax*.scale,label=isCapped), size=2) 
+  }
+
+  p
 
   gg.file <- paste0(input.basename, "-norm-col.pdf")
   ggsave(gg.file, width=figure.width, height=figure.height, units=c("in"), colormodel='rgb', useDingbats=FALSE)
   embed_fonts(gg.file, options="-dPDFSETTINGS=/prepress")
 
 }
-  
-  
+
+print(">> done");
 #
 # EOF
 #
