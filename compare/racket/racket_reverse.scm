@@ -11,10 +11,8 @@
            (printf "0:RESULT-cpu:ms: ~a.0\n0:RESULT-total:ms: ~a.0\n0:RESULT-gc:ms: ~a.0\n"
                    cpu user gc)
            (apply values v)))])))
-(struct element ())
 (letrec
-    ([E    (element)]
-     [head car]
+    ([head car]
      [tail cdr]
      [racket-reverse (lambda (l)
                        (letrec ((aux (lambda (list acc)
@@ -28,6 +26,5 @@
                      [numberish (if pairish (string->number (car l)) pairish)])
                   (if numberish numberish 20000000)))]
      [num (listnum (vector->list (current-command-line-arguments)))]
-     [l (make-list num E)]
-     )
+     [l (make-list num 1)])
   (time (void (racket-reverse l))))

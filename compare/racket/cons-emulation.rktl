@@ -1,0 +1,25 @@
+#lang racket/base
+(require (for-syntax racket/base)
+        racket/performance-hint)
+(require racket/provide)
+(provide (filtered-out (lambda (name)
+                         (and (regexp-match?  "#%pycket:" name)
+                             (regexp-replace "#%pycket:" name "")))
+                      (all-defined-out)))
+
+(define-values (struct:cons #%pycket:cons #%pycket:pair?  cons-ref cons-set!)
+  (make-struct-type 'cons #f 2 0 #f '() #f #f '(0 1) #f 'cons))  
+(define #%pycket:car (make-struct-field-accessor cons-ref 0))
+(define #%pycket:cdr (make-struct-field-accessor cons-ref 1))
+(define (#%pycket:build-list n proc)
+  (define (mk-acc m proc l)
+    (if (= 0 m)
+       l
+       (mk-acc (- m 1) (proc m) (#%pycket:cons proc l))))
+  (mk-acc n proc null))
+(define (#%pycket:make-list n e)
+  (define (mk-acc m e l)
+    (if (= 0 m)
+       l
+       (mk-acc (- m 1) e (#%pycket:cons e l))))
+  (mk-acc n e null))

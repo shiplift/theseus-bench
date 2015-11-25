@@ -3,6 +3,7 @@
 
 import sys
 import operator
+import time
 
 sys.setrecursionlimit(1000 * sys.getrecursionlimit())
 
@@ -19,13 +20,17 @@ def accept(tok, toks):
     return len(toks) and tok == toks[0]
 
 class Node(object):
+    __slots__ = ()
     def __repr__(self):
-        return "%s" % self.__class__.__name__
+        return str(self.__class__.__name__)
     def evaluate(self):
         raise NotImplementedError("Abstract Base Class")
+    def transform(self):
+        return self
+
 
 class Expr(Node):
-    op = (None, None)
+    op = None
 
     def __init__(self, l, r=None):
         self.left = l
@@ -34,39 +39,54 @@ class Expr(Node):
     def __repr__(self):
         s = super(Expr, self).__repr__()
         if self.right is None:
-            return s + "(%r)" % self.left
+            return "".join([s, "(", repr(self.left), ")"])
         else:
-            return s + "(%r, %r)" % (self.left, self.right)
+            return "".join([s, "(", repr(self.left), ", ", repr(self.right), ")"])
 
     def __str__(self):
         if self.right is None:
-            return "(%s)" % self.left
+            return "".join(["(", str(self.left), ")"])
         else:
-            return "(%s %s %s)" % (self.left, self.op[0], self.right)
+            return "".join(["(", str(self.left), " ", self.op, " ", str(self.right), ")"])
 
-    def evaluate(self):
+    def transform(self):
         if self.right is None:
-            return self.left.evaluate()
+            return self.left.transform()
         else:
-            return self.op[1](self.left.evaluate(),self.right.evaluate())
+            return self.__class__(self.left.transform(), self.right.transform())
 
     @classmethod
     def make(cls, toks):
         toks = lstrip(toks)
         (l, rest) = cls.next.make(toks)
         r = None
-        if accept(cls.op[0], rest):
+        if accept(cls.op, rest):
             rest.pop(0)
             (r, rest) = cls.next.make(lstrip(rest))
         return cls(l, r), rest
 
 class Mul(Expr):
-    op = ("*", operator.mul)
+    op = "*"
+    def evaluate(self):
+        return self.left.evaluate() * self.right.evaluate()
 
 class Add(Expr):
-    op = ("+", operator.add)
+    op = "+"
+    def evaluate(self):
+        return self.left.evaluate() + self.right.evaluate()
 
 class Num(Expr):
+
+    def transform(self):
+        assert self.right is None
+        if isinstance(self.left, Expr):
+            e = self.left
+            assert e.right is None
+            return e.left.transform()
+        elif isinstance(self.left, NUM):
+            return self.left.transform()
+        else:
+            raise RuntimeError("dont know what to do")
 
     @classmethod
     def make(cls, toks):
@@ -86,7 +106,7 @@ class Num(Expr):
 class NUM(Node):
     def __repr__(self):
         s = super(NUM, self).__repr__()
-        return s + "(%i)" % self.value
+        return "".join([s, "(%i)" % self.value])
     def __str__(self):
         return "%i" % self.value
 
@@ -95,6 +115,9 @@ class NUM(Node):
 
     def evaluate(self):
         return self.value
+
+    def transform(self):
+        return self
 
 Expr.next = Mul
 Mul.next = Add
@@ -113,7 +136,7 @@ def evaluate(ast):
 def transform(st):
     # print "st>>", st
     # print "ast>>", repr(st)
-    return st
+    return st.transform()
 
 def parse(string):
     expr, rest = Expr.make(list(string.strip()))
@@ -158,8 +181,19 @@ def main(argv):
     else:
         inp = sys.stdin.read()
 
-    val = evaluate(transform(parse(inp)))
-    print "val>>", val
+    ast = parse(inp)
+    
+    t1 = time.clock()
+    st = transform(ast)
+    t2 = time.clock()
+    
+    val = evaluate(st)
+#    print val
+#    assert val
+    
+    t = (t2 - t1) * 1000
+    print "0:RESULT-cpu:ms: %s\n0:RESULT-total:ms: %s\n0:RESULT-gc:ms: 0.0\n" % (t, t)
+
     return 0
 
 if __name__ == '__main__':

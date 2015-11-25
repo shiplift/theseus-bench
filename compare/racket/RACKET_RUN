@@ -20,4 +20,6 @@ if [ "$OS" = "Linux" ]; then
   DOIT=/usr/bin/time
 fi
 
+raco make "$FIL"
+
 exec $DOIT racket $ARGS $FIL "$@"

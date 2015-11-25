@@ -20,8 +20,7 @@
 
 (struct node (left val right))
 (struct leaf (val))
-(struct element ())
-(define E (element))
+(define E 1)
 
 (define (make item d)
   (if (= d 0)
@@ -64,6 +63,5 @@
                   (if numberish 
                       (+ (- min-depth 1) (/ numberish 1000000))
                       18)))]
-     [num (treenum (vector->list (current-command-line-arguments)))]
-     )
+     [num (treenum (vector->list (current-command-line-arguments)))])
   (time (void (racket-tree num))))
