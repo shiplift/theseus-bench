@@ -54,7 +54,7 @@ def make(item, d):
 
 def check(t):
     if t.is_leaf():
-        return E
+        return t.val
     check(t.left)
     return check(t.right)
 
@@ -78,7 +78,7 @@ def main(args):
     if len(args) > 1:
         num = (min_depth - 1) + (int(args[1]) / 1000000)
     else:
-        18
+        num = 18
     t1 = time.clock()
     res = python_tree(num)
     t2 = time.clock()

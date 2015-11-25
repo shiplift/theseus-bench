@@ -14,9 +14,21 @@ FIL="./racket_$1.scm"
 shift
 
 if [ ! -h pycket ]; then
-  exit 1
+  if [ -z "$PYCKET" ]; then
+    exit 1
+  fi
 fi
-PYCKET=pycket/../pycket-c
+PYCKET=${PYCKET:-pycket/../pycket-c}
+
+if [ ! -z "${DO_PYPYLOG}" ]; then
+  if [ "${PYCKET##*-}" -eq "c" ]; then
+      OUT="${FIL%.*}-out.pypylog"
+  else
+      OUT="${FIL%.*}-${PYCKET##*-}-out.pypylog"
+  fi
+  rm -f ${FIL}-out.txt
+  export PYPYLOG=${DO_PYPYLOG}:${OUT}
+fi
 
 OS=`uname -s`
 if [ "$OS" = "Linux" ]; then

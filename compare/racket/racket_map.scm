@@ -1,6 +1,7 @@
 #lang racket/base
 (require (for-syntax racket/base))
-(require racket/list)
+(require (prefix-in r: racket/base))
+(require "cons-emulation.rktl")
 (define-syntax time
   (lambda (stx)
     (syntax-case stx ()
@@ -11,24 +12,20 @@
            (printf "0:RESULT-cpu:ms: ~a.0\n0:RESULT-total:ms: ~a.0\n0:RESULT-gc:ms: ~a.0\n"
                    cpu user gc)
            (apply values v)))])))
-(struct element ())
 (letrec
-    ([E    (element)]
-     [F    (element)]
-     [head car]
+    ([head car]
      [tail cdr]
      [racket-map (lambda (f l)
                    (if (null? l)
                        '()
                        (cons (f (head l)) (racket-map f (tail l)))))]
      [swap (lambda (x)
-             (if (eq? x E) F E))]
+             (if (eq? x 1) 2 1))]
      [listnum (lambda (l)
                 (let*
-                    ([pairish (pair? l)]
-                     [numberish (if pairish (string->number (car l)) pairish)])
+                    ([pairish (r:pair? l)]
+                     [numberish (if pairish (string->number (r:car l)) pairish)])
                   (if numberish numberish 5000000)))]
      [num (listnum (vector->list (current-command-line-arguments)))]
-     [l (make-list num E)]
-     )
+     [l (make-list num 1)])
   (time (void (racket-map swap l))))
