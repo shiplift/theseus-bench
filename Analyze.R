@@ -284,7 +284,7 @@ facet_grid(. ~ benchmark)
 #  facet_grid(benchmark ~ .)
 
 f.name <- 'plot1.pdf'
-ggsave(f.name, width=24, height=17, units=c("cm"), colormodel='cmyk')
+ggsave(f.name, width=24, height=17, units=c("cm"), colormodel='cmyk', useDingbats=FALSE)
 embed_fonts(f.name, format="pdfwrite", options="-dEmbedAllFonts=true -dPDFSETTINGS=/prepress -dCompatibilityLevel=1.4 -dSubsetFonts=true -dHaveTrueTypeFonts=true")
 
 
@@ -411,7 +411,7 @@ facet_null()
 
 if (FALSE) {
   filename <-"/Users/tobias/Documents/Uni/FK/2013/02.1 Fall Retreat/report/revplot.pdf"
-  ggsave(filename , width=16, height=6.7, units=c("cm"), colormodel='rgb')
+  ggsave(filename , width=16, height=6.7, units=c("cm"), colormodel='rgb', useDingbats=FALSE)
   embed_fonts(filename, format="pdfwrite", options="-dEmbedAllFonts=true -dPDFSETTINGS=/prepress -dCompatibilityLevel=1.4 -dSubsetFonts=true -dHaveTrueTypeFonts=true")
 }
 

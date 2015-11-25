@@ -235,7 +235,7 @@ if (error_processing) {
       facet_null()  
       
     gg.file <- paste0(input.basename, "-cpu.pdf")
-    ggsave(gg.file, width=figure.width, height=figure.height, units=c("in"), colormodel='rgb')
+    ggsave(gg.file, width=figure.width, height=figure.height, units=c("in"), colormodel='rgb', useDingbats=FALSE)
     embed_fonts(gg.file, options=pdf.embed.options)  
   }
   
@@ -277,7 +277,7 @@ if (error_processing) {
       facet_null()  
     
     gg.file <- paste0(input.basename, "-mem.pdf")
-    ggsave(gg.file, width=figure.width, height=figure.height, units=c("in"), colormodel='rgb')
+    ggsave(gg.file, width=figure.width, height=figure.height, units=c("in"), colormodel='rgb', useDingbats=FALSE)
     embed_fonts(gg.file, options=pdf.embed.options)
   }
 
@@ -320,9 +320,11 @@ if (error_processing) {
     & bench.summary$vm != "LambUncached"
     & bench.summary$vm != "Python"
   ,]
-  dat$vm <- factor(dat$vm, levels = c("Lamb","LambUncached",
+  dat$vm <- factor(dat$vm, levels = c("Lamb", # "LambUncached",
+                                      "PycketShapes",
+                                      "PycketOrig",  
                                       "MLton","SMLNJ","OCaml",
-                                      "Racket", "Pycket",
+                                      "Racket", # "Pycket",
                                       "Python", "Pypy"))
   levels(dat$vm)[levels(dat$vm) == "Lamb"] <- "Prototype"
 
@@ -335,8 +337,7 @@ if (error_processing) {
          aes(x=benchmark,y=v,group=interaction(benchmark,vm),fill=vm)
   ) +
     geom_bar(stat="identity", position=dodge, width=.75, aes(fill = vm))+
-    geom_point(position=dodge,aes(y=mean/2, shape=vm),size=2, color="grey90") +
-  
+    # geom_point(position=dodge,aes(y=mean/2, shape=vm),size=2, color="grey90") +
   #   xlab("Benchmark") +
     ylab("Execution time (ms)") +
     theme_bw(base_size=8, base_family="Helvetica") +
@@ -373,7 +374,7 @@ if (error_processing) {
     facet_null()
 
   gg.file <- paste0(input.basename, "-norm-col.pdf")
-  ggsave(gg.file, width=figure.width, height=figure.height, units=c("in"), colormodel='rgb')
+  ggsave(gg.file, width=figure.width, height=figure.height, units=c("in"), colormodel='rgb', useDingbats=FALSE)
   embed_fonts(gg.file, options="-dPDFSETTINGS=/prepress")
 
 }
