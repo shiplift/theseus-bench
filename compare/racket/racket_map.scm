@@ -12,20 +12,23 @@
            (printf "0:RESULT-cpu:ms: ~a.0\n0:RESULT-total:ms: ~a.0\n0:RESULT-gc:ms: ~a.0\n"
                    cpu user gc)
            (apply values v)))])))
+(struct element (x) #:transparent)
 (letrec
-    ([head car]
+    ([e (element 'e)]
+     [f (element 'f)]
+     [head car]
      [tail cdr]
      [racket-map (lambda (f l)
                    (if (null? l)
                        '()
                        (cons (f (head l)) (racket-map f (tail l)))))]
      [swap (lambda (x)
-             (if (eq? x 1) 2 1))]
+             (if (equal? x e) f e))]
      [listnum (lambda (l)
                 (let*
                     ([pairish (r:pair? l)]
                      [numberish (if pairish (string->number (r:car l)) pairish)])
                   (if numberish numberish 5000000)))]
      [num (listnum (vector->list (current-command-line-arguments)))]
-     [l (make-list num 1)])
+     [l (make-list num e)])
   (time (void (racket-map swap l))))

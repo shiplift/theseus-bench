@@ -12,8 +12,11 @@
            (printf "0:RESULT-cpu:ms: ~a.0\n0:RESULT-total:ms: ~a.0\n0:RESULT-gc:ms: ~a.0\n"
                    cpu user gc)
            (apply values v)))])))
+(struct element (x) #:transparent)
 (letrec
-    ([head car]
+    ([e (element 'e)]
+     [f (element 'f)]
+     [head car]
      [tail cdr]
      [racket-filter (lambda (p l)
                    (cond [(null? l) '()]
@@ -23,10 +26,10 @@
                   (letrec ((aux (lambda (m acc)
                                   (if (= 0 m)
                                       acc
-                                      (aux (- m 1) (cons (if (odd? m) 1 2) acc))))))
+                                      (aux (- m 1) (cons (if (odd? m) e f) acc))))))
                     (aux n '())))]
      [flt (lambda (x)
-             (eq? x 1))]
+             (equal? x e))]
      [listnum (lambda (l)
                 (let*
                     ([pairish (r:pair? l)]
