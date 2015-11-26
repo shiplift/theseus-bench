@@ -1,0 +1,1707 @@
+[31b5f05919] {jit-log-opt-loop
+# Loop 0 ((let ([if_582 (= 0 m138)]) (if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))) from (mk-acc136 AppRand0_445 e140 AppRand2_117)..element1{|}.cons2{element1{|}, |}) : loop with 200 ops
+[p0, p1]
++121: label(p0, p1, descr=TargetToken(4375383520))
+debug_merge_point(0, 0, '(let ([if_582 (= 0 m138)]) (if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))) from (mk-acc136 AppRand0_445 e140 AppRand2_117)..element1{|}.cons2{element1{|}. |}')
+guard_class(p0, 4302745952, descr=<Guard0x104c49100>) [p0, p1]
++147: p3 = getfield_gc_pure_r(p0, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p3, 4302745032, descr=<Guard0x104dcaf20>) [p0, p1]
++163: p5 = getfield_gc_pure_r(p3, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p5, 4302750960, descr=<Guard0x104dcaed0>) [p0, p1]
++179: p7 = getfield_gc_pure_r(p0, descr=<FieldP rpython.tool.pairtype.ConsEnvSize3.inst__vals_0 16>)
+guard_nonnull_class(p7, ConstClass(W_Fixnum), descr=<Guard0x104c49268>) [p0, p1]
++201: p9 = getfield_gc_pure_r(p0, descr=<FieldP rpython.tool.pairtype.ConsEnvSize3.inst__vals_1 24>)
+guard_nonnull_class(p9, 4302713992, descr=<Guard0x104c491f0>) [p0, p1]
++223: p11 = getfield_gc_pure_r(p9, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++227: p12 = getfield_gc_pure_r(p0, descr=<FieldP rpython.tool.pairtype.ConsEnvSize3.inst__vals_2 32>)
+guard_nonnull_class(p12, 4302714280, descr=<Guard0x104c49178>) [p0, p1]
++249: p14 = getfield_gc_pure_r(p12, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p11, ConstPtr(ptr15), descr=<Guard0x104dcae80>) [p0, p1]
+guard_value(p14, ConstPtr(ptr16), descr=<Guard0x104dcae30>) [p0, p1]
+debug_merge_point(0, 0, '(= 0 m138)..element1{|}.cons2{element1{|}. |}')
+guard_not_invalidated(descr=<Guard0x104dcade0>) [p0, p1]
++291: i17 = getfield_gc_pure_i(p7, descr=<FieldS pycket.values.W_Fixnum.inst_value 8>)
++295: i19 = int_eq(0, i17)
+guard_false(i19, descr=<Guard0x104dcad90>) [p0, p1]
+debug_merge_point(0, 0, '(if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))...element1{|}.cons2{element1{|}. |}')
+debug_merge_point(0, 0, '(let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117))...element1{|}.cons2{element1{|}. |}')
+debug_merge_point(0, 0, '(- m138 1)..element1{|}.cons2{element1{|}. |}')
++305: i21 = int_sub_ovf(i17, 1)
+guard_no_overflow(descr=<Guard0x104dcad40>) [p0, p1]
+debug_merge_point(0, 0, '(#%pycket:cons e140 l142)..element1{|}.cons2{element1{|}. |}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. |}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. |}')
++315: p22 = getfield_gc_pure_r(p9, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_class(p22, ConstClass(W_Symbol), descr=<Guard0x104dcacf0>) [p0, p1]
++331: p24 = getfield_gc_pure_r(p12, descr=<FieldP rpython.tool.pairtype.W_StructSize2.inst___storage_0 16>)
++335: p25 = getfield_gc_pure_r(p12, descr=<FieldP rpython.tool.pairtype.W_StructSize2.inst___storage_1 24>)
+guard_class(p24, ConstClass(W_Symbol), descr=<Guard0x104dcaca0>) [p0, p1]
+guard_class(p25, 4302715720, descr=<Guard0x104dcac50>) [p0, p1]
++364: p28 = getfield_gc_pure_r(p25, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p28, ConstPtr(ptr29), descr=<Guard0x104dcac00>) [p0, p1]
+debug_merge_point(0, 0, '(mk-acc136 AppRand0_445 e140 AppRand2_117)..cons2{element1{|}. cons2{element1{|}. |}}..element1{|}.cons2{element1{|}. |}')
++387: p30 = getfield_gc_pure_r(p3, descr=<FieldP pycket.values.W_Closure1AsEnv.inst_caselam 16>)
+guard_value(p30, ConstPtr(ptr31), descr=<Guard0x104dcabb0>) [p0, p1]
+debug_merge_point(0, 0, '(let ([if_582 (= 0 m138)]) (if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))) from (mk-acc136 AppRand0_445 e140 AppRand2_117)..element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
+debug_merge_point(0, 0, '(= 0 m138)..element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
++410: i33 = int_eq(0, i21)
+guard_false(i33, descr=<Guard0x104dcab60>) [p0, p1]
+debug_merge_point(0, 0, '(if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))...element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
+debug_merge_point(0, 0, '(let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117))...element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
+debug_merge_point(0, 0, '(- m138 1)..element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
++420: i35 = int_sub_ovf(i21, 1)
+guard_no_overflow(descr=<Guard0x104dcab10>) [p0, p1]
+debug_merge_point(0, 0, '(#%pycket:cons e140 l142)..element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
+debug_merge_point(0, 0, '(mk-acc136 AppRand0_445 e140 AppRand2_117)..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}..element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
+debug_merge_point(0, 0, '(let ([if_582 (= 0 m138)]) (if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))) from (mk-acc136 AppRand0_445 e140 AppRand2_117)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
+debug_merge_point(0, 0, '(= 0 m138)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
++430: i37 = int_eq(0, i35)
+guard_false(i37, descr=<Guard0x104dcb5b0>) [p0, p1]
+debug_merge_point(0, 0, '(if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))...element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
+debug_merge_point(0, 0, '(let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117))...element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
+debug_merge_point(0, 0, '(- m138 1)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
++440: i39 = int_sub_ovf(i35, 1)
+guard_no_overflow(descr=<Guard0x104de2480>) [p0, p1]
+debug_merge_point(0, 0, '(#%pycket:cons e140 l142)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
+debug_merge_point(0, 0, '(mk-acc136 AppRand0_445 e140 AppRand2_117)..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
+debug_merge_point(0, 0, '(let ([if_582 (= 0 m138)]) (if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))) from (mk-acc136 AppRand0_445 e140 AppRand2_117)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
+debug_merge_point(0, 0, '(= 0 m138)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
++450: i41 = int_eq(0, i39)
+guard_false(i41, descr=<Guard0x104de2430>) [p0, p1]
+debug_merge_point(0, 0, '(if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))...element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
+debug_merge_point(0, 0, '(let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117))...element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
+debug_merge_point(0, 0, '(- m138 1)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
++460: i43 = int_sub_ovf(i39, 1)
+guard_no_overflow(descr=<Guard0x104de2390>) [p0, p1]
+debug_merge_point(0, 0, '(#%pycket:cons e140 l142)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
+debug_merge_point(0, 0, '(mk-acc136 AppRand0_445 e140 AppRand2_117)..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
+debug_merge_point(0, 0, '(let ([if_582 (= 0 m138)]) (if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))) from (mk-acc136 AppRand0_445 e140 AppRand2_117)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
+debug_merge_point(0, 0, '(= 0 m138)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
++470: i45 = int_eq(0, i43)
+guard_false(i45, descr=<Guard0x104de2340>) [p0, p1]
+debug_merge_point(0, 0, '(if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))...element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
+debug_merge_point(0, 0, '(let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117))...element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
+debug_merge_point(0, 0, '(- m138 1)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
++480: i47 = int_sub_ovf(i43, 1)
+guard_no_overflow(descr=<Guard0x104de22a0>) [p0, p1]
+debug_merge_point(0, 0, '(#%pycket:cons e140 l142)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
+debug_merge_point(0, 0, '(mk-acc136 AppRand0_445 e140 AppRand2_117)..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
+debug_merge_point(0, 0, '(let ([if_582 (= 0 m138)]) (if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))) from (mk-acc136 AppRand0_445 e140 AppRand2_117)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
+debug_merge_point(0, 0, '(= 0 m138)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
++490: i49 = int_eq(0, i47)
+guard_false(i49, descr=<Guard0x104de2250>) [p0, p1]
+debug_merge_point(0, 0, '(if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))...element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
+debug_merge_point(0, 0, '(let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117))...element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
+debug_merge_point(0, 0, '(- m138 1)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
++500: i51 = int_sub_ovf(i47, 1)
+guard_no_overflow(descr=<Guard0x104de21b0>) [p0, p1]
+debug_merge_point(0, 0, '(#%pycket:cons e140 l142)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
+debug_merge_point(0, 0, '(mk-acc136 AppRand0_445 e140 AppRand2_117)..cons2{element1{|}. |}..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
+debug_merge_point(0, 0, '(let ([if_582 (= 0 m138)]) (if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))) from (mk-acc136 AppRand0_445 e140 AppRand2_117)..element1{|}.cons2{element1{|}. |}')
++510: p52 = same_as_r(p22)
++513: label(p3, i51, p9, p22, p24, p25, p1, p52, descr=TargetToken(4375383608))
+debug_merge_point(0, 0, '(let ([if_582 (= 0 m138)]) (if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))) from (mk-acc136 AppRand0_445 e140 AppRand2_117)..element1{|}.cons2{element1{|}. |}')
+debug_merge_point(0, 0, '(= 0 m138)..element1{|}.cons2{element1{|}. |}')
+guard_not_invalidated(descr=<Guard0x104c492e0>) [p25, p24, p22, i51, p9, p3, p1]
++544: i53 = int_eq(0, i51)
+guard_false(i53, descr=<Guard0x104de2160>) [p25, p24, p22, i51, p9, p3, p1]
+debug_merge_point(0, 0, '(if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))...element1{|}.cons2{element1{|}. |}')
+debug_merge_point(0, 0, '(let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117))...element1{|}.cons2{element1{|}. |}')
+debug_merge_point(0, 0, '(- m138 1)..element1{|}.cons2{element1{|}. |}')
++554: i54 = int_sub_ovf(i51, 1)
+guard_no_overflow(descr=<Guard0x104de20c0>) [p25, p24, p22, i51, p9, p3, p1]
+debug_merge_point(0, 0, '(#%pycket:cons e140 l142)..element1{|}.cons2{element1{|}. |}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. |}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. |}')
+guard_class(p22, ConstClass(W_Symbol), descr=<Guard0x104de2070>) [p25, p24, p22, i51, p9, p3, p1]
+debug_merge_point(0, 0, '(mk-acc136 AppRand0_445 e140 AppRand2_117)..cons2{element1{|}. cons2{element1{|}. |}}..element1{|}.cons2{element1{|}. |}')
+debug_merge_point(0, 0, '(let ([if_582 (= 0 m138)]) (if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))) from (mk-acc136 AppRand0_445 e140 AppRand2_117)..element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
+debug_merge_point(0, 0, '(= 0 m138)..element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
++579: i55 = int_eq(0, i54)
+guard_false(i55, descr=<Guard0x104de2020>) [p25, p24, p22, i51, p9, p3, p1]
+debug_merge_point(0, 0, '(if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))...element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
+debug_merge_point(0, 0, '(let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117))...element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
+debug_merge_point(0, 0, '(- m138 1)..element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
++589: i56 = int_sub_ovf(i54, 1)
+guard_no_overflow(descr=<Guard0x104dcbf60>) [p25, p24, p22, i51, p9, p3, p1]
+debug_merge_point(0, 0, '(#%pycket:cons e140 l142)..element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
+debug_merge_point(0, 0, '(mk-acc136 AppRand0_445 e140 AppRand2_117)..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}..element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
+debug_merge_point(0, 0, '(let ([if_582 (= 0 m138)]) (if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))) from (mk-acc136 AppRand0_445 e140 AppRand2_117)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
+debug_merge_point(0, 0, '(= 0 m138)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
++599: i57 = int_eq(0, i56)
+guard_false(i57, descr=<Guard0x104dcbf10>) [p25, p24, p22, i51, p9, p3, p1]
+debug_merge_point(0, 0, '(if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))...element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
+debug_merge_point(0, 0, '(let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117))...element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
+debug_merge_point(0, 0, '(- m138 1)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
++609: i58 = int_sub_ovf(i56, 1)
+guard_no_overflow(descr=<Guard0x104dcbe70>) [p25, p24, p22, i51, p9, p3, p1]
+debug_merge_point(0, 0, '(#%pycket:cons e140 l142)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
+debug_merge_point(0, 0, '(mk-acc136 AppRand0_445 e140 AppRand2_117)..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
+debug_merge_point(0, 0, '(let ([if_582 (= 0 m138)]) (if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))) from (mk-acc136 AppRand0_445 e140 AppRand2_117)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
+debug_merge_point(0, 0, '(= 0 m138)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
++619: i59 = int_eq(0, i58)
+guard_false(i59, descr=<Guard0x104dcbe20>) [p25, p24, p22, i51, p9, p3, p1]
+debug_merge_point(0, 0, '(if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))...element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
+debug_merge_point(0, 0, '(let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117))...element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
+debug_merge_point(0, 0, '(- m138 1)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
++629: i60 = int_sub_ovf(i58, 1)
+guard_no_overflow(descr=<Guard0x104dcbd80>) [p25, p24, p22, i51, p9, p3, p1]
+debug_merge_point(0, 0, '(#%pycket:cons e140 l142)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
+debug_merge_point(0, 0, '(mk-acc136 AppRand0_445 e140 AppRand2_117)..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
+debug_merge_point(0, 0, '(let ([if_582 (= 0 m138)]) (if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))) from (mk-acc136 AppRand0_445 e140 AppRand2_117)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
+debug_merge_point(0, 0, '(= 0 m138)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
++639: i61 = int_eq(0, i60)
+guard_false(i61, descr=<Guard0x104dcbd30>) [p25, p24, p22, i51, p9, p3, p1]
+debug_merge_point(0, 0, '(if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))...element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
+debug_merge_point(0, 0, '(let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117))...element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
+debug_merge_point(0, 0, '(- m138 1)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
++649: i62 = int_sub_ovf(i60, 1)
+guard_no_overflow(descr=<Guard0x104dcbc90>) [p25, p24, p22, i51, p9, p3, p1]
+debug_merge_point(0, 0, '(#%pycket:cons e140 l142)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
+debug_merge_point(0, 0, '(mk-acc136 AppRand0_445 e140 AppRand2_117)..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
+debug_merge_point(0, 0, '(let ([if_582 (= 0 m138)]) (if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))) from (mk-acc136 AppRand0_445 e140 AppRand2_117)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
+debug_merge_point(0, 0, '(= 0 m138)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
++659: i63 = int_eq(0, i62)
+guard_false(i63, descr=<Guard0x104dcbc40>) [p25, p24, p22, i51, p9, p3, p1]
+debug_merge_point(0, 0, '(if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))...element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
+debug_merge_point(0, 0, '(let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117))...element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
+debug_merge_point(0, 0, '(- m138 1)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
++669: i64 = int_sub_ovf(i62, 1)
+guard_no_overflow(descr=<Guard0x104dcbb50>) [p25, p24, p22, i51, p9, p3, p1]
+debug_merge_point(0, 0, '(#%pycket:cons e140 l142)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573)..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
+debug_merge_point(0, 0, '(mk-acc136 AppRand0_445 e140 AppRand2_117)..cons2{element1{|}. |}..element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
+debug_merge_point(0, 0, '(let ([if_582 (= 0 m138)]) (if if_582 l142 (let ([AppRand0_445 (- m138 1)][AppRand2_117 (#%pycket:cons e140 l142)]) (mk-acc136 AppRand0_445 e140 AppRand2_117)))) from (mk-acc136 AppRand0_445 e140 AppRand2_117)..element1{|}.cons2{element1{|}. |}')
+p65 = new_with_vtable(descr=<SizeDescr 72>)
+setfield_gc(p65, ConstPtr(ptr66), descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+setfield_gc(p65, p22, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_0 16>)
+setfield_gc(p65, p22, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_1 24>)
+setfield_gc(p65, p22, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_2 32>)
+setfield_gc(p65, p22, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_3 40>)
+setfield_gc(p65, p22, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_4 48>)
+setfield_gc(p65, p24, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_5 56>)
+setfield_gc(p65, p25, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_6 64>)
+jump(p3, i64, p9, p52, p22, p65, p1, p52, descr=TargetToken(4375383608))
++832: --end of the loop--
+[31b6012021] jit-log-opt-loop}
+[3232843fbe] {jit-log-opt-loop
+# Loop 1 (LoopLabel(equal_vec_func:pycket.prims.equal:63).element1{|}..) : loop with 66 ops
+[p0, p1]
++121: label(p0, p1, descr=TargetToken(4375382112))
+debug_merge_point(0, 0, 'LoopLabel(equal_vec_func:pycket.prims.equal:63).element1{|}..')
++128: p2 = getfield_gc_pure_r(p1, descr=<FieldP pycket.cont.Args.inst_a 32>)
++139: p3 = getfield_gc_pure_r(p1, descr=<FieldP pycket.cont.Args.inst_b 40>)
++143: i4 = getfield_gc_pure_i(p1, descr=<FieldS pycket.cont.Args.inst_idx 48>)
++147: p5 = getfield_gc_pure_r(p1, descr=<FieldP pycket.cont.Args.inst_info 56>)
++151: p6 = getfield_gc_pure_r(p1, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++155: p7 = getfield_gc_pure_r(p1, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p2, ConstClass(W_Vector), descr=<Guard0x104c493d0>) [i4, p7, p6, p5, p3, p2]
++171: i9 = getfield_gc_pure_i(p2, descr=<FieldS pycket.vector.W_Vector.inst_len 8>)
++175: i10 = int_ge(i4, i9)
+guard_false(i10, descr=<Guard0x104de38d0>) [i4, p7, p6, p5, p3, p2]
++184: p11 = getfield_gc_r(p2, descr=<FieldP pycket.vector.W_Vector.inst_strategy 24>)
+guard_class(p11, 4302792392, descr=<Guard0x104de3880>) [i4, p7, p6, p5, p3, p2]
++201: p13 = getfield_gc_r(p2, descr=<FieldP pycket.vector.W_Vector.inst_storage 16>)
++205: p14 = getarrayitem_gc_r(p13, i4, descr=<ArrayP 8>)
+guard_class(p6, 4302745344, descr=<Guard0x104de3830>) [i4, p7, p6, p5, p3, p2]
++222: p16 = getfield_gc_pure_r(p6, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p16, 4302732392, descr=<Guard0x104de37e0>) [i4, p7, p6, p5, p3, p2]
++240: p18 = getfield_gc_pure_r(p16, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p18, 4302750960, descr=<Guard0x104de3790>) [i4, p7, p6, p5, p3, p2]
++259: p20 = getfield_gc_pure_r(p6, descr=<FieldP rpython.tool.pairtype.ConsEnvSize1.inst__vals_0 16>)
+guard_nonnull_class(p20, 4302713992, descr=<Guard0x104c49538>) [i4, p7, p6, p5, p3, p2]
++283: p22 = getfield_gc_pure_r(p20, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++287: p23 = getfield_gc_pure_r(p16, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_0 24>)
+guard_nonnull_class(p23, ConstClass(W_Cell), descr=<Guard0x104c494c0>) [i4, p7, p6, p5, p3, p2]
++312: p25 = getfield_gc_pure_r(p16, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_1 32>)
+guard_nonnull_class(p25, ConstClass(W_Cell), descr=<Guard0x104c49448>) [i4, p7, p6, p5, p3, p2]
+guard_value(p22, ConstPtr(ptr27), descr=<Guard0x104de3740>) [i4, p7, p6, p5, p3, p2]
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}..')
+guard_class(p14, ConstClass(W_Symbol), descr=<Guard0x104de36f0>) [i4, p7, p6, p5, p3, p2]
+guard_class(p3, ConstClass(W_Vector), descr=<Guard0x104de36a0>) [i4, p7, p6, p5, p3, p2]
++381: p30 = getfield_gc_r(p3, descr=<FieldP pycket.vector.W_Vector.inst_strategy 24>)
++385: i31 = getfield_gc_pure_i(p3, descr=<FieldS pycket.vector.W_Vector.inst_len 8>)
+guard_class(p30, 4302792392, descr=<Guard0x104de3650>) [i4, p7, p6, p5, p3, p2]
++398: p33 = getfield_gc_r(p3, descr=<FieldP pycket.vector.W_Vector.inst_storage 16>)
++402: p34 = getarrayitem_gc_r(p33, i4, descr=<ArrayP 8>)
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}..')
+guard_class(p34, ConstClass(W_Symbol), descr=<Guard0x104de3600>) [i4, p7, p6, p5, p3, p2]
+debug_merge_point(0, 0, 'LoopLabel(equal_func_loop:pycket.prims.equal:106).element1{|}..')
++421: i36 = getfield_gc_pure_i(p5, descr=<FieldS pycket.prims.equal.EqualInfo.inst_for_chaperone 8>)
+guard_value(i36, 0, descr=<Guard0x104de35b0>) [i4, p7, p6, p5, p3, p2]
++435: i38 = instance_ptr_eq(p14, p34)
+guard_true(i38, descr=<Guard0x104de3560>) [i4, p7, p6, p5, p3, p2]
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}..')
++444: i40 = int_add(i4, 1)
+debug_merge_point(0, 0, 'LoopLabel(equal_vec_func:pycket.prims.equal:63).element1{|}..')
++448: label(p6, p7, p2, p3, i40, p5, i9, p13, p33, descr=TargetToken(4375386688))
+debug_merge_point(0, 0, 'LoopLabel(equal_vec_func:pycket.prims.equal:63).element1{|}..')
++496: i41 = int_ge(i40, i9)
+guard_false(i41, descr=<Guard0x104c49358>) [i9, i40, p7, p6, p5, p3, p2]
++505: p42 = getarrayitem_gc_r(p13, i40, descr=<ArrayP 8>)
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}..')
+guard_class(p42, ConstClass(W_Symbol), descr=<Guard0x104de3510>) [i9, i40, p7, p6, p5, p3, p2]
++522: p43 = getarrayitem_gc_r(p33, i40, descr=<ArrayP 8>)
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}..')
+guard_class(p43, ConstClass(W_Symbol), descr=<Guard0x104de34c0>) [i9, i40, p7, p6, p5, p3, p2]
+debug_merge_point(0, 0, 'LoopLabel(equal_func_loop:pycket.prims.equal:106).element1{|}..')
++539: i44 = instance_ptr_eq(p42, p43)
+guard_true(i44, descr=<Guard0x104de3470>) [i9, i40, p7, p6, p5, p3, p2]
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}..')
++548: i45 = int_add(i40, 1)
+debug_merge_point(0, 0, 'LoopLabel(equal_vec_func:pycket.prims.equal:63).element1{|}..')
++552: i46 = arraylen_gc(p13, descr=<ArrayP 8>)
++552: i47 = arraylen_gc(p33, descr=<ArrayP 8>)
++552: jump(p6, p7, p2, p3, i45, p5, i9, p13, p33, descr=TargetToken(4375386688))
++560: --end of the loop--
+[3232897d8b] jit-log-opt-loop}
+[3232dbac6b] {jit-log-opt-bridge
+# bridge out of Guard 0x104c49358 with 158 ops
+[i0, i1, p2, p3, p4, p5, p6]
++46: i7 = int_ge(i1, i0)
+guard_true(i7, descr=<Guard0x11a4fc020>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p2, 4302699640, descr=<Guard0x11a616ac0>) [i0, i1, p2, p3, p4, p5, p6]
++75: p9 = getfield_gc_pure_r(p2, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p9, ConstPtr(ptr10), descr=<Guard0x11a616a70>) [i0, i1, p2, p3, p4, p5, p6]
++98: p11 = getfield_gc_pure_r(p2, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+guard_not_invalidated(descr=<Guard0x11a616a20>) [i0, i1, p2, p3, p4, p5, p6]
++102: p12 = getfield_gc_pure_r(p2, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p11, 4302732392, descr=<Guard0x11a6169d0>) [i0, i1, p2, p3, p4, p5, p6]
++119: p14 = getfield_gc_pure_r(p11, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p14, 4302750960, descr=<Guard0x11a616980>) [i0, i1, p2, p3, p4, p5, p6]
++136: p16 = getfield_gc_pure_r(p11, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_0 24>)
+guard_nonnull_class(p16, ConstClass(W_Cell), descr=<Guard0x11a4fc908>) [i0, i1, p2, p3, p4, p5, p6]
++159: p18 = getfield_gc_pure_r(p11, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_1 32>)
+guard_nonnull_class(p18, ConstClass(W_Cell), descr=<Guard0x11a4fc890>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(if if_583 CellRef(f) CellRef(e))...')
+debug_merge_point(0, 0, 'CellRef(f)...')
++182: p20 = getfield_gc_r(p16, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p20, 4302713992, descr=<Guard0x11a4fc818>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p12, 4302699640, descr=<Guard0x11a616930>) [i0, i1, p2, p3, p4, p5, p6]
++219: p23 = getfield_gc_pure_r(p12, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p23, ConstPtr(ptr24), descr=<Guard0x11a6168e0>) [i0, i1, p2, p3, p4, p5, p6]
++243: p25 = getfield_gc_pure_r(p12, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++248: p26 = getfield_gc_pure_r(p12, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p25, 4302745648, descr=<Guard0x11a616890>) [i0, i1, p2, p3, p4, p5, p6]
++266: p28 = getfield_gc_pure_r(p25, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p28, 4302732704, descr=<Guard0x11a616840>) [i0, i1, p2, p3, p4, p5, p6]
++284: p30 = getfield_gc_pure_r(p28, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p30, 4302750960, descr=<Guard0x11a6167f0>) [i0, i1, p2, p3, p4, p5, p6]
++302: p32 = getfield_gc_pure_r(p20, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++306: p33 = getfield_gc_pure_r(p25, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_0 16>)
+guard_nonnull_class(p33, 4302732392, descr=<Guard0x11a4fc7a0>) [i0, i1, p2, p3, p4, p5, p6]
++328: p35 = getfield_gc_pure_r(p25, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_1 24>)
+guard_nonnull_class(p35, 4302714280, descr=<Guard0x11a4fc728>) [i0, i1, p2, p3, p4, p5, p6]
++350: p37 = getfield_gc_pure_r(p35, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++354: p38 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_0 24>)
+guard_nonnull_class(p38, ConstClass(W_Cell), descr=<Guard0x11a4fc6b0>) [i0, i1, p2, p3, p4, p5, p6]
++377: p40 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_1 32>)
+guard_nonnull_class(p40, ConstClass(W_Cell), descr=<Guard0x11a4fc638>) [i0, i1, p2, p3, p4, p5, p6]
++400: p42 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_2 40>)
+guard_nonnull_class(p42, ConstClass(W_Cell), descr=<Guard0x11a4fc5c0>) [i0, i1, p2, p3, p4, p5, p6]
+guard_value(p32, ConstPtr(ptr44), descr=<Guard0x11a6167a0>) [i0, i1, p2, p3, p4, p5, p6]
+guard_value(p37, ConstPtr(ptr45), descr=<Guard0x11a616750>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284))).element1{|}..cons2{element1{|}. |}...')
+debug_merge_point(0, 0, '(CellRef(tail) l).element1{|}..cons2{element1{|}. |}...')
++468: p46 = getfield_gc_r(p40, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_value(p46, ConstPtr(ptr47), descr=<Guard0x11a4fc548>) [i0, i1, p2, p3, p4, p5, p6]
++491: p48 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize2.inst___storage_1 24>)
+guard_class(p48, 4302715720, descr=<Guard0x11a616700>) [i0, i1, p2, p3, p4, p5, p6]
++508: p50 = getfield_gc_pure_r(p48, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p50, ConstPtr(ptr51), descr=<Guard0x11a6166b0>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)).cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}.element1{|}..cons2{element1{|}. |}...')
+debug_merge_point(0, 0, 'AppRand0_448.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}.element1{|}..cons2{element1{|}. |}...')
+debug_merge_point(0, 0, '(CellRef(racket-map) f141 AppRand1_283).cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}.element1{|}..cons2{element1{|}. |}...')
++531: p52 = getfield_gc_r(p38, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p52, 4302732704, descr=<Guard0x11a4fc4d0>) [i0, i1, p2, p3, p4, p5, p6]
++553: p54 = getfield_gc_pure_r(p52, descr=<FieldP pycket.values.W_Closure1AsEnv.inst_caselam 16>)
+guard_value(p54, ConstPtr(ptr55), descr=<Guard0x11a616660>) [i0, i1, p2, p3, p4, p5, p6]
++576: i56 = instance_ptr_eq(p28, p52)
+guard_true(i56, descr=<Guard0x11a616610>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(if (null? l) '() (let ([AppRand0_447 (CellRef(head) l)]) (let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))))) from (CellRef(racket-map) f141 AppRand1_283)..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}...')
+debug_merge_point(0, 0, '(let ([AppRand0_447 (CellRef(head) l)]) (let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))))..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}...')
+debug_merge_point(0, 0, '(CellRef(head) l)..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}...')
++585: p57 = getfield_gc_r(p42, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_value(p57, ConstPtr(ptr58), descr=<Guard0x11a4fc458>) [i0, i1, p2, p3, p4, p5, p6]
++608: p59 = getfield_gc_pure_r(p48, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_0 16>)
++612: p60 = getfield_gc_pure_r(p48, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_1 24>)
++612: p61 = getfield_gc_pure_r(p48, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_2 32>)
++612: p62 = getfield_gc_pure_r(p48, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_3 40>)
++612: p63 = getfield_gc_pure_r(p48, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_4 48>)
++612: p64 = getfield_gc_pure_r(p48, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_5 56>)
++612: p65 = getfield_gc_pure_r(p48, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_6 64>)
+guard_class(p59, ConstClass(W_Symbol), descr=<Guard0x11a616570>) [i0, i1, p2, p3, p4, p5, p6]
++624: p67 = getfield_gc_pure_r(p28, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p67, 4302750960, descr=<Guard0x11a616520>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}...')
+debug_merge_point(0, 0, '(f141 AppRand0_447).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}...')
++641: p69 = getfield_gc_pure_r(p33, descr=<FieldP pycket.values.W_Closure1AsEnv.inst_caselam 16>)
+guard_value(p69, ConstPtr(ptr70), descr=<Guard0x11a6164d0>) [i0, i1, p2, p3, p4, p5, p6]
++671: p71 = getfield_gc_pure_r(p33, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p71, 4302750960, descr=<Guard0x11a616480>) [i0, i1, p2, p3, p4, p5, p6]
++687: p73 = getfield_gc_pure_r(p33, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_0 24>)
+guard_nonnull_class(p73, ConstClass(W_Cell), descr=<Guard0x11a4fc3e0>) [i0, i1, p2, p3, p4, p5, p6]
++709: p75 = getfield_gc_pure_r(p33, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_1 32>)
+guard_nonnull_class(p75, ConstClass(W_Cell), descr=<Guard0x11a4fc368>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([if_583 (equal? x CellRef(e))]) (if if_583 CellRef(f) CellRef(e))) from (f141 AppRand0_447).element1{|}..')
+debug_merge_point(0, 0, '(equal? x CellRef(e)).element1{|}..')
++731: p77 = getfield_gc_r(p75, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p77, 4302713992, descr=<Guard0x11a4fc2f0>) [i0, i1, p2, p3, p4, p5, p6]
++753: p79 = getfield_gc_pure_r(p77, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p79, ConstPtr(ptr80), descr=<Guard0x11a616430>) [i0, i1, p2, p3, p4, p5, p6]
++776: i82 = getfield_gc_i(ConstPtr(ptr81), descr=<FieldU pycket.values_struct.W_StructType.inst_isopaque 168>)
+guard_false(i82, descr=<Guard0x11a6163e0>) [i0, i1, p2, p3, p4, p5, p6]
++799: i88 = call_i(ConstClass(ll_call_lookup_function_trampoline__v282___simple_call__function_l), ConstPtr(ptr84), ConstPtr(ptr85), -3040389267169576089, 0, descr=<Calli 8 rrii EF=5 OS=4>)
+guard_no_exception(descr=<Guard0x11a4fc278>) [p77, i88, p59, p20, p26, p30, p48, p28, p33]
++974: i90 = int_lt(i88, 0)
+guard_false(i90, descr=<Guard0x11a616340>) [p77, i88, p59, p20, p26, p30, p48, p28, p33]
++984: p91 = getfield_gc_r(ConstPtr(ptr84), descr=<FieldP dicttable.entries 48>)
++997: p92 = getinteriorfield_gc_r(p91, i88, descr=<InteriorFieldDescr <FieldP odictentry.value 8>>)
+guard_nonnull_class(p92, ConstClass(W_Symbol), descr=<Guard0x11a4fc200>) [p77, i88, p59, p20, p26, p30, p48, p28, p33]
++1024: i99 = call_i(ConstClass(ll_call_lookup_function_trampoline__v282___simple_call__function_l), ConstPtr(ptr95), ConstPtr(ptr96), -3040389267169576089, 0, descr=<Calli 8 rrii EF=5 OS=4>)
+guard_no_exception(descr=<Guard0x11a4fc188>) [p77, i99, p92, p59, p20, p26, p30, p48, p28, p33]
++1164: i101 = int_lt(i99, 0)
+guard_false(i101, descr=<Guard0x11a6162a0>) [p77, i99, p92, p59, p20, p26, p30, p48, p28, p33]
++1174: p102 = getinteriorfield_gc_r(p91, i99, descr=<InteriorFieldDescr <FieldP odictentry.value 8>>)
+guard_nonnull_class(p102, ConstClass(W_Symbol), descr=<Guard0x11a4fc110>) [p77, i99, p92, p59, p20, p26, p30, p48, p28, p33]
++1208: p104 = getfield_gc_pure_r(p77, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_nonnull_class(p104, ConstClass(W_Symbol), descr=<Guard0x11a4fc098>) [p77, i99, p92, p59, p20, p26, p30, p48, p28, p33]
+debug_merge_point(0, 0, 'LoopLabel(equal_vec_func:pycket.prims.equal:63).element1{|}..')
+p106 = new_with_vtable(descr=<SizeDescr 24>)
+p107 = new_with_vtable(descr=<SizeDescr 24>)
+setfield_gc(p107, ConstPtr(ptr108), descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+setfield_gc(p107, p59, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+p109 = new_with_vtable(descr=<SizeDescr 64>)
+p110 = new_with_vtable(descr=<SizeDescr 40>)
+setfield_gc(p110, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p110, p33, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+p112 = new_with_vtable(descr=<SizeDescr 40>)
+setfield_gc(p112, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+p114 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p114, p28, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+setfield_gc(p114, p33, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_0 16>)
+setfield_gc(p114, p48, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_1 24>)
+setfield_gc(p112, p114, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+p115 = new_with_vtable(descr=<SizeDescr 48>)
+setfield_gc(p115, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p115, p30, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+setfield_gc(p115, p26, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p115, ConstPtr(ptr117), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+setfield_gc(p115, p20, descr=<FieldP pycket.small_list.LetContSize1.inst__vals_w_0 40>)
+setfield_gc(p112, p115, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p112, ConstPtr(ptr118), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+setfield_gc(p110, p112, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p110, ConstPtr(ptr119), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+p120 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p120, 2, descr=<FieldS pycket.vector.W_Vector.inst_len 8>)
+p122 = new_array_clear(2, descr=<ArrayP 8>)
+setarrayitem_gc(p122, 0, p92, descr=<ArrayP 8>)
+setarrayitem_gc(p122, 1, p59, descr=<ArrayP 8>)
+setfield_gc(p120, p122, descr=<FieldP pycket.vector.W_Vector.inst_storage 16>)
+setfield_gc(p120, ConstPtr(ptr125), descr=<FieldP pycket.vector.W_Vector.inst_strategy 24>)
+p126 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p126, 2, descr=<FieldS pycket.vector.W_Vector.inst_len 8>)
+p128 = new_array_clear(2, descr=<ArrayP 8>)
+setarrayitem_gc(p128, 0, p102, descr=<ArrayP 8>)
+setarrayitem_gc(p128, 1, p104, descr=<ArrayP 8>)
+setfield_gc(p126, p128, descr=<FieldP pycket.vector.W_Vector.inst_storage 16>)
+setfield_gc(p126, ConstPtr(ptr131), descr=<FieldP pycket.vector.W_Vector.inst_strategy 24>)
+setfield_gc(p109, p106, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+setfield_gc(p109, p110, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p106, p33, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+setfield_gc(p106, p107, descr=<FieldP rpython.tool.pairtype.ConsEnvSize1.inst__vals_0 16>)
+setfield_gc(p109, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p109, p120, descr=<FieldP pycket.cont.Args.inst_a 32>)
+setfield_gc(p109, p126, descr=<FieldP pycket.cont.Args.inst_b 40>)
+setfield_gc(p109, 0, descr=<FieldS pycket.cont.Args.inst_idx 48>)
+setfield_gc(p109, ConstPtr(ptr134), descr=<FieldP pycket.cont.Args.inst_info 56>)
+jump(p106, p109, descr=TargetToken(4375382112))
++1792: --end of the loop--
+[3232e64e3f] jit-log-opt-bridge}
+[3233467498] {jit-log-opt-bridge
+# bridge out of Guard 0x11a4fc728 with 155 ops
+[i0, i1, p2, p3, p4, p5, p6]
++46: i7 = int_ge(i1, i0)
+guard_true(i7, descr=<Guard0x11a4fc980>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p2, 4302699640, descr=<Guard0x11a63b4c0>) [i0, i1, p2, p3, p4, p5, p6]
++68: p9 = getfield_gc_pure_r(p2, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p9, ConstPtr(ptr10), descr=<Guard0x11a63b470>) [i0, i1, p2, p3, p4, p5, p6]
++91: p11 = getfield_gc_pure_r(p2, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+guard_not_invalidated(descr=<Guard0x11a63b420>) [i0, i1, p2, p3, p4, p5, p6]
++95: p12 = getfield_gc_pure_r(p2, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p11, 4302732392, descr=<Guard0x11a63b3d0>) [i0, i1, p2, p3, p4, p5, p6]
++112: p14 = getfield_gc_pure_r(p11, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p14, 4302750960, descr=<Guard0x11a63b380>) [i0, i1, p2, p3, p4, p5, p6]
++129: p16 = getfield_gc_pure_r(p11, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_0 24>)
+guard_nonnull_class(p16, ConstClass(W_Cell), descr=<Guard0x11a4fd268>) [i0, i1, p2, p3, p4, p5, p6]
++152: p18 = getfield_gc_pure_r(p11, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_1 32>)
+guard_nonnull_class(p18, ConstClass(W_Cell), descr=<Guard0x11a4fd1f0>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(if if_583 CellRef(f) CellRef(e))...')
+debug_merge_point(0, 0, 'CellRef(f)...')
++175: p20 = getfield_gc_r(p16, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p20, 4302713992, descr=<Guard0x11a4fd178>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p12, 4302699640, descr=<Guard0x11a63b330>) [i0, i1, p2, p3, p4, p5, p6]
++212: p23 = getfield_gc_pure_r(p12, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p23, ConstPtr(ptr24), descr=<Guard0x11a63b2e0>) [i0, i1, p2, p3, p4, p5, p6]
++236: p25 = getfield_gc_pure_r(p12, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++241: p26 = getfield_gc_pure_r(p12, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p25, 4302745648, descr=<Guard0x11a63b290>) [i0, i1, p2, p3, p4, p5, p6]
++259: p28 = getfield_gc_pure_r(p25, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p28, 4302732704, descr=<Guard0x11a63b240>) [i0, i1, p2, p3, p4, p5, p6]
++277: p30 = getfield_gc_pure_r(p28, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p30, 4302750960, descr=<Guard0x11a63b1f0>) [i0, i1, p2, p3, p4, p5, p6]
++295: p32 = getfield_gc_pure_r(p20, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++299: p33 = getfield_gc_pure_r(p25, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_0 16>)
+guard_nonnull_class(p33, 4302732392, descr=<Guard0x11a4fd100>) [i0, i1, p2, p3, p4, p5, p6]
++321: p35 = getfield_gc_pure_r(p25, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_1 24>)
+guard_nonnull_class(p35, 4302714568, descr=<Guard0x11a4fd088>) [i0, i1, p2, p3, p4, p5, p6]
++343: p37 = getfield_gc_pure_r(p35, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++347: p38 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_0 24>)
+guard_nonnull_class(p38, ConstClass(W_Cell), descr=<Guard0x11a4fd010>) [i0, i1, p2, p3, p4, p5, p6]
++370: p40 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_1 32>)
+guard_nonnull_class(p40, ConstClass(W_Cell), descr=<Guard0x11a4fcf98>) [i0, i1, p2, p3, p4, p5, p6]
++393: p42 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_2 40>)
+guard_nonnull_class(p42, ConstClass(W_Cell), descr=<Guard0x11a4fcf20>) [i0, i1, p2, p3, p4, p5, p6]
+guard_value(p32, ConstPtr(ptr44), descr=<Guard0x11a63b1a0>) [i0, i1, p2, p3, p4, p5, p6]
+guard_value(p37, ConstPtr(ptr45), descr=<Guard0x11a63b150>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284))).element1{|}..cons2{element1{|}. cons2{element1{|}. |}}...')
+debug_merge_point(0, 0, '(CellRef(tail) l).element1{|}..cons2{element1{|}. cons2{element1{|}. |}}...')
++461: p46 = getfield_gc_r(p40, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_value(p46, ConstPtr(ptr47), descr=<Guard0x11a4fcea8>) [i0, i1, p2, p3, p4, p5, p6]
++484: p48 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize3.inst___storage_0 16>)
++484: p49 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize3.inst___storage_1 24>)
++488: p50 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize3.inst___storage_2 32>)
+guard_class(p49, ConstClass(W_Symbol), descr=<Guard0x11a63b100>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p50, 4302715720, descr=<Guard0x11a63b0b0>) [i0, i1, p2, p3, p4, p5, p6]
++517: p53 = getfield_gc_pure_r(p50, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p53, ConstPtr(ptr54), descr=<Guard0x11a63b060>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)).cons2{element1{|}. |}.element1{|}..cons2{element1{|}. cons2{element1{|}. |}}...')
+debug_merge_point(0, 0, 'AppRand0_448.cons2{element1{|}. |}.element1{|}..cons2{element1{|}. cons2{element1{|}. |}}...')
+debug_merge_point(0, 0, '(CellRef(racket-map) f141 AppRand1_283).cons2{element1{|}. |}.element1{|}..cons2{element1{|}. cons2{element1{|}. |}}...')
++540: p55 = getfield_gc_r(p38, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p55, 4302732704, descr=<Guard0x11a4fce30>) [i0, i1, p2, p3, p4, p5, p6]
++562: p57 = getfield_gc_pure_r(p55, descr=<FieldP pycket.values.W_Closure1AsEnv.inst_caselam 16>)
+guard_value(p57, ConstPtr(ptr58), descr=<Guard0x11a63b010>) [i0, i1, p2, p3, p4, p5, p6]
++585: i59 = instance_ptr_eq(p28, p55)
+guard_true(i59, descr=<Guard0x11a63afc0>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(if (null? l) '() (let ([AppRand0_447 (CellRef(head) l)]) (let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))))) from (CellRef(racket-map) f141 AppRand1_283)..cons2{element1{|}. |}...')
+debug_merge_point(0, 0, '(let ([AppRand0_447 (CellRef(head) l)]) (let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))))..cons2{element1{|}. |}...')
+debug_merge_point(0, 0, '(CellRef(head) l)..cons2{element1{|}. |}...')
++594: p60 = getfield_gc_r(p42, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_value(p60, ConstPtr(ptr61), descr=<Guard0x11a4fcdb8>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))).element1{|}..cons2{element1{|}. |}...')
+debug_merge_point(0, 0, '(f141 AppRand0_447).element1{|}..cons2{element1{|}. |}...')
++617: p62 = getfield_gc_pure_r(p33, descr=<FieldP pycket.values.W_Closure1AsEnv.inst_caselam 16>)
+guard_value(p62, ConstPtr(ptr63), descr=<Guard0x11a63af20>) [i0, i1, p2, p3, p4, p5, p6]
++647: p64 = getfield_gc_pure_r(p33, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p64, 4302750960, descr=<Guard0x11a63aed0>) [i0, i1, p2, p3, p4, p5, p6]
++663: p66 = getfield_gc_pure_r(p33, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_0 24>)
+guard_nonnull_class(p66, ConstClass(W_Cell), descr=<Guard0x11a4fcd40>) [i0, i1, p2, p3, p4, p5, p6]
++685: p68 = getfield_gc_pure_r(p33, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_1 32>)
+guard_nonnull_class(p68, ConstClass(W_Cell), descr=<Guard0x11a4fccc8>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([if_583 (equal? x CellRef(e))]) (if if_583 CellRef(f) CellRef(e))) from (f141 AppRand0_447).element1{|}..')
+debug_merge_point(0, 0, '(equal? x CellRef(e)).element1{|}..')
++707: p70 = getfield_gc_r(p68, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p70, 4302713992, descr=<Guard0x11a4fcc50>) [i0, i1, p2, p3, p4, p5, p6]
++729: p72 = getfield_gc_pure_r(p70, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p72, ConstPtr(ptr73), descr=<Guard0x11a63ae80>) [i0, i1, p2, p3, p4, p5, p6]
++752: i75 = getfield_gc_i(ConstPtr(ptr74), descr=<FieldU pycket.values_struct.W_StructType.inst_isopaque 168>)
+guard_false(i75, descr=<Guard0x11a63ae30>) [i0, i1, p2, p3, p4, p5, p6]
++775: i81 = call_i(ConstClass(ll_call_lookup_function_trampoline__v282___simple_call__function_l), ConstPtr(ptr77), ConstPtr(ptr78), -3040389267169576089, 0, descr=<Calli 8 rrii EF=5 OS=4>)
+guard_no_exception(descr=<Guard0x11a4fcbd8>) [p70, i81, p20, p26, p30, p50, p49, p28, p33]
++950: i83 = int_lt(i81, 0)
+guard_false(i83, descr=<Guard0x11a63ad90>) [p70, i81, p20, p26, p30, p50, p49, p28, p33]
++960: p84 = getfield_gc_r(ConstPtr(ptr77), descr=<FieldP dicttable.entries 48>)
++973: p85 = getinteriorfield_gc_r(p84, i81, descr=<InteriorFieldDescr <FieldP odictentry.value 8>>)
+guard_nonnull_class(p85, ConstClass(W_Symbol), descr=<Guard0x11a4fcb60>) [p70, i81, p20, p26, p30, p50, p49, p28, p33]
++1000: i92 = call_i(ConstClass(ll_call_lookup_function_trampoline__v282___simple_call__function_l), ConstPtr(ptr88), ConstPtr(ptr89), -3040389267169576089, 0, descr=<Calli 8 rrii EF=5 OS=4>)
+guard_no_exception(descr=<Guard0x11a4fcae8>) [p70, i92, p85, p20, p26, p30, p50, p49, p28, p33]
++1140: i94 = int_lt(i92, 0)
+guard_false(i94, descr=<Guard0x11a63acf0>) [p70, i92, p85, p20, p26, p30, p50, p49, p28, p33]
++1150: p95 = getinteriorfield_gc_r(p84, i92, descr=<InteriorFieldDescr <FieldP odictentry.value 8>>)
+guard_nonnull_class(p95, ConstClass(W_Symbol), descr=<Guard0x11a4fca70>) [p70, i92, p85, p20, p26, p30, p50, p49, p28, p33]
++1184: p97 = getfield_gc_pure_r(p70, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_nonnull_class(p97, ConstClass(W_Symbol), descr=<Guard0x11a4fc9f8>) [p70, i92, p85, p20, p26, p30, p50, p49, p28, p33]
+debug_merge_point(0, 0, 'LoopLabel(equal_vec_func:pycket.prims.equal:63).element1{|}..')
+p99 = new_with_vtable(descr=<SizeDescr 24>)
+p100 = new_with_vtable(descr=<SizeDescr 24>)
+setfield_gc(p100, ConstPtr(ptr101), descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+setfield_gc(p100, p49, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+p102 = new_with_vtable(descr=<SizeDescr 64>)
+p103 = new_with_vtable(descr=<SizeDescr 40>)
+setfield_gc(p103, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p103, p33, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+p105 = new_with_vtable(descr=<SizeDescr 40>)
+setfield_gc(p105, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+p107 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p107, p28, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+setfield_gc(p107, p33, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_0 16>)
+p108 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p108, ConstPtr(ptr109), descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+setfield_gc(p108, p49, descr=<FieldP rpython.tool.pairtype.W_StructSize2.inst___storage_0 16>)
+setfield_gc(p108, p50, descr=<FieldP rpython.tool.pairtype.W_StructSize2.inst___storage_1 24>)
+setfield_gc(p107, p108, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_1 24>)
+setfield_gc(p105, p107, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+p110 = new_with_vtable(descr=<SizeDescr 48>)
+setfield_gc(p110, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p110, p30, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+setfield_gc(p110, p26, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p110, ConstPtr(ptr112), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+setfield_gc(p110, p20, descr=<FieldP pycket.small_list.LetContSize1.inst__vals_w_0 40>)
+setfield_gc(p105, p110, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p105, ConstPtr(ptr113), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+setfield_gc(p103, p105, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p103, ConstPtr(ptr114), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+p115 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p115, 2, descr=<FieldS pycket.vector.W_Vector.inst_len 8>)
+p117 = new_array_clear(2, descr=<ArrayP 8>)
+setarrayitem_gc(p117, 0, p85, descr=<ArrayP 8>)
+setarrayitem_gc(p117, 1, p49, descr=<ArrayP 8>)
+setfield_gc(p115, p117, descr=<FieldP pycket.vector.W_Vector.inst_storage 16>)
+setfield_gc(p115, ConstPtr(ptr120), descr=<FieldP pycket.vector.W_Vector.inst_strategy 24>)
+p121 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p121, 2, descr=<FieldS pycket.vector.W_Vector.inst_len 8>)
+p123 = new_array_clear(2, descr=<ArrayP 8>)
+setarrayitem_gc(p123, 0, p95, descr=<ArrayP 8>)
+setarrayitem_gc(p123, 1, p97, descr=<ArrayP 8>)
+setfield_gc(p121, p123, descr=<FieldP pycket.vector.W_Vector.inst_storage 16>)
+setfield_gc(p121, ConstPtr(ptr126), descr=<FieldP pycket.vector.W_Vector.inst_strategy 24>)
+setfield_gc(p102, p99, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+setfield_gc(p102, p103, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p99, p33, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+setfield_gc(p99, p100, descr=<FieldP rpython.tool.pairtype.ConsEnvSize1.inst__vals_0 16>)
+setfield_gc(p102, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p102, p115, descr=<FieldP pycket.cont.Args.inst_a 32>)
+setfield_gc(p102, p121, descr=<FieldP pycket.cont.Args.inst_b 40>)
+setfield_gc(p102, 0, descr=<FieldS pycket.cont.Args.inst_idx 48>)
+setfield_gc(p102, ConstPtr(ptr129), descr=<FieldP pycket.cont.Args.inst_info 56>)
+jump(p99, p102, descr=TargetToken(4375382112))
++1792: --end of the loop--
+[32334f3d0e] jit-log-opt-bridge}
+[3233c8ea0c] {jit-log-opt-bridge
+# bridge out of Guard 0x11a4fd088 with 164 ops
+[i0, i1, p2, p3, p4, p5, p6]
++46: i7 = int_ge(i1, i0)
+guard_true(i7, descr=<Guard0x104bda908>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p2, 4302699640, descr=<Guard0x104c5f6f0>) [i0, i1, p2, p3, p4, p5, p6]
++68: p9 = getfield_gc_pure_r(p2, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p9, ConstPtr(ptr10), descr=<Guard0x104c5f6a0>) [i0, i1, p2, p3, p4, p5, p6]
++91: p11 = getfield_gc_pure_r(p2, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+guard_not_invalidated(descr=<Guard0x104c5f650>) [i0, i1, p2, p3, p4, p5, p6]
++95: p12 = getfield_gc_pure_r(p2, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p11, 4302732392, descr=<Guard0x104c5f600>) [i0, i1, p2, p3, p4, p5, p6]
++112: p14 = getfield_gc_pure_r(p11, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p14, 4302750960, descr=<Guard0x104c5f5b0>) [i0, i1, p2, p3, p4, p5, p6]
++129: p16 = getfield_gc_pure_r(p11, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_0 24>)
+guard_nonnull_class(p16, ConstClass(W_Cell), descr=<Guard0x11a4fd358>) [i0, i1, p2, p3, p4, p5, p6]
++152: p18 = getfield_gc_pure_r(p11, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_1 32>)
+guard_nonnull_class(p18, ConstClass(W_Cell), descr=<Guard0x11a4fd2e0>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(if if_583 CellRef(f) CellRef(e))...')
+debug_merge_point(0, 0, 'CellRef(f)...')
++175: p20 = getfield_gc_r(p16, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p20, 4302713992, descr=<Guard0x104c49f88>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p12, 4302699640, descr=<Guard0x104c5f560>) [i0, i1, p2, p3, p4, p5, p6]
++212: p23 = getfield_gc_pure_r(p12, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p23, ConstPtr(ptr24), descr=<Guard0x104c5f510>) [i0, i1, p2, p3, p4, p5, p6]
++236: p25 = getfield_gc_pure_r(p12, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++241: p26 = getfield_gc_pure_r(p12, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p25, 4302745648, descr=<Guard0x104c5f4c0>) [i0, i1, p2, p3, p4, p5, p6]
++259: p28 = getfield_gc_pure_r(p25, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p28, 4302732704, descr=<Guard0x104c5f470>) [i0, i1, p2, p3, p4, p5, p6]
++277: p30 = getfield_gc_pure_r(p28, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p30, 4302750960, descr=<Guard0x104c5f420>) [i0, i1, p2, p3, p4, p5, p6]
++295: p32 = getfield_gc_pure_r(p20, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++299: p33 = getfield_gc_pure_r(p25, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_0 16>)
+guard_nonnull_class(p33, 4302732392, descr=<Guard0x104c49f10>) [i0, i1, p2, p3, p4, p5, p6]
++321: p35 = getfield_gc_pure_r(p25, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_1 24>)
+guard_nonnull_class(p35, 4302715432, descr=<Guard0x104c49e98>) [i0, i1, p2, p3, p4, p5, p6]
++343: p37 = getfield_gc_pure_r(p35, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++347: p38 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_0 24>)
+guard_nonnull_class(p38, ConstClass(W_Cell), descr=<Guard0x104c49e20>) [i0, i1, p2, p3, p4, p5, p6]
++370: p40 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_1 32>)
+guard_nonnull_class(p40, ConstClass(W_Cell), descr=<Guard0x104c49da8>) [i0, i1, p2, p3, p4, p5, p6]
++393: p42 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_2 40>)
+guard_nonnull_class(p42, ConstClass(W_Cell), descr=<Guard0x104c49d30>) [i0, i1, p2, p3, p4, p5, p6]
+guard_value(p32, ConstPtr(ptr44), descr=<Guard0x104c5f3d0>) [i0, i1, p2, p3, p4, p5, p6]
+guard_value(p37, ConstPtr(ptr45), descr=<Guard0x104c5f380>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284))).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}...')
+debug_merge_point(0, 0, '(CellRef(tail) l).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}...')
++461: p46 = getfield_gc_r(p40, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_value(p46, ConstPtr(ptr47), descr=<Guard0x104c49cb8>) [i0, i1, p2, p3, p4, p5, p6]
++484: p48 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize6.inst___storage_0 16>)
++484: p49 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize6.inst___storage_1 24>)
++488: p50 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize6.inst___storage_2 32>)
++492: p51 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize6.inst___storage_3 40>)
++496: p52 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize6.inst___storage_4 48>)
++507: p53 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize6.inst___storage_5 56>)
+guard_class(p49, ConstClass(W_Symbol), descr=<Guard0x104c5f330>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p50, ConstClass(W_Symbol), descr=<Guard0x104c5f2e0>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p51, ConstClass(W_Symbol), descr=<Guard0x104c5f290>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p52, ConstClass(W_Symbol), descr=<Guard0x104c5f240>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p53, 4302715720, descr=<Guard0x104c5f1f0>) [i0, i1, p2, p3, p4, p5, p6]
++587: p59 = getfield_gc_pure_r(p53, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p59, ConstPtr(ptr60), descr=<Guard0x104c5f1a0>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)).cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}.element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}...')
+debug_merge_point(0, 0, 'AppRand0_448.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}.element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}...')
+debug_merge_point(0, 0, '(CellRef(racket-map) f141 AppRand1_283).cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}.element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}...')
++610: p61 = getfield_gc_r(p38, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p61, 4302732704, descr=<Guard0x104c49c40>) [i0, i1, p2, p3, p4, p5, p6]
++632: p63 = getfield_gc_pure_r(p61, descr=<FieldP pycket.values.W_Closure1AsEnv.inst_caselam 16>)
+guard_value(p63, ConstPtr(ptr64), descr=<Guard0x104c5f150>) [i0, i1, p2, p3, p4, p5, p6]
++655: i65 = instance_ptr_eq(p28, p61)
+guard_true(i65, descr=<Guard0x104c5f100>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(if (null? l) '() (let ([AppRand0_447 (CellRef(head) l)]) (let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))))) from (CellRef(racket-map) f141 AppRand1_283)..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}...')
+debug_merge_point(0, 0, '(let ([AppRand0_447 (CellRef(head) l)]) (let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))))..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}...')
+debug_merge_point(0, 0, '(CellRef(head) l)..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}...')
++664: p66 = getfield_gc_r(p42, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_value(p66, ConstPtr(ptr67), descr=<Guard0x104c49bc8>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}...')
+debug_merge_point(0, 0, '(f141 AppRand0_447).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}...')
++687: p68 = getfield_gc_pure_r(p33, descr=<FieldP pycket.values.W_Closure1AsEnv.inst_caselam 16>)
+guard_value(p68, ConstPtr(ptr69), descr=<Guard0x104c5f060>) [i0, i1, p2, p3, p4, p5, p6]
++717: p70 = getfield_gc_pure_r(p33, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p70, 4302750960, descr=<Guard0x104c5f010>) [i0, i1, p2, p3, p4, p5, p6]
++733: p72 = getfield_gc_pure_r(p33, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_0 24>)
+guard_nonnull_class(p72, ConstClass(W_Cell), descr=<Guard0x104c49b50>) [i0, i1, p2, p3, p4, p5, p6]
++755: p74 = getfield_gc_pure_r(p33, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_1 32>)
+guard_nonnull_class(p74, ConstClass(W_Cell), descr=<Guard0x104c49ad8>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([if_583 (equal? x CellRef(e))]) (if if_583 CellRef(f) CellRef(e))) from (f141 AppRand0_447).element1{|}..')
+debug_merge_point(0, 0, '(equal? x CellRef(e)).element1{|}..')
++777: p76 = getfield_gc_r(p74, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p76, 4302713992, descr=<Guard0x104c49a60>) [i0, i1, p2, p3, p4, p5, p6]
++799: p78 = getfield_gc_pure_r(p76, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p78, ConstPtr(ptr79), descr=<Guard0x104c5efc0>) [i0, i1, p2, p3, p4, p5, p6]
++822: i81 = getfield_gc_i(ConstPtr(ptr80), descr=<FieldU pycket.values_struct.W_StructType.inst_isopaque 168>)
+guard_false(i81, descr=<Guard0x104c5ef70>) [i0, i1, p2, p3, p4, p5, p6]
++845: i87 = call_i(ConstClass(ll_call_lookup_function_trampoline__v282___simple_call__function_l), ConstPtr(ptr83), ConstPtr(ptr84), -3040389267169576089, 0, descr=<Calli 8 rrii EF=5 OS=4>)
+guard_no_exception(descr=<Guard0x104c499e8>) [p76, i87, p20, p26, p30, p53, p52, p51, p50, p49, p28, p33]
++1027: i89 = int_lt(i87, 0)
+guard_false(i89, descr=<Guard0x104c5eed0>) [p76, i87, p20, p26, p30, p53, p52, p51, p50, p49, p28, p33]
++1037: p90 = getfield_gc_r(ConstPtr(ptr83), descr=<FieldP dicttable.entries 48>)
++1050: p91 = getinteriorfield_gc_r(p90, i87, descr=<InteriorFieldDescr <FieldP odictentry.value 8>>)
+guard_nonnull_class(p91, ConstClass(W_Symbol), descr=<Guard0x104c49970>) [p76, i87, p20, p26, p30, p53, p52, p51, p50, p49, p28, p33]
++1077: i98 = call_i(ConstClass(ll_call_lookup_function_trampoline__v282___simple_call__function_l), ConstPtr(ptr94), ConstPtr(ptr95), -3040389267169576089, 0, descr=<Calli 8 rrii EF=5 OS=4>)
+guard_no_exception(descr=<Guard0x104c49808>) [p76, i98, p91, p20, p26, p30, p53, p52, p51, p50, p49, p28, p33]
++1217: i100 = int_lt(i98, 0)
+guard_false(i100, descr=<Guard0x104c5ee30>) [p76, i98, p91, p20, p26, p30, p53, p52, p51, p50, p49, p28, p33]
++1227: p101 = getinteriorfield_gc_r(p90, i98, descr=<InteriorFieldDescr <FieldP odictentry.value 8>>)
+guard_nonnull_class(p101, ConstClass(W_Symbol), descr=<Guard0x104c49718>) [p76, i98, p91, p20, p26, p30, p53, p52, p51, p50, p49, p28, p33]
++1261: p103 = getfield_gc_pure_r(p76, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_nonnull_class(p103, ConstClass(W_Symbol), descr=<Guard0x104c495b0>) [p76, i98, p91, p20, p26, p30, p53, p52, p51, p50, p49, p28, p33]
+debug_merge_point(0, 0, 'LoopLabel(equal_vec_func:pycket.prims.equal:63).element1{|}..')
+p105 = new_with_vtable(descr=<SizeDescr 24>)
+p106 = new_with_vtable(descr=<SizeDescr 24>)
+setfield_gc(p106, ConstPtr(ptr107), descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+setfield_gc(p106, p49, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+p108 = new_with_vtable(descr=<SizeDescr 64>)
+p109 = new_with_vtable(descr=<SizeDescr 40>)
+setfield_gc(p109, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p109, p33, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+p111 = new_with_vtable(descr=<SizeDescr 40>)
+setfield_gc(p111, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+p113 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p113, p28, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+setfield_gc(p113, p33, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_0 16>)
+p114 = new_with_vtable(descr=<SizeDescr 56>)
+setfield_gc(p114, ConstPtr(ptr115), descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+setfield_gc(p114, p49, descr=<FieldP rpython.tool.pairtype.W_StructSize5.inst___storage_0 16>)
+setfield_gc(p114, p50, descr=<FieldP rpython.tool.pairtype.W_StructSize5.inst___storage_1 24>)
+setfield_gc(p114, p51, descr=<FieldP rpython.tool.pairtype.W_StructSize5.inst___storage_2 32>)
+setfield_gc(p114, p52, descr=<FieldP rpython.tool.pairtype.W_StructSize5.inst___storage_3 40>)
+setfield_gc(p114, p53, descr=<FieldP rpython.tool.pairtype.W_StructSize5.inst___storage_4 48>)
+setfield_gc(p113, p114, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_1 24>)
+setfield_gc(p111, p113, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+p116 = new_with_vtable(descr=<SizeDescr 48>)
+setfield_gc(p116, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p116, p30, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+setfield_gc(p116, p26, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p116, ConstPtr(ptr118), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+setfield_gc(p116, p20, descr=<FieldP pycket.small_list.LetContSize1.inst__vals_w_0 40>)
+setfield_gc(p111, p116, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p111, ConstPtr(ptr119), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+setfield_gc(p109, p111, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p109, ConstPtr(ptr120), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+p121 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p121, 2, descr=<FieldS pycket.vector.W_Vector.inst_len 8>)
+p123 = new_array_clear(2, descr=<ArrayP 8>)
+setarrayitem_gc(p123, 0, p91, descr=<ArrayP 8>)
+setarrayitem_gc(p123, 1, p49, descr=<ArrayP 8>)
+setfield_gc(p121, p123, descr=<FieldP pycket.vector.W_Vector.inst_storage 16>)
+setfield_gc(p121, ConstPtr(ptr126), descr=<FieldP pycket.vector.W_Vector.inst_strategy 24>)
+p127 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p127, 2, descr=<FieldS pycket.vector.W_Vector.inst_len 8>)
+p129 = new_array_clear(2, descr=<ArrayP 8>)
+setarrayitem_gc(p129, 0, p101, descr=<ArrayP 8>)
+setarrayitem_gc(p129, 1, p103, descr=<ArrayP 8>)
+setfield_gc(p127, p129, descr=<FieldP pycket.vector.W_Vector.inst_storage 16>)
+setfield_gc(p127, ConstPtr(ptr132), descr=<FieldP pycket.vector.W_Vector.inst_strategy 24>)
+setfield_gc(p108, p105, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+setfield_gc(p108, p109, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p105, p33, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+setfield_gc(p105, p106, descr=<FieldP rpython.tool.pairtype.ConsEnvSize1.inst__vals_0 16>)
+setfield_gc(p108, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p108, p121, descr=<FieldP pycket.cont.Args.inst_a 32>)
+setfield_gc(p108, p127, descr=<FieldP pycket.cont.Args.inst_b 40>)
+setfield_gc(p108, 0, descr=<FieldS pycket.cont.Args.inst_idx 48>)
+setfield_gc(p108, ConstPtr(ptr135), descr=<FieldP pycket.cont.Args.inst_info 56>)
+jump(p105, p108, descr=TargetToken(4375382112))
++1904: --end of the loop--
+[3233d2e4ea] jit-log-opt-bridge}
+[32344342b0] {jit-log-opt-bridge
+# bridge out of Guard 0x104c49e98 with 158 ops
+[i0, i1, p2, p3, p4, p5, p6]
++46: i7 = int_ge(i1, i0)
+guard_true(i7, descr=<Guard0x11a4fd3d0>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p2, 4302699640, descr=<Guard0x104aea7a0>) [i0, i1, p2, p3, p4, p5, p6]
++68: p9 = getfield_gc_pure_r(p2, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p9, ConstPtr(ptr10), descr=<Guard0x104aea700>) [i0, i1, p2, p3, p4, p5, p6]
++91: p11 = getfield_gc_pure_r(p2, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+guard_not_invalidated(descr=<Guard0x104aea610>) [i0, i1, p2, p3, p4, p5, p6]
++95: p12 = getfield_gc_pure_r(p2, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p11, 4302732392, descr=<Guard0x104aea5c0>) [i0, i1, p2, p3, p4, p5, p6]
++112: p14 = getfield_gc_pure_r(p11, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p14, 4302750960, descr=<Guard0x104aea570>) [i0, i1, p2, p3, p4, p5, p6]
++129: p16 = getfield_gc_pure_r(p11, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_0 24>)
+guard_nonnull_class(p16, ConstClass(W_Cell), descr=<Guard0x11a4fdcb8>) [i0, i1, p2, p3, p4, p5, p6]
++152: p18 = getfield_gc_pure_r(p11, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_1 32>)
+guard_nonnull_class(p18, ConstClass(W_Cell), descr=<Guard0x11a4fdc40>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(if if_583 CellRef(f) CellRef(e))...')
+debug_merge_point(0, 0, 'CellRef(f)...')
++175: p20 = getfield_gc_r(p16, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p20, 4302713992, descr=<Guard0x11a4fdbc8>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p12, 4302699640, descr=<Guard0x104aea520>) [i0, i1, p2, p3, p4, p5, p6]
++212: p23 = getfield_gc_pure_r(p12, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p23, ConstPtr(ptr24), descr=<Guard0x104aea4d0>) [i0, i1, p2, p3, p4, p5, p6]
++236: p25 = getfield_gc_pure_r(p12, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++241: p26 = getfield_gc_pure_r(p12, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p25, 4302745648, descr=<Guard0x104aea480>) [i0, i1, p2, p3, p4, p5, p6]
++259: p28 = getfield_gc_pure_r(p25, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p28, 4302732704, descr=<Guard0x104aea430>) [i0, i1, p2, p3, p4, p5, p6]
++277: p30 = getfield_gc_pure_r(p28, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p30, 4302750960, descr=<Guard0x104aea2a0>) [i0, i1, p2, p3, p4, p5, p6]
++295: p32 = getfield_gc_pure_r(p20, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++299: p33 = getfield_gc_pure_r(p25, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_0 16>)
+guard_nonnull_class(p33, 4302732392, descr=<Guard0x11a4fdb50>) [i0, i1, p2, p3, p4, p5, p6]
++321: p35 = getfield_gc_pure_r(p25, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_1 24>)
+guard_nonnull_class(p35, 4302714856, descr=<Guard0x11a4fdad8>) [i0, i1, p2, p3, p4, p5, p6]
++343: p37 = getfield_gc_pure_r(p35, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++347: p38 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_0 24>)
+guard_nonnull_class(p38, ConstClass(W_Cell), descr=<Guard0x11a4fda60>) [i0, i1, p2, p3, p4, p5, p6]
++370: p40 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_1 32>)
+guard_nonnull_class(p40, ConstClass(W_Cell), descr=<Guard0x11a4fd9e8>) [i0, i1, p2, p3, p4, p5, p6]
++393: p42 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_2 40>)
+guard_nonnull_class(p42, ConstClass(W_Cell), descr=<Guard0x11a4fd970>) [i0, i1, p2, p3, p4, p5, p6]
+guard_value(p32, ConstPtr(ptr44), descr=<Guard0x104aea250>) [i0, i1, p2, p3, p4, p5, p6]
+guard_value(p37, ConstPtr(ptr45), descr=<Guard0x104aea1b0>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284))).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}...')
+debug_merge_point(0, 0, '(CellRef(tail) l).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}...')
++461: p46 = getfield_gc_r(p40, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_value(p46, ConstPtr(ptr47), descr=<Guard0x11a4fd8f8>) [i0, i1, p2, p3, p4, p5, p6]
++484: p48 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize4.inst___storage_0 16>)
++484: p49 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize4.inst___storage_1 24>)
++488: p50 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize4.inst___storage_2 32>)
++492: p51 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize4.inst___storage_3 40>)
+guard_class(p49, ConstClass(W_Symbol), descr=<Guard0x104aea160>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p50, ConstClass(W_Symbol), descr=<Guard0x104aea110>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p51, 4302715720, descr=<Guard0x104aea020>) [i0, i1, p2, p3, p4, p5, p6]
++533: p55 = getfield_gc_pure_r(p51, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p55, ConstPtr(ptr56), descr=<Guard0x104b9ff10>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)).cons2{element1{|}. cons2{element1{|}. |}}.element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}...')
+debug_merge_point(0, 0, 'AppRand0_448.cons2{element1{|}. cons2{element1{|}. |}}.element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}...')
+debug_merge_point(0, 0, '(CellRef(racket-map) f141 AppRand1_283).cons2{element1{|}. cons2{element1{|}. |}}.element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}...')
++556: p57 = getfield_gc_r(p38, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p57, 4302732704, descr=<Guard0x11a4fd880>) [i0, i1, p2, p3, p4, p5, p6]
++578: p59 = getfield_gc_pure_r(p57, descr=<FieldP pycket.values.W_Closure1AsEnv.inst_caselam 16>)
+guard_value(p59, ConstPtr(ptr60), descr=<Guard0x104b9fd30>) [i0, i1, p2, p3, p4, p5, p6]
++601: i61 = instance_ptr_eq(p28, p57)
+guard_true(i61, descr=<Guard0x104b9fbf0>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(if (null? l) '() (let ([AppRand0_447 (CellRef(head) l)]) (let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))))) from (CellRef(racket-map) f141 AppRand1_283)..cons2{element1{|}. cons2{element1{|}. |}}...')
+debug_merge_point(0, 0, '(let ([AppRand0_447 (CellRef(head) l)]) (let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))))..cons2{element1{|}. cons2{element1{|}. |}}...')
+debug_merge_point(0, 0, '(CellRef(head) l)..cons2{element1{|}. cons2{element1{|}. |}}...')
++610: p62 = getfield_gc_r(p42, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_value(p62, ConstPtr(ptr63), descr=<Guard0x11a4fd808>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))).element1{|}..cons2{element1{|}. cons2{element1{|}. |}}...')
+debug_merge_point(0, 0, '(f141 AppRand0_447).element1{|}..cons2{element1{|}. cons2{element1{|}. |}}...')
++633: p64 = getfield_gc_pure_r(p33, descr=<FieldP pycket.values.W_Closure1AsEnv.inst_caselam 16>)
+guard_value(p64, ConstPtr(ptr65), descr=<Guard0x104b9f970>) [i0, i1, p2, p3, p4, p5, p6]
++663: p66 = getfield_gc_pure_r(p33, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p66, 4302750960, descr=<Guard0x104b9f920>) [i0, i1, p2, p3, p4, p5, p6]
++679: p68 = getfield_gc_pure_r(p33, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_0 24>)
+guard_nonnull_class(p68, ConstClass(W_Cell), descr=<Guard0x11a4fd790>) [i0, i1, p2, p3, p4, p5, p6]
++701: p70 = getfield_gc_pure_r(p33, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_1 32>)
+guard_nonnull_class(p70, ConstClass(W_Cell), descr=<Guard0x11a4fd718>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([if_583 (equal? x CellRef(e))]) (if if_583 CellRef(f) CellRef(e))) from (f141 AppRand0_447).element1{|}..')
+debug_merge_point(0, 0, '(equal? x CellRef(e)).element1{|}..')
++723: p72 = getfield_gc_r(p70, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p72, 4302713992, descr=<Guard0x11a4fd6a0>) [i0, i1, p2, p3, p4, p5, p6]
++745: p74 = getfield_gc_pure_r(p72, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p74, ConstPtr(ptr75), descr=<Guard0x104b9f8d0>) [i0, i1, p2, p3, p4, p5, p6]
++768: i77 = getfield_gc_i(ConstPtr(ptr76), descr=<FieldU pycket.values_struct.W_StructType.inst_isopaque 168>)
+guard_false(i77, descr=<Guard0x104b9f880>) [i0, i1, p2, p3, p4, p5, p6]
++791: i83 = call_i(ConstClass(ll_call_lookup_function_trampoline__v282___simple_call__function_l), ConstPtr(ptr79), ConstPtr(ptr80), -3040389267169576089, 0, descr=<Calli 8 rrii EF=5 OS=4>)
+guard_no_exception(descr=<Guard0x11a4fd628>) [p72, i83, p20, p26, p30, p51, p50, p49, p28, p33]
++973: i85 = int_lt(i83, 0)
+guard_false(i85, descr=<Guard0x104b9f7e0>) [p72, i83, p20, p26, p30, p51, p50, p49, p28, p33]
++983: p86 = getfield_gc_r(ConstPtr(ptr79), descr=<FieldP dicttable.entries 48>)
++996: p87 = getinteriorfield_gc_r(p86, i83, descr=<InteriorFieldDescr <FieldP odictentry.value 8>>)
+guard_nonnull_class(p87, ConstClass(W_Symbol), descr=<Guard0x11a4fd5b0>) [p72, i83, p20, p26, p30, p51, p50, p49, p28, p33]
++1023: i94 = call_i(ConstClass(ll_call_lookup_function_trampoline__v282___simple_call__function_l), ConstPtr(ptr90), ConstPtr(ptr91), -3040389267169576089, 0, descr=<Calli 8 rrii EF=5 OS=4>)
+guard_no_exception(descr=<Guard0x11a4fd538>) [p72, i94, p87, p20, p26, p30, p51, p50, p49, p28, p33]
++1163: i96 = int_lt(i94, 0)
+guard_false(i96, descr=<Guard0x104b9f740>) [p72, i94, p87, p20, p26, p30, p51, p50, p49, p28, p33]
++1173: p97 = getinteriorfield_gc_r(p86, i94, descr=<InteriorFieldDescr <FieldP odictentry.value 8>>)
+guard_nonnull_class(p97, ConstClass(W_Symbol), descr=<Guard0x11a4fd4c0>) [p72, i94, p87, p20, p26, p30, p51, p50, p49, p28, p33]
++1207: p99 = getfield_gc_pure_r(p72, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_nonnull_class(p99, ConstClass(W_Symbol), descr=<Guard0x11a4fd448>) [p72, i94, p87, p20, p26, p30, p51, p50, p49, p28, p33]
+debug_merge_point(0, 0, 'LoopLabel(equal_vec_func:pycket.prims.equal:63).element1{|}..')
+p101 = new_with_vtable(descr=<SizeDescr 24>)
+p102 = new_with_vtable(descr=<SizeDescr 24>)
+setfield_gc(p102, ConstPtr(ptr103), descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+setfield_gc(p102, p49, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+p104 = new_with_vtable(descr=<SizeDescr 64>)
+p105 = new_with_vtable(descr=<SizeDescr 40>)
+setfield_gc(p105, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p105, p33, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+p107 = new_with_vtable(descr=<SizeDescr 40>)
+setfield_gc(p107, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+p109 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p109, p28, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+setfield_gc(p109, p33, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_0 16>)
+p110 = new_with_vtable(descr=<SizeDescr 40>)
+setfield_gc(p110, ConstPtr(ptr111), descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+setfield_gc(p110, p49, descr=<FieldP rpython.tool.pairtype.W_StructSize3.inst___storage_0 16>)
+setfield_gc(p110, p50, descr=<FieldP rpython.tool.pairtype.W_StructSize3.inst___storage_1 24>)
+setfield_gc(p110, p51, descr=<FieldP rpython.tool.pairtype.W_StructSize3.inst___storage_2 32>)
+setfield_gc(p109, p110, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_1 24>)
+setfield_gc(p107, p109, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+p112 = new_with_vtable(descr=<SizeDescr 48>)
+setfield_gc(p112, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p112, p30, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+setfield_gc(p112, p26, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p112, ConstPtr(ptr114), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+setfield_gc(p112, p20, descr=<FieldP pycket.small_list.LetContSize1.inst__vals_w_0 40>)
+setfield_gc(p107, p112, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p107, ConstPtr(ptr115), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+setfield_gc(p105, p107, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p105, ConstPtr(ptr116), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+p117 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p117, 2, descr=<FieldS pycket.vector.W_Vector.inst_len 8>)
+p119 = new_array_clear(2, descr=<ArrayP 8>)
+setarrayitem_gc(p119, 0, p87, descr=<ArrayP 8>)
+setarrayitem_gc(p119, 1, p49, descr=<ArrayP 8>)
+setfield_gc(p117, p119, descr=<FieldP pycket.vector.W_Vector.inst_storage 16>)
+setfield_gc(p117, ConstPtr(ptr122), descr=<FieldP pycket.vector.W_Vector.inst_strategy 24>)
+p123 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p123, 2, descr=<FieldS pycket.vector.W_Vector.inst_len 8>)
+p125 = new_array_clear(2, descr=<ArrayP 8>)
+setarrayitem_gc(p125, 0, p97, descr=<ArrayP 8>)
+setarrayitem_gc(p125, 1, p99, descr=<ArrayP 8>)
+setfield_gc(p123, p125, descr=<FieldP pycket.vector.W_Vector.inst_storage 16>)
+setfield_gc(p123, ConstPtr(ptr128), descr=<FieldP pycket.vector.W_Vector.inst_strategy 24>)
+setfield_gc(p104, p101, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+setfield_gc(p104, p105, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p101, p33, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+setfield_gc(p101, p102, descr=<FieldP rpython.tool.pairtype.ConsEnvSize1.inst__vals_0 16>)
+setfield_gc(p104, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p104, p117, descr=<FieldP pycket.cont.Args.inst_a 32>)
+setfield_gc(p104, p123, descr=<FieldP pycket.cont.Args.inst_b 40>)
+setfield_gc(p104, 0, descr=<FieldS pycket.cont.Args.inst_idx 48>)
+setfield_gc(p104, ConstPtr(ptr131), descr=<FieldP pycket.cont.Args.inst_info 56>)
+jump(p101, p104, descr=TargetToken(4375382112))
++1840: --end of the loop--
+[32344ca9cc] jit-log-opt-bridge}
+[3234b8ac03] {jit-log-opt-bridge
+# bridge out of Guard 0x11a4fdad8 with 161 ops
+[i0, i1, p2, p3, p4, p5, p6]
++46: i7 = int_ge(i1, i0)
+guard_true(i7, descr=<Guard0x11a4fdf10>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p2, 4302699640, descr=<Guard0x104924de0>) [i0, i1, p2, p3, p4, p5, p6]
++68: p9 = getfield_gc_pure_r(p2, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p9, ConstPtr(ptr10), descr=<Guard0x104924d90>) [i0, i1, p2, p3, p4, p5, p6]
++91: p11 = getfield_gc_pure_r(p2, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+guard_not_invalidated(descr=<Guard0x104924d40>) [i0, i1, p2, p3, p4, p5, p6]
++95: p12 = getfield_gc_pure_r(p2, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p11, 4302732392, descr=<Guard0x104924cf0>) [i0, i1, p2, p3, p4, p5, p6]
++112: p14 = getfield_gc_pure_r(p11, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p14, 4302750960, descr=<Guard0x104924ca0>) [i0, i1, p2, p3, p4, p5, p6]
++129: p16 = getfield_gc_pure_r(p11, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_0 24>)
+guard_nonnull_class(p16, ConstClass(W_Cell), descr=<Guard0x11a6cc818>) [i0, i1, p2, p3, p4, p5, p6]
++152: p18 = getfield_gc_pure_r(p11, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_1 32>)
+guard_nonnull_class(p18, ConstClass(W_Cell), descr=<Guard0x11a6cc7a0>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(if if_583 CellRef(f) CellRef(e))...')
+debug_merge_point(0, 0, 'CellRef(f)...')
++175: p20 = getfield_gc_r(p16, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p20, 4302713992, descr=<Guard0x11a6cc728>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p12, 4302699640, descr=<Guard0x104924c50>) [i0, i1, p2, p3, p4, p5, p6]
++212: p23 = getfield_gc_pure_r(p12, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p23, ConstPtr(ptr24), descr=<Guard0x104924c00>) [i0, i1, p2, p3, p4, p5, p6]
++236: p25 = getfield_gc_pure_r(p12, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++241: p26 = getfield_gc_pure_r(p12, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p25, 4302745648, descr=<Guard0x104924bb0>) [i0, i1, p2, p3, p4, p5, p6]
++259: p28 = getfield_gc_pure_r(p25, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p28, 4302732704, descr=<Guard0x104924b60>) [i0, i1, p2, p3, p4, p5, p6]
++277: p30 = getfield_gc_pure_r(p28, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p30, 4302750960, descr=<Guard0x104924b10>) [i0, i1, p2, p3, p4, p5, p6]
++295: p32 = getfield_gc_pure_r(p20, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++299: p33 = getfield_gc_pure_r(p25, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_0 16>)
+guard_nonnull_class(p33, 4302732392, descr=<Guard0x11a6cc6b0>) [i0, i1, p2, p3, p4, p5, p6]
++321: p35 = getfield_gc_pure_r(p25, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_1 24>)
+guard_nonnull_class(p35, 4302715144, descr=<Guard0x11a6cc638>) [i0, i1, p2, p3, p4, p5, p6]
++343: p37 = getfield_gc_pure_r(p35, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++347: p38 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_0 24>)
+guard_nonnull_class(p38, ConstClass(W_Cell), descr=<Guard0x11a6cc5c0>) [i0, i1, p2, p3, p4, p5, p6]
++370: p40 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_1 32>)
+guard_nonnull_class(p40, ConstClass(W_Cell), descr=<Guard0x11a6cc548>) [i0, i1, p2, p3, p4, p5, p6]
++393: p42 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_2 40>)
+guard_nonnull_class(p42, ConstClass(W_Cell), descr=<Guard0x11a6cc4d0>) [i0, i1, p2, p3, p4, p5, p6]
+guard_value(p32, ConstPtr(ptr44), descr=<Guard0x104924ac0>) [i0, i1, p2, p3, p4, p5, p6]
+guard_value(p37, ConstPtr(ptr45), descr=<Guard0x104924a70>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284))).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}...')
+debug_merge_point(0, 0, '(CellRef(tail) l).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}...')
++461: p46 = getfield_gc_r(p40, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_value(p46, ConstPtr(ptr47), descr=<Guard0x11a6cc458>) [i0, i1, p2, p3, p4, p5, p6]
++484: p48 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize5.inst___storage_0 16>)
++484: p49 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize5.inst___storage_1 24>)
++488: p50 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize5.inst___storage_2 32>)
++492: p51 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize5.inst___storage_3 40>)
++496: p52 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize5.inst___storage_4 48>)
+guard_class(p49, ConstClass(W_Symbol), descr=<Guard0x104924a20>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p50, ConstClass(W_Symbol), descr=<Guard0x1049249d0>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p51, ConstClass(W_Symbol), descr=<Guard0x104924980>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p52, 4302715720, descr=<Guard0x104924930>) [i0, i1, p2, p3, p4, p5, p6]
++563: p57 = getfield_gc_pure_r(p52, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p57, ConstPtr(ptr58), descr=<Guard0x1049248e0>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)).cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}.element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}...')
+debug_merge_point(0, 0, 'AppRand0_448.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}.element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}...')
+debug_merge_point(0, 0, '(CellRef(racket-map) f141 AppRand1_283).cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}.element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}...')
++586: p59 = getfield_gc_r(p38, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p59, 4302732704, descr=<Guard0x11a6cc3e0>) [i0, i1, p2, p3, p4, p5, p6]
++608: p61 = getfield_gc_pure_r(p59, descr=<FieldP pycket.values.W_Closure1AsEnv.inst_caselam 16>)
+guard_value(p61, ConstPtr(ptr62), descr=<Guard0x104924890>) [i0, i1, p2, p3, p4, p5, p6]
++631: i63 = instance_ptr_eq(p28, p59)
+guard_true(i63, descr=<Guard0x104924840>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(if (null? l) '() (let ([AppRand0_447 (CellRef(head) l)]) (let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))))) from (CellRef(racket-map) f141 AppRand1_283)..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}...')
+debug_merge_point(0, 0, '(let ([AppRand0_447 (CellRef(head) l)]) (let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))))..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}...')
+debug_merge_point(0, 0, '(CellRef(head) l)..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}...')
++640: p64 = getfield_gc_r(p42, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_value(p64, ConstPtr(ptr65), descr=<Guard0x11a6cc368>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}...')
+debug_merge_point(0, 0, '(f141 AppRand0_447).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}...')
++663: p66 = getfield_gc_pure_r(p33, descr=<FieldP pycket.values.W_Closure1AsEnv.inst_caselam 16>)
+guard_value(p66, ConstPtr(ptr67), descr=<Guard0x1049247a0>) [i0, i1, p2, p3, p4, p5, p6]
++693: p68 = getfield_gc_pure_r(p33, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p68, 4302750960, descr=<Guard0x1049245c0>) [i0, i1, p2, p3, p4, p5, p6]
++709: p70 = getfield_gc_pure_r(p33, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_0 24>)
+guard_nonnull_class(p70, ConstClass(W_Cell), descr=<Guard0x11a6cc2f0>) [i0, i1, p2, p3, p4, p5, p6]
++731: p72 = getfield_gc_pure_r(p33, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_1 32>)
+guard_nonnull_class(p72, ConstClass(W_Cell), descr=<Guard0x11a6cc278>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([if_583 (equal? x CellRef(e))]) (if if_583 CellRef(f) CellRef(e))) from (f141 AppRand0_447).element1{|}..')
+debug_merge_point(0, 0, '(equal? x CellRef(e)).element1{|}..')
++753: p74 = getfield_gc_r(p72, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p74, 4302713992, descr=<Guard0x11a6cc200>) [i0, i1, p2, p3, p4, p5, p6]
++775: p76 = getfield_gc_pure_r(p74, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p76, ConstPtr(ptr77), descr=<Guard0x104924570>) [i0, i1, p2, p3, p4, p5, p6]
++798: i79 = getfield_gc_i(ConstPtr(ptr78), descr=<FieldU pycket.values_struct.W_StructType.inst_isopaque 168>)
+guard_false(i79, descr=<Guard0x104924520>) [i0, i1, p2, p3, p4, p5, p6]
++821: i85 = call_i(ConstClass(ll_call_lookup_function_trampoline__v282___simple_call__function_l), ConstPtr(ptr81), ConstPtr(ptr82), -3040389267169576089, 0, descr=<Calli 8 rrii EF=5 OS=4>)
+guard_no_exception(descr=<Guard0x11a6cc188>) [p74, i85, p20, p26, p30, p52, p51, p50, p49, p28, p33]
++1003: i87 = int_lt(i85, 0)
+guard_false(i87, descr=<Guard0x104924480>) [p74, i85, p20, p26, p30, p52, p51, p50, p49, p28, p33]
++1013: p88 = getfield_gc_r(ConstPtr(ptr81), descr=<FieldP dicttable.entries 48>)
++1026: p89 = getinteriorfield_gc_r(p88, i85, descr=<InteriorFieldDescr <FieldP odictentry.value 8>>)
+guard_nonnull_class(p89, ConstClass(W_Symbol), descr=<Guard0x11a6cc110>) [p74, i85, p20, p26, p30, p52, p51, p50, p49, p28, p33]
++1053: i96 = call_i(ConstClass(ll_call_lookup_function_trampoline__v282___simple_call__function_l), ConstPtr(ptr92), ConstPtr(ptr93), -3040389267169576089, 0, descr=<Calli 8 rrii EF=5 OS=4>)
+guard_no_exception(descr=<Guard0x11a6cc098>) [p74, i96, p89, p20, p26, p30, p52, p51, p50, p49, p28, p33]
++1193: i98 = int_lt(i96, 0)
+guard_false(i98, descr=<Guard0x1049243e0>) [p74, i96, p89, p20, p26, p30, p52, p51, p50, p49, p28, p33]
++1203: p99 = getinteriorfield_gc_r(p88, i96, descr=<InteriorFieldDescr <FieldP odictentry.value 8>>)
+guard_nonnull_class(p99, ConstClass(W_Symbol), descr=<Guard0x11a6cc020>) [p74, i96, p89, p20, p26, p30, p52, p51, p50, p49, p28, p33]
++1237: p101 = getfield_gc_pure_r(p74, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_nonnull_class(p101, ConstClass(W_Symbol), descr=<Guard0x11a4fdf88>) [p74, i96, p89, p20, p26, p30, p52, p51, p50, p49, p28, p33]
+debug_merge_point(0, 0, 'LoopLabel(equal_vec_func:pycket.prims.equal:63).element1{|}..')
+p103 = new_with_vtable(descr=<SizeDescr 24>)
+p104 = new_with_vtable(descr=<SizeDescr 24>)
+setfield_gc(p104, ConstPtr(ptr105), descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+setfield_gc(p104, p49, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+p106 = new_with_vtable(descr=<SizeDescr 64>)
+p107 = new_with_vtable(descr=<SizeDescr 40>)
+setfield_gc(p107, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p107, p33, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+p109 = new_with_vtable(descr=<SizeDescr 40>)
+setfield_gc(p109, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+p111 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p111, p28, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+setfield_gc(p111, p33, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_0 16>)
+p112 = new_with_vtable(descr=<SizeDescr 48>)
+setfield_gc(p112, ConstPtr(ptr113), descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+setfield_gc(p112, p49, descr=<FieldP rpython.tool.pairtype.W_StructSize4.inst___storage_0 16>)
+setfield_gc(p112, p50, descr=<FieldP rpython.tool.pairtype.W_StructSize4.inst___storage_1 24>)
+setfield_gc(p112, p51, descr=<FieldP rpython.tool.pairtype.W_StructSize4.inst___storage_2 32>)
+setfield_gc(p112, p52, descr=<FieldP rpython.tool.pairtype.W_StructSize4.inst___storage_3 40>)
+setfield_gc(p111, p112, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_1 24>)
+setfield_gc(p109, p111, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+p114 = new_with_vtable(descr=<SizeDescr 48>)
+setfield_gc(p114, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p114, p30, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+setfield_gc(p114, p26, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p114, ConstPtr(ptr116), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+setfield_gc(p114, p20, descr=<FieldP pycket.small_list.LetContSize1.inst__vals_w_0 40>)
+setfield_gc(p109, p114, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p109, ConstPtr(ptr117), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+setfield_gc(p107, p109, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p107, ConstPtr(ptr118), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+p119 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p119, 2, descr=<FieldS pycket.vector.W_Vector.inst_len 8>)
+p121 = new_array_clear(2, descr=<ArrayP 8>)
+setarrayitem_gc(p121, 0, p89, descr=<ArrayP 8>)
+setarrayitem_gc(p121, 1, p49, descr=<ArrayP 8>)
+setfield_gc(p119, p121, descr=<FieldP pycket.vector.W_Vector.inst_storage 16>)
+setfield_gc(p119, ConstPtr(ptr124), descr=<FieldP pycket.vector.W_Vector.inst_strategy 24>)
+p125 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p125, 2, descr=<FieldS pycket.vector.W_Vector.inst_len 8>)
+p127 = new_array_clear(2, descr=<ArrayP 8>)
+setarrayitem_gc(p127, 0, p99, descr=<ArrayP 8>)
+setarrayitem_gc(p127, 1, p101, descr=<ArrayP 8>)
+setfield_gc(p125, p127, descr=<FieldP pycket.vector.W_Vector.inst_storage 16>)
+setfield_gc(p125, ConstPtr(ptr130), descr=<FieldP pycket.vector.W_Vector.inst_strategy 24>)
+setfield_gc(p106, p103, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+setfield_gc(p106, p107, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p103, p33, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+setfield_gc(p103, p104, descr=<FieldP rpython.tool.pairtype.ConsEnvSize1.inst__vals_0 16>)
+setfield_gc(p106, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p106, p119, descr=<FieldP pycket.cont.Args.inst_a 32>)
+setfield_gc(p106, p125, descr=<FieldP pycket.cont.Args.inst_b 40>)
+setfield_gc(p106, 0, descr=<FieldS pycket.cont.Args.inst_idx 48>)
+setfield_gc(p106, ConstPtr(ptr133), descr=<FieldP pycket.cont.Args.inst_info 56>)
+jump(p103, p106, descr=TargetToken(4375382112))
++1872: --end of the loop--
+[3234c0a715] jit-log-opt-bridge}
+[32352a227a] {jit-log-opt-bridge
+# bridge out of Guard 0x11a6cc638 with 185 ops
+[i0, i1, p2, p3, p4, p5, p6]
++46: i7 = int_ge(i1, i0)
+guard_true(i7, descr=<Guard0x11a6cc890>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p2, 4302699640, descr=<Guard0x1045e6660>) [i0, i1, p2, p3, p4, p5, p6]
++68: p9 = getfield_gc_pure_r(p2, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p9, ConstPtr(ptr10), descr=<Guard0x1045e6480>) [i0, i1, p2, p3, p4, p5, p6]
++91: p11 = getfield_gc_pure_r(p2, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+guard_not_invalidated(descr=<Guard0x1045e63e0>) [i0, i1, p2, p3, p4, p5, p6]
++95: p12 = getfield_gc_pure_r(p2, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p11, 4302732392, descr=<Guard0x1045e6340>) [i0, i1, p2, p3, p4, p5, p6]
++112: p14 = getfield_gc_pure_r(p11, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p14, 4302750960, descr=<Guard0x1045e62a0>) [i0, i1, p2, p3, p4, p5, p6]
++129: p16 = getfield_gc_pure_r(p11, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_0 24>)
+guard_nonnull_class(p16, ConstClass(W_Cell), descr=<Guard0x11a6cd5b0>) [i0, i1, p2, p3, p4, p5, p6]
++152: p18 = getfield_gc_pure_r(p11, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_1 32>)
+guard_nonnull_class(p18, ConstClass(W_Cell), descr=<Guard0x11a6cd538>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(if if_583 CellRef(f) CellRef(e))...')
+debug_merge_point(0, 0, 'CellRef(f)...')
++175: p20 = getfield_gc_r(p16, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p20, 4302713992, descr=<Guard0x11a6cd4c0>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p12, 4302699640, descr=<Guard0x1045e6200>) [i0, i1, p2, p3, p4, p5, p6]
++212: p23 = getfield_gc_pure_r(p12, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p23, ConstPtr(ptr24), descr=<Guard0x1045e60c0>) [i0, i1, p2, p3, p4, p5, p6]
++236: p25 = getfield_gc_pure_r(p12, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++241: p26 = getfield_gc_pure_r(p12, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p25, 4302745648, descr=<Guard0x1045e6070>) [i0, i1, p2, p3, p4, p5, p6]
++259: p28 = getfield_gc_pure_r(p25, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p28, 4302732704, descr=<Guard0x1046c3ec0>) [i0, i1, p2, p3, p4, p5, p6]
++277: p30 = getfield_gc_pure_r(p28, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p30, 4302750960, descr=<Guard0x1046c3dd0>) [i0, i1, p2, p3, p4, p5, p6]
++295: p32 = getfield_gc_pure_r(p20, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++299: p33 = getfield_gc_pure_r(p25, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_0 16>)
+guard_nonnull_class(p33, 4302732392, descr=<Guard0x11a6cd448>) [i0, i1, p2, p3, p4, p5, p6]
++321: p35 = getfield_gc_pure_r(p25, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_1 24>)
+guard_nonnull_class(p35, 4302715720, descr=<Guard0x11a6cd3d0>) [i0, i1, p2, p3, p4, p5, p6]
++343: p37 = getfield_gc_pure_r(p35, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++347: p38 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_0 24>)
+guard_nonnull_class(p38, ConstClass(W_Cell), descr=<Guard0x11a6cd358>) [i0, i1, p2, p3, p4, p5, p6]
++370: p40 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_1 32>)
+guard_nonnull_class(p40, ConstClass(W_Cell), descr=<Guard0x11a6cd2e0>) [i0, i1, p2, p3, p4, p5, p6]
++393: p42 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_2 40>)
+guard_nonnull_class(p42, ConstClass(W_Cell), descr=<Guard0x11a6cd268>) [i0, i1, p2, p3, p4, p5, p6]
+guard_value(p32, ConstPtr(ptr44), descr=<Guard0x1046c3ba0>) [i0, i1, p2, p3, p4, p5, p6]
+guard_value(p37, ConstPtr(ptr45), descr=<Guard0x1046c3a10>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284))).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}...')
+debug_merge_point(0, 0, '(CellRef(tail) l).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}...')
++454: p46 = getfield_gc_r(p40, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_value(p46, ConstPtr(ptr47), descr=<Guard0x11a6cd1f0>) [i0, i1, p2, p3, p4, p5, p6]
++477: p48 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_0 16>)
++477: p49 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_1 24>)
++481: p50 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_2 32>)
++485: p51 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_3 40>)
++489: p52 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_4 48>)
++493: p53 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_5 56>)
++497: p54 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_6 64>)
+guard_class(p49, ConstClass(W_Symbol), descr=<Guard0x1046c3790>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p50, ConstClass(W_Symbol), descr=<Guard0x1046c3740>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p51, ConstClass(W_Symbol), descr=<Guard0x1046c36f0>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p52, ConstClass(W_Symbol), descr=<Guard0x1046c36a0>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p53, ConstClass(W_Symbol), descr=<Guard0x1046c3650>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p54, 4302715720, descr=<Guard0x1046c3600>) [i0, i1, p2, p3, p4, p5, p6]
++576: p61 = getfield_gc_pure_r(p54, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p61, ConstPtr(ptr62), descr=<Guard0x1046c35b0>) [i0, i1, p2, p3, p4, p5, p6]
++599: p63 = getfield_gc_pure_r(p25, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p63, 4302732704, descr=<Guard0x1046c3560>) [i0, i1, p2, p3, p4, p5, p6]
++615: p65 = getfield_gc_pure_r(p63, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p65, 4302750960, descr=<Guard0x1046c3510>) [i0, i1, p2, p3, p4, p5, p6]
++638: p67 = getfield_gc_pure_r(p20, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++649: p68 = getfield_gc_pure_r(p25, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_0 16>)
+guard_nonnull_class(p68, 4302732392, descr=<Guard0x11a6cd178>) [i0, i1, p2, p3, p4, p5, p6]
++679: p70 = getfield_gc_pure_r(p25, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_1 24>)
+guard_nonnull_class(p70, 4302715720, descr=<Guard0x11a6cd100>) [i0, i1, p2, p3, p4, p5, p6]
++709: p72 = getfield_gc_pure_r(p70, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++713: p73 = getfield_gc_pure_r(p63, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_0 24>)
+guard_nonnull_class(p73, ConstClass(W_Cell), descr=<Guard0x11a6cd088>) [i0, i1, p2, p3, p4, p5, p6]
++736: p75 = getfield_gc_pure_r(p63, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_1 32>)
+guard_nonnull_class(p75, ConstClass(W_Cell), descr=<Guard0x11a6cd010>) [i0, i1, p2, p3, p4, p5, p6]
++765: p77 = getfield_gc_pure_r(p63, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_2 40>)
+guard_nonnull_class(p77, ConstClass(W_Cell), descr=<Guard0x11a6ccf98>) [i0, i1, p2, p3, p4, p5, p6]
+guard_value(p67, ConstPtr(ptr79), descr=<Guard0x1046c3470>) [i0, i1, p2, p3, p4, p5, p6]
+guard_value(p72, ConstPtr(ptr80), descr=<Guard0x1046c3420>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)).cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}.element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}...')
+debug_merge_point(0, 0, 'AppRand0_448.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}.element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}...')
+debug_merge_point(0, 0, '(CellRef(racket-map) f141 AppRand1_283).cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}.element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}...')
++825: p81 = getfield_gc_r(p73, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p81, 4302732704, descr=<Guard0x11a6ccf20>) [i0, i1, p2, p3, p4, p5, p6]
++848: p83 = getfield_gc_pure_r(p81, descr=<FieldP pycket.values.W_Closure1AsEnv.inst_caselam 16>)
+guard_value(p83, ConstPtr(ptr84), descr=<Guard0x1046c3380>) [i0, i1, p2, p3, p4, p5, p6]
++871: i85 = instance_ptr_eq(p63, p81)
+guard_true(i85, descr=<Guard0x1046c3330>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(if (null? l) '() (let ([AppRand0_447 (CellRef(head) l)]) (let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))))) from (CellRef(racket-map) f141 AppRand1_283)..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}...')
+debug_merge_point(0, 0, '(let ([AppRand0_447 (CellRef(head) l)]) (let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))))..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}...')
+debug_merge_point(0, 0, '(CellRef(head) l)..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}...')
++880: p86 = getfield_gc_r(p77, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_value(p86, ConstPtr(ptr87), descr=<Guard0x11a6ccea8>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}...')
+debug_merge_point(0, 0, '(f141 AppRand0_447).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}...')
++903: p88 = getfield_gc_pure_r(p68, descr=<FieldP pycket.values.W_Closure1AsEnv.inst_caselam 16>)
+guard_value(p88, ConstPtr(ptr89), descr=<Guard0x1046c3150>) [i0, i1, p2, p3, p4, p5, p6]
++933: p90 = getfield_gc_pure_r(p68, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p90, 4302750960, descr=<Guard0x1046c30b0>) [i0, i1, p2, p3, p4, p5, p6]
++949: p92 = getfield_gc_pure_r(p68, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_0 24>)
+guard_nonnull_class(p92, ConstClass(W_Cell), descr=<Guard0x11a6cce30>) [i0, i1, p2, p3, p4, p5, p6]
++971: p94 = getfield_gc_pure_r(p68, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_1 32>)
+guard_nonnull_class(p94, ConstClass(W_Cell), descr=<Guard0x11a6ccdb8>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([if_583 (equal? x CellRef(e))]) (if if_583 CellRef(f) CellRef(e))) from (f141 AppRand0_447).element1{|}..')
+debug_merge_point(0, 0, '(equal? x CellRef(e)).element1{|}..')
++993: p96 = getfield_gc_r(p94, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p96, 4302713992, descr=<Guard0x11a6ccd40>) [i0, i1, p2, p3, p4, p5, p6]
++1016: p98 = getfield_gc_pure_r(p96, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p98, ConstPtr(ptr99), descr=<Guard0x1046c2f20>) [i0, i1, p2, p3, p4, p5, p6]
++1039: i101 = getfield_gc_i(ConstPtr(ptr100), descr=<FieldU pycket.values_struct.W_StructType.inst_isopaque 168>)
+guard_false(i101, descr=<Guard0x1046c2e80>) [i0, i1, p2, p3, p4, p5, p6]
++1062: i107 = call_i(ConstClass(ll_call_lookup_function_trampoline__v282___simple_call__function_l), ConstPtr(ptr103), ConstPtr(ptr104), -3040389267169576089, 0, descr=<Calli 8 rrii EF=5 OS=4>)
+guard_no_exception(descr=<Guard0x11a6ccbd8>) [p96, i107, p20, p26, p65, p54, p53, p52, p51, p50, p49, p63, p68]
++1237: i109 = int_lt(i107, 0)
+guard_false(i109, descr=<Guard0x1046c2d90>) [p96, i107, p20, p26, p65, p54, p53, p52, p51, p50, p49, p63, p68]
++1247: p110 = getfield_gc_r(ConstPtr(ptr103), descr=<FieldP dicttable.entries 48>)
++1260: p111 = getinteriorfield_gc_r(p110, i107, descr=<InteriorFieldDescr <FieldP odictentry.value 8>>)
+guard_nonnull_class(p111, ConstClass(W_Symbol), descr=<Guard0x11a6cca70>) [p96, i107, p20, p26, p65, p54, p53, p52, p51, p50, p49, p63, p68]
++1288: i118 = call_i(ConstClass(ll_call_lookup_function_trampoline__v282___simple_call__function_l), ConstPtr(ptr114), ConstPtr(ptr115), -3040389267169576089, 0, descr=<Calli 8 rrii EF=5 OS=4>)
+guard_no_exception(descr=<Guard0x11a6cc9f8>) [p96, i118, p111, p20, p26, p65, p54, p53, p52, p51, p50, p49, p63, p68]
++1428: i120 = int_lt(i118, 0)
+guard_false(i120, descr=<Guard0x1046c2cf0>) [p96, i118, p111, p20, p26, p65, p54, p53, p52, p51, p50, p49, p63, p68]
++1438: p121 = getinteriorfield_gc_r(p110, i118, descr=<InteriorFieldDescr <FieldP odictentry.value 8>>)
+guard_nonnull_class(p121, ConstClass(W_Symbol), descr=<Guard0x11a6cc980>) [p96, i118, p111, p20, p26, p65, p54, p53, p52, p51, p50, p49, p63, p68]
++1473: p123 = getfield_gc_pure_r(p96, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_nonnull_class(p123, ConstClass(W_Symbol), descr=<Guard0x11a6cc908>) [p96, i118, p111, p20, p26, p65, p54, p53, p52, p51, p50, p49, p63, p68]
+debug_merge_point(0, 0, 'LoopLabel(equal_vec_func:pycket.prims.equal:63).element1{|}..')
+p125 = new_with_vtable(descr=<SizeDescr 24>)
+p126 = new_with_vtable(descr=<SizeDescr 24>)
+setfield_gc(p126, ConstPtr(ptr127), descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+setfield_gc(p126, p49, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+p128 = new_with_vtable(descr=<SizeDescr 64>)
+p129 = new_with_vtable(descr=<SizeDescr 40>)
+setfield_gc(p129, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p129, p68, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+p131 = new_with_vtable(descr=<SizeDescr 40>)
+setfield_gc(p131, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+p133 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p133, p63, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+setfield_gc(p133, p68, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_0 16>)
+p134 = new_with_vtable(descr=<SizeDescr 64>)
+setfield_gc(p134, ConstPtr(ptr135), descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+setfield_gc(p134, p49, descr=<FieldP rpython.tool.pairtype.W_StructSize6.inst___storage_0 16>)
+setfield_gc(p134, p50, descr=<FieldP rpython.tool.pairtype.W_StructSize6.inst___storage_1 24>)
+setfield_gc(p134, p51, descr=<FieldP rpython.tool.pairtype.W_StructSize6.inst___storage_2 32>)
+setfield_gc(p134, p52, descr=<FieldP rpython.tool.pairtype.W_StructSize6.inst___storage_3 40>)
+setfield_gc(p134, p53, descr=<FieldP rpython.tool.pairtype.W_StructSize6.inst___storage_4 48>)
+setfield_gc(p134, p54, descr=<FieldP rpython.tool.pairtype.W_StructSize6.inst___storage_5 56>)
+setfield_gc(p133, p134, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_1 24>)
+setfield_gc(p131, p133, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+p136 = new_with_vtable(descr=<SizeDescr 48>)
+setfield_gc(p136, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p136, p65, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+setfield_gc(p136, p26, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p136, ConstPtr(ptr138), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+setfield_gc(p136, p20, descr=<FieldP pycket.small_list.LetContSize1.inst__vals_w_0 40>)
+setfield_gc(p131, p136, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p131, ConstPtr(ptr139), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+setfield_gc(p129, p131, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p129, ConstPtr(ptr140), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+p141 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p141, 2, descr=<FieldS pycket.vector.W_Vector.inst_len 8>)
+p143 = new_array_clear(2, descr=<ArrayP 8>)
+setarrayitem_gc(p143, 0, p111, descr=<ArrayP 8>)
+setarrayitem_gc(p143, 1, p49, descr=<ArrayP 8>)
+setfield_gc(p141, p143, descr=<FieldP pycket.vector.W_Vector.inst_storage 16>)
+setfield_gc(p141, ConstPtr(ptr146), descr=<FieldP pycket.vector.W_Vector.inst_strategy 24>)
+p147 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p147, 2, descr=<FieldS pycket.vector.W_Vector.inst_len 8>)
+p149 = new_array_clear(2, descr=<ArrayP 8>)
+setarrayitem_gc(p149, 0, p121, descr=<ArrayP 8>)
+setarrayitem_gc(p149, 1, p123, descr=<ArrayP 8>)
+setfield_gc(p147, p149, descr=<FieldP pycket.vector.W_Vector.inst_storage 16>)
+setfield_gc(p147, ConstPtr(ptr152), descr=<FieldP pycket.vector.W_Vector.inst_strategy 24>)
+setfield_gc(p128, p125, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+setfield_gc(p128, p129, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p125, p68, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+setfield_gc(p125, p126, descr=<FieldP rpython.tool.pairtype.ConsEnvSize1.inst__vals_0 16>)
+setfield_gc(p128, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p128, p141, descr=<FieldP pycket.cont.Args.inst_a 32>)
+setfield_gc(p128, p147, descr=<FieldP pycket.cont.Args.inst_b 40>)
+setfield_gc(p128, 0, descr=<FieldS pycket.cont.Args.inst_idx 48>)
+setfield_gc(p128, ConstPtr(ptr155), descr=<FieldP pycket.cont.Args.inst_info 56>)
+jump(p125, p128, descr=TargetToken(4375382112))
++2144: --end of the loop--
+[32353366c2] jit-log-opt-bridge}
+[3582cd93b9] {jit-log-opt-bridge
+# bridge out of Guard 0x11a6cd3d0 with 194 ops
+[i0, i1, p2, p3, p4, p5, p6]
++46: i7 = int_ge(i1, i0)
+guard_true(i7, descr=<Guard0x11a4fdd30>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p2, 4302699640, descr=<Guard0x104a899c0>) [i0, i1, p2, p3, p4, p5, p6]
++68: p9 = getfield_gc_pure_r(p2, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p9, ConstPtr(ptr10), descr=<Guard0x104a89970>) [i0, i1, p2, p3, p4, p5, p6]
++91: p11 = getfield_gc_pure_r(p2, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+guard_not_invalidated(descr=<Guard0x104a89920>) [i0, i1, p2, p3, p4, p5, p6]
++95: p12 = getfield_gc_pure_r(p2, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p11, 4302732392, descr=<Guard0x104a898d0>) [i0, i1, p2, p3, p4, p5, p6]
++112: p14 = getfield_gc_pure_r(p11, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p14, 4302750960, descr=<Guard0x104a89830>) [i0, i1, p2, p3, p4, p5, p6]
++129: p16 = getfield_gc_pure_r(p11, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_0 24>)
+guard_nonnull_class(p16, ConstClass(W_Cell), descr=<Guard0x11a6cd718>) [i0, i1, p2, p3, p4, p5, p6]
++152: p18 = getfield_gc_pure_r(p11, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_1 32>)
+guard_nonnull_class(p18, ConstClass(W_Cell), descr=<Guard0x11a6cd6a0>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(if if_583 CellRef(f) CellRef(e))...')
+debug_merge_point(0, 0, 'CellRef(f)...')
++175: p20 = getfield_gc_r(p16, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p20, 4302713992, descr=<Guard0x11a6cd628>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p12, 4302699640, descr=<Guard0x104a897e0>) [i0, i1, p2, p3, p4, p5, p6]
++212: p23 = getfield_gc_pure_r(p12, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p23, ConstPtr(ptr24), descr=<Guard0x104a89790>) [i0, i1, p2, p3, p4, p5, p6]
++236: p25 = getfield_gc_pure_r(p12, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++241: p26 = getfield_gc_pure_r(p12, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p25, 4302745648, descr=<Guard0x104a89740>) [i0, i1, p2, p3, p4, p5, p6]
++259: p28 = getfield_gc_pure_r(p25, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p28, 4302732704, descr=<Guard0x104a89650>) [i0, i1, p2, p3, p4, p5, p6]
++277: p30 = getfield_gc_pure_r(p28, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p30, 4302750960, descr=<Guard0x104a89290>) [i0, i1, p2, p3, p4, p5, p6]
++295: p32 = getfield_gc_pure_r(p20, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++299: p33 = getfield_gc_pure_r(p25, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_0 16>)
+guard_nonnull_class(p33, 4302732392, descr=<Guard0x11a6cccc8>) [i0, i1, p2, p3, p4, p5, p6]
++321: p35 = getfield_gc_pure_r(p25, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_1 24>)
+guard_nonnull_class(p35, 4302716584, descr=<Guard0x11a6ccc50>) [i0, i1, p2, p3, p4, p5, p6]
++343: p37 = getfield_gc_pure_r(p35, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++347: p38 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_0 24>)
+guard_nonnull_class(p38, ConstClass(W_Cell), descr=<Guard0x11a6ccb60>) [i0, i1, p2, p3, p4, p5, p6]
++370: p40 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_1 32>)
+guard_nonnull_class(p40, ConstClass(W_Cell), descr=<Guard0x11a6ccae8>) [i0, i1, p2, p3, p4, p5, p6]
++393: p42 = getfield_gc_pure_r(p28, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_2 40>)
+guard_nonnull_class(p42, ConstClass(W_Cell), descr=<Guard0x104c498f8>) [i0, i1, p2, p3, p4, p5, p6]
+guard_value(p32, ConstPtr(ptr44), descr=<Guard0x104a22a70>) [i0, i1, p2, p3, p4, p5, p6]
+guard_value(p37, ConstPtr(ptr45), descr=<Guard0x104a22a20>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284))).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}}}}...')
+debug_merge_point(0, 0, '(CellRef(tail) l).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}}}}...')
++454: p46 = getfield_gc_r(p40, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_value(p46, ConstPtr(ptr47), descr=<Guard0x104c49880>) [i0, i1, p2, p3, p4, p5, p6]
++477: p48 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize10.inst___storage_0 16>)
++477: p49 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize10.inst___storage_1 24>)
++481: p50 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize10.inst___storage_2 32>)
++485: p51 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize10.inst___storage_3 40>)
++489: p52 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize10.inst___storage_4 48>)
++493: p53 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize10.inst___storage_5 56>)
++497: p54 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize10.inst___storage_6 64>)
++501: p55 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize10.inst___storage_7 72>)
++512: p56 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize10.inst___storage_8 80>)
++523: p57 = getfield_gc_pure_r(p35, descr=<FieldP rpython.tool.pairtype.W_StructSize10.inst___storage_9 88>)
+guard_class(p49, ConstClass(W_Symbol), descr=<Guard0x104a229d0>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p50, ConstClass(W_Symbol), descr=<Guard0x104a22980>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p51, ConstClass(W_Symbol), descr=<Guard0x104a22930>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p52, ConstClass(W_Symbol), descr=<Guard0x104a228e0>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p53, ConstClass(W_Symbol), descr=<Guard0x104a22890>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p54, ConstClass(W_Symbol), descr=<Guard0x104a22840>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p55, ConstClass(W_Symbol), descr=<Guard0x104a227f0>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p56, ConstClass(W_Symbol), descr=<Guard0x104a227a0>) [i0, i1, p2, p3, p4, p5, p6]
+guard_class(p57, 4302715432, descr=<Guard0x104a22750>) [i0, i1, p2, p3, p4, p5, p6]
++654: p67 = getfield_gc_pure_r(p57, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p67, ConstPtr(ptr68), descr=<Guard0x104a22700>) [i0, i1, p2, p3, p4, p5, p6]
++677: p69 = getfield_gc_pure_r(p25, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p69, 4302732704, descr=<Guard0x104a226b0>) [i0, i1, p2, p3, p4, p5, p6]
++693: p71 = getfield_gc_pure_r(p69, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p71, 4302750960, descr=<Guard0x104a22660>) [i0, i1, p2, p3, p4, p5, p6]
++717: p73 = getfield_gc_pure_r(p20, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++735: p74 = getfield_gc_pure_r(p25, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_0 16>)
+guard_nonnull_class(p74, 4302732392, descr=<Guard0x104c49790>) [i0, i1, p2, p3, p4, p5, p6]
++765: p76 = getfield_gc_pure_r(p25, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_1 24>)
+guard_nonnull_class(p76, 4302716584, descr=<Guard0x104c496a0>) [i0, i1, p2, p3, p4, p5, p6]
++795: p78 = getfield_gc_pure_r(p76, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++799: p79 = getfield_gc_pure_r(p69, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_0 24>)
+guard_nonnull_class(p79, ConstClass(W_Cell), descr=<Guard0x104c49628>) [i0, i1, p2, p3, p4, p5, p6]
++822: p81 = getfield_gc_pure_r(p69, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_1 32>)
+guard_nonnull_class(p81, ConstClass(W_Cell), descr=<Guard0x11a4fde98>) [i0, i1, p2, p3, p4, p5, p6]
++851: p83 = getfield_gc_pure_r(p69, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize3.inst__vals_2 40>)
+guard_nonnull_class(p83, ConstClass(W_Cell), descr=<Guard0x11a4fde20>) [i0, i1, p2, p3, p4, p5, p6]
+guard_value(p73, ConstPtr(ptr85), descr=<Guard0x104a22610>) [i0, i1, p2, p3, p4, p5, p6]
+guard_value(p78, ConstPtr(ptr86), descr=<Guard0x104a225c0>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)).cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}}}.element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}}}}...')
+debug_merge_point(0, 0, 'AppRand0_448.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}}}.element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}}}}...')
+debug_merge_point(0, 0, '(CellRef(racket-map) f141 AppRand1_283).cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}}}.element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}}}}...')
++911: p87 = getfield_gc_r(p79, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p87, 4302732704, descr=<Guard0x11a4fdda8>) [i0, i1, p2, p3, p4, p5, p6]
++934: p89 = getfield_gc_pure_r(p87, descr=<FieldP pycket.values.W_Closure1AsEnv.inst_caselam 16>)
+guard_value(p89, ConstPtr(ptr90), descr=<Guard0x104a22570>) [i0, i1, p2, p3, p4, p5, p6]
++957: i91 = instance_ptr_eq(p69, p87)
+guard_true(i91, descr=<Guard0x104aea890>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(if (null? l) '() (let ([AppRand0_447 (CellRef(head) l)]) (let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))))) from (CellRef(racket-map) f141 AppRand1_283)..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}}}...')
+debug_merge_point(0, 0, '(let ([AppRand0_447 (CellRef(head) l)]) (let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))))..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}}}...')
+debug_merge_point(0, 0, '(CellRef(head) l)..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}}}...')
++966: p92 = getfield_gc_r(p83, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_value(p92, ConstPtr(ptr93), descr=<Guard0x11a6cdb50>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([AppRand0_448 (f141 AppRand0_447)]) (let ([AppRand1_283 (CellRef(tail) l)]) (let ([AppRand0_448 AppRand0_448][AppRand1_284 (CellRef(racket-map) f141 AppRand1_283)]) (cons AppRand0_448 AppRand1_284)))).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}}}...')
+debug_merge_point(0, 0, '(f141 AppRand0_447).element1{|}..cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}}}...')
++989: p94 = getfield_gc_pure_r(p74, descr=<FieldP pycket.values.W_Closure1AsEnv.inst_caselam 16>)
+guard_value(p94, ConstPtr(ptr95), descr=<Guard0x104aeb150>) [i0, i1, p2, p3, p4, p5, p6]
++1019: p96 = getfield_gc_pure_r(p74, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p96, 4302750960, descr=<Guard0x104aeb100>) [i0, i1, p2, p3, p4, p5, p6]
++1035: p98 = getfield_gc_pure_r(p74, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_0 24>)
+guard_nonnull_class(p98, ConstClass(W_Cell), descr=<Guard0x11a6cdad8>) [i0, i1, p2, p3, p4, p5, p6]
++1057: p100 = getfield_gc_pure_r(p74, descr=<FieldP rpython.tool.pairtype.W_Closure1AsEnvSize2.inst__vals_1 32>)
+guard_nonnull_class(p100, ConstClass(W_Cell), descr=<Guard0x11a6cda60>) [i0, i1, p2, p3, p4, p5, p6]
+debug_merge_point(0, 0, '(let ([if_583 (equal? x CellRef(e))]) (if if_583 CellRef(f) CellRef(e))) from (f141 AppRand0_447).element1{|}..')
+debug_merge_point(0, 0, '(equal? x CellRef(e)).element1{|}..')
++1079: p102 = getfield_gc_r(p100, descr=<FieldP pycket.values.W_Cell.inst_w_value 8>)
+guard_nonnull_class(p102, 4302713992, descr=<Guard0x11a6cd9e8>) [i0, i1, p2, p3, p4, p5, p6]
++1102: p104 = getfield_gc_pure_r(p102, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p104, ConstPtr(ptr105), descr=<Guard0x104aeafc0>) [i0, i1, p2, p3, p4, p5, p6]
++1125: i107 = getfield_gc_i(ConstPtr(ptr106), descr=<FieldU pycket.values_struct.W_StructType.inst_isopaque 168>)
+guard_false(i107, descr=<Guard0x104aeaf20>) [i0, i1, p2, p3, p4, p5, p6]
++1148: i113 = call_i(ConstClass(ll_call_lookup_function_trampoline__v282___simple_call__function_l), ConstPtr(ptr109), ConstPtr(ptr110), -3040389267169576089, 0, descr=<Calli 8 rrii EF=5 OS=4>)
+guard_no_exception(descr=<Guard0x11a6cd970>) [p102, i113, p20, p26, p71, p57, p56, p55, p54, p53, p52, p51, p50, p49, p69, p74]
++1323: i115 = int_lt(i113, 0)
+guard_false(i115, descr=<Guard0x104aeacf0>) [p102, i113, p20, p26, p71, p57, p56, p55, p54, p53, p52, p51, p50, p49, p69, p74]
++1333: p116 = getfield_gc_r(ConstPtr(ptr109), descr=<FieldP dicttable.entries 48>)
++1346: p117 = getinteriorfield_gc_r(p116, i113, descr=<InteriorFieldDescr <FieldP odictentry.value 8>>)
+guard_nonnull_class(p117, ConstClass(W_Symbol), descr=<Guard0x11a6cd8f8>) [p102, i113, p20, p26, p71, p57, p56, p55, p54, p53, p52, p51, p50, p49, p69, p74]
++1374: i124 = call_i(ConstClass(ll_call_lookup_function_trampoline__v282___simple_call__function_l), ConstPtr(ptr120), ConstPtr(ptr121), -3040389267169576089, 0, descr=<Calli 8 rrii EF=5 OS=4>)
+guard_no_exception(descr=<Guard0x11a6cd880>) [p102, i124, p117, p20, p26, p71, p57, p56, p55, p54, p53, p52, p51, p50, p49, p69, p74]
++1514: i126 = int_lt(i124, 0)
+guard_false(i126, descr=<Guard0x104aeac50>) [p102, i124, p117, p20, p26, p71, p57, p56, p55, p54, p53, p52, p51, p50, p49, p69, p74]
++1524: p127 = getinteriorfield_gc_r(p116, i124, descr=<InteriorFieldDescr <FieldP odictentry.value 8>>)
+guard_nonnull_class(p127, ConstClass(W_Symbol), descr=<Guard0x11a6cd808>) [p102, i124, p117, p20, p26, p71, p57, p56, p55, p54, p53, p52, p51, p50, p49, p69, p74]
++1559: p129 = getfield_gc_pure_r(p102, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_nonnull_class(p129, ConstClass(W_Symbol), descr=<Guard0x11a6cd790>) [p102, i124, p117, p20, p26, p71, p57, p56, p55, p54, p53, p52, p51, p50, p49, p69, p74]
+debug_merge_point(0, 0, 'LoopLabel(equal_vec_func:pycket.prims.equal:63).element1{|}..')
+p131 = new_with_vtable(descr=<SizeDescr 24>)
+p132 = new_with_vtable(descr=<SizeDescr 24>)
+setfield_gc(p132, ConstPtr(ptr133), descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+setfield_gc(p132, p49, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+p134 = new_with_vtable(descr=<SizeDescr 64>)
+p135 = new_with_vtable(descr=<SizeDescr 40>)
+setfield_gc(p135, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p135, p74, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+p137 = new_with_vtable(descr=<SizeDescr 40>)
+setfield_gc(p137, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+p139 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p139, p69, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+setfield_gc(p139, p74, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_0 16>)
+p140 = new_with_vtable(descr=<SizeDescr 88>)
+setfield_gc(p140, ConstPtr(ptr141), descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+setfield_gc(p140, p49, descr=<FieldP rpython.tool.pairtype.W_StructSize9.inst___storage_0 16>)
+setfield_gc(p140, p50, descr=<FieldP rpython.tool.pairtype.W_StructSize9.inst___storage_1 24>)
+setfield_gc(p140, p51, descr=<FieldP rpython.tool.pairtype.W_StructSize9.inst___storage_2 32>)
+setfield_gc(p140, p52, descr=<FieldP rpython.tool.pairtype.W_StructSize9.inst___storage_3 40>)
+setfield_gc(p140, p53, descr=<FieldP rpython.tool.pairtype.W_StructSize9.inst___storage_4 48>)
+setfield_gc(p140, p54, descr=<FieldP rpython.tool.pairtype.W_StructSize9.inst___storage_5 56>)
+setfield_gc(p140, p55, descr=<FieldP rpython.tool.pairtype.W_StructSize9.inst___storage_6 64>)
+setfield_gc(p140, p56, descr=<FieldP rpython.tool.pairtype.W_StructSize9.inst___storage_7 72>)
+setfield_gc(p140, p57, descr=<FieldP rpython.tool.pairtype.W_StructSize9.inst___storage_8 80>)
+setfield_gc(p139, p140, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_1 24>)
+setfield_gc(p137, p139, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+p142 = new_with_vtable(descr=<SizeDescr 48>)
+setfield_gc(p142, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p142, p71, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+setfield_gc(p142, p26, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p142, ConstPtr(ptr144), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+setfield_gc(p142, p20, descr=<FieldP pycket.small_list.LetContSize1.inst__vals_w_0 40>)
+setfield_gc(p137, p142, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p137, ConstPtr(ptr145), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+setfield_gc(p135, p137, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p135, ConstPtr(ptr146), descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+p147 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p147, 2, descr=<FieldS pycket.vector.W_Vector.inst_len 8>)
+p149 = new_array_clear(2, descr=<ArrayP 8>)
+setarrayitem_gc(p149, 0, p117, descr=<ArrayP 8>)
+setarrayitem_gc(p149, 1, p49, descr=<ArrayP 8>)
+setfield_gc(p147, p149, descr=<FieldP pycket.vector.W_Vector.inst_storage 16>)
+setfield_gc(p147, ConstPtr(ptr152), descr=<FieldP pycket.vector.W_Vector.inst_strategy 24>)
+p153 = new_with_vtable(descr=<SizeDescr 32>)
+setfield_gc(p153, 2, descr=<FieldS pycket.vector.W_Vector.inst_len 8>)
+p155 = new_array_clear(2, descr=<ArrayP 8>)
+setarrayitem_gc(p155, 0, p127, descr=<ArrayP 8>)
+setarrayitem_gc(p155, 1, p129, descr=<ArrayP 8>)
+setfield_gc(p153, p155, descr=<FieldP pycket.vector.W_Vector.inst_storage 16>)
+setfield_gc(p153, ConstPtr(ptr158), descr=<FieldP pycket.vector.W_Vector.inst_strategy 24>)
+setfield_gc(p134, p131, descr=<FieldP pycket.cont.Cont.inst_env 16>)
+setfield_gc(p134, p135, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+setfield_gc(p131, p74, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+setfield_gc(p131, p132, descr=<FieldP rpython.tool.pairtype.ConsEnvSize1.inst__vals_0 16>)
+setfield_gc(p134, ConstPtr(null), descr=<FieldP pycket.cont.BaseCont.inst_marks 8>)
+setfield_gc(p134, p147, descr=<FieldP pycket.cont.Args.inst_a 32>)
+setfield_gc(p134, p153, descr=<FieldP pycket.cont.Args.inst_b 40>)
+setfield_gc(p134, 0, descr=<FieldS pycket.cont.Args.inst_idx 48>)
+setfield_gc(p134, ConstPtr(ptr161), descr=<FieldP pycket.cont.Args.inst_info 56>)
+jump(p131, p134, descr=TargetToken(4375382112))
++2272: --end of the loop--
+[3582d937aa] jit-log-opt-bridge}
+[35836952a1] {jit-log-opt-loop
+# Loop 2 ((cons AppRand0_448 AppRand1_284).element1{|}.cons2{element1{|}, |}) : loop with 216 ops
+[p0, p1]
++121: label(p0, p1, descr=TargetToken(4368532720))
+debug_merge_point(0, 0, '(cons AppRand0_448 AppRand1_284).element1{|}.cons2{element1{|}. |}')
+guard_not_invalidated(descr=<Guard0x11a6cdbc8>) [p1, p0]
+guard_class(p0, 4302745648, descr=<Guard0x104c5e570>) [p1, p0]
++147: p3 = getfield_gc_pure_r(p0, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_0 16>)
+guard_nonnull_class(p3, 4302713992, descr=<Guard0x15854a2f0>) [p1, p0]
++169: p5 = getfield_gc_pure_r(p0, descr=<FieldP rpython.tool.pairtype.ConsEnvSize2.inst__vals_1 24>)
+guard_nonnull_class(p5, 4302714280, descr=<Guard0x15854a278>) [p1, p0]
++191: p7 = getfield_gc_pure_r(p0, descr=<FieldP pycket.env.ConsEnv.inst__prev 8>)
+guard_class(p7, 4302750960, descr=<Guard0x104c5e520>) [p1, p0]
++207: p9 = getfield_gc_pure_r(p3, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
++211: p10 = getfield_gc_pure_r(p5, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p9, ConstPtr(ptr11), descr=<Guard0x104c5e4d0>) [p1, p0]
+guard_value(p10, ConstPtr(ptr12), descr=<Guard0x104c5e480>) [p1, p0]
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. |}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. |}')
++253: p13 = getfield_gc_pure_r(p3, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_class(p13, ConstClass(W_Symbol), descr=<Guard0x104c5e430>) [p1, p0]
++269: p15 = getfield_gc_pure_r(p5, descr=<FieldP rpython.tool.pairtype.W_StructSize2.inst___storage_0 16>)
++273: p16 = getfield_gc_pure_r(p5, descr=<FieldP rpython.tool.pairtype.W_StructSize2.inst___storage_1 24>)
+guard_class(p15, ConstClass(W_Symbol), descr=<Guard0x104c5e3e0>) [p1, p0]
+guard_class(p16, 4302715720, descr=<Guard0x104c5e390>) [p1, p0]
++301: p19 = getfield_gc_pure_r(p16, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p19, ConstPtr(ptr20), descr=<Guard0x104c5e340>) [p1, p0]
+guard_class(p1, 4302699896, descr=<Guard0x104c5e2f0>) [p1, p0]
++343: p22 = getfield_gc_pure_r(p1, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p22, ConstPtr(ptr23), descr=<Guard0x104c5e2a0>) [p1, p0]
++366: p24 = getfield_gc_pure_r(p1, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++370: p25 = getfield_gc_pure_r(p1, descr=<FieldP pycket.small_list.LetContSize1.inst__vals_w_0 40>)
+guard_nonnull_class(p25, 4302713992, descr=<Guard0x15854a200>) [p1, p0]
++393: p27 = getfield_gc_pure_r(p1, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p24, 4302750960, descr=<Guard0x104c5e250>) [p1, p0]
++409: p29 = getfield_gc_pure_r(p25, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p29, ConstPtr(ptr30), descr=<Guard0x104c5e200>) [p1, p0]
+debug_merge_point(0, 0, '(cons AppRand0_448 AppRand1_284).element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
++432: p31 = getfield_gc_pure_r(p25, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_class(p31, ConstClass(W_Symbol), descr=<Guard0x104c5e110>) [p1, p0]
+guard_class(p27, 4302699896, descr=<Guard0x104c5e0c0>) [p1, p0]
++461: p34 = getfield_gc_pure_r(p27, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p34, ConstPtr(ptr35), descr=<Guard0x104c5e070>) [p1, p0]
++484: p36 = getfield_gc_pure_r(p27, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++488: p37 = getfield_gc_pure_r(p27, descr=<FieldP pycket.small_list.LetContSize1.inst__vals_w_0 40>)
+guard_nonnull_class(p37, 4302713992, descr=<Guard0x15854a188>) [p1, p0]
++511: p39 = getfield_gc_pure_r(p27, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p36, 4302750960, descr=<Guard0x104c5e020>) [p1, p0]
++528: p41 = getfield_gc_pure_r(p37, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p41, ConstPtr(ptr42), descr=<Guard0x104bcdfb0>) [p1, p0]
+debug_merge_point(0, 0, '(cons AppRand0_448 AppRand1_284).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
++551: p43 = getfield_gc_pure_r(p37, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_class(p43, ConstClass(W_Symbol), descr=<Guard0x104bcd1a0>) [p1, p0]
+guard_class(p39, 4302699896, descr=<Guard0x104bcd010>) [p1, p0]
++582: p46 = getfield_gc_pure_r(p39, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p46, ConstPtr(ptr47), descr=<Guard0x104bccfc0>) [p1, p0]
++606: p48 = getfield_gc_pure_r(p39, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++611: p49 = getfield_gc_pure_r(p39, descr=<FieldP pycket.small_list.LetContSize1.inst__vals_w_0 40>)
+guard_nonnull_class(p49, 4302713992, descr=<Guard0x15854a110>) [p1, p0]
++635: p51 = getfield_gc_pure_r(p39, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p48, 4302750960, descr=<Guard0x104bccf70>) [p1, p0]
++653: p53 = getfield_gc_pure_r(p49, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p53, ConstPtr(ptr54), descr=<Guard0x104bccf20>) [p1, p0]
+debug_merge_point(0, 0, '(cons AppRand0_448 AppRand1_284).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
++676: p55 = getfield_gc_pure_r(p49, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_class(p55, ConstClass(W_Symbol), descr=<Guard0x104bcced0>) [p1, p0]
++693: p57 = getfield_gc_pure_r(p16, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p57, ConstPtr(ptr58), descr=<Guard0x104bcc5c0>) [p1, p0]
+guard_class(p51, 4302699896, descr=<Guard0x104bcc110>) [p1, p0]
++730: p60 = getfield_gc_pure_r(p51, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p60, ConstPtr(ptr61), descr=<Guard0x104b9f9c0>) [p1, p0]
++753: p62 = getfield_gc_pure_r(p51, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++757: p63 = getfield_gc_pure_r(p51, descr=<FieldP pycket.small_list.LetContSize1.inst__vals_w_0 40>)
+guard_nonnull_class(p63, 4302713992, descr=<Guard0x15854a098>) [p1, p0]
++781: p65 = getfield_gc_pure_r(p51, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p62, 4302750960, descr=<Guard0x104b9f830>) [p1, p0]
++798: p67 = getfield_gc_pure_r(p63, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p67, ConstPtr(ptr68), descr=<Guard0x104b9f790>) [p1, p0]
+debug_merge_point(0, 0, '(cons AppRand0_448 AppRand1_284).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
++822: p69 = getfield_gc_pure_r(p63, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_class(p69, ConstClass(W_Symbol), descr=<Guard0x104b9f6f0>) [p1, p0]
+guard_class(p65, 4302699896, descr=<Guard0x104b9f6a0>) [p1, p0]
++853: p72 = getfield_gc_pure_r(p65, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p72, ConstPtr(ptr73), descr=<Guard0x104b9f650>) [p1, p0]
++876: p74 = getfield_gc_pure_r(p65, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++880: p75 = getfield_gc_pure_r(p65, descr=<FieldP pycket.small_list.LetContSize1.inst__vals_w_0 40>)
+guard_nonnull_class(p75, 4302713992, descr=<Guard0x15854a020>) [p1, p0]
++904: p77 = getfield_gc_pure_r(p65, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p74, 4302750960, descr=<Guard0x104b9f600>) [p1, p0]
++922: p79 = getfield_gc_pure_r(p75, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p79, ConstPtr(ptr80), descr=<Guard0x104b9f5b0>) [p1, p0]
+debug_merge_point(0, 0, '(cons AppRand0_448 AppRand1_284).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
++945: p81 = getfield_gc_pure_r(p75, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_class(p81, ConstClass(W_Symbol), descr=<Guard0x104b9f560>) [p1, p0]
+guard_class(p77, 4302699896, descr=<Guard0x104b9f510>) [p1, p0]
++976: p84 = getfield_gc_pure_r(p77, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p84, ConstPtr(ptr85), descr=<Guard0x104b9f4c0>) [p1, p0]
++999: p86 = getfield_gc_pure_r(p77, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++1003: p87 = getfield_gc_pure_r(p77, descr=<FieldP pycket.small_list.LetContSize1.inst__vals_w_0 40>)
+guard_nonnull_class(p87, 4302713992, descr=<Guard0x11a6cdf88>) [p1, p0]
++1026: p89 = getfield_gc_pure_r(p77, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p86, 4302750960, descr=<Guard0x104b9f470>) [p1, p0]
++1051: p91 = getfield_gc_pure_r(p87, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p91, ConstPtr(ptr92), descr=<Guard0x104b9f420>) [p1, p0]
+debug_merge_point(0, 0, '(cons AppRand0_448 AppRand1_284).element1{|}.cons2{element1{|}. |}')
++1074: label(p86, p87, p81, p69, p55, p43, p31, p13, p15, p16, p89, descr=TargetToken(4370149008))
+debug_merge_point(0, 0, '(cons AppRand0_448 AppRand1_284).element1{|}.cons2{element1{|}. |}')
+guard_not_invalidated(descr=<Guard0x11a6cdc40>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. |}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. |}')
++1088: p93 = getfield_gc_pure_r(p87, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_class(p93, ConstClass(W_Symbol), descr=<Guard0x104b9f3d0>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
+guard_class(p81, ConstClass(W_Symbol), descr=<Guard0x104b9f380>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
+guard_class(p89, 4302699896, descr=<Guard0x104b9f330>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1140: p94 = getfield_gc_pure_r(p89, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p94, ConstPtr(ptr23), descr=<Guard0x104b9f2e0>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1164: p95 = getfield_gc_pure_r(p89, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++1169: p96 = getfield_gc_pure_r(p89, descr=<FieldP pycket.small_list.LetContSize1.inst__vals_w_0 40>)
+guard_nonnull_class(p96, 4302713992, descr=<Guard0x11a6cdf10>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1192: p97 = getfield_gc_pure_r(p89, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p95, 4302750960, descr=<Guard0x104b9f290>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1216: p98 = getfield_gc_pure_r(p96, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p98, ConstPtr(ptr30), descr=<Guard0x104b9f240>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
+debug_merge_point(0, 0, '(cons AppRand0_448 AppRand1_284).element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. |}}')
++1239: p99 = getfield_gc_pure_r(p96, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_class(p99, ConstClass(W_Symbol), descr=<Guard0x104b9f1f0>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
+guard_class(p97, 4302699896, descr=<Guard0x104b9f1a0>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1269: p100 = getfield_gc_pure_r(p97, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p100, ConstPtr(ptr35), descr=<Guard0x104b9f150>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1292: p101 = getfield_gc_pure_r(p97, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++1296: p102 = getfield_gc_pure_r(p97, descr=<FieldP pycket.small_list.LetContSize1.inst__vals_w_0 40>)
+guard_nonnull_class(p102, 4302713992, descr=<Guard0x11a6cde98>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1319: p103 = getfield_gc_pure_r(p97, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p101, 4302750960, descr=<Guard0x104b9f100>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1342: p104 = getfield_gc_pure_r(p102, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p104, ConstPtr(ptr42), descr=<Guard0x104b9f0b0>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
+debug_merge_point(0, 0, '(cons AppRand0_448 AppRand1_284).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}')
++1365: p105 = getfield_gc_pure_r(p102, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_class(p105, ConstClass(W_Symbol), descr=<Guard0x104b9f060>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
+guard_class(p103, 4302699896, descr=<Guard0x104b9f010>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1393: p106 = getfield_gc_pure_r(p103, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p106, ConstPtr(ptr47), descr=<Guard0x104b9efc0>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1416: p107 = getfield_gc_pure_r(p103, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++1420: p108 = getfield_gc_pure_r(p103, descr=<FieldP pycket.small_list.LetContSize1.inst__vals_w_0 40>)
+guard_nonnull_class(p108, 4302713992, descr=<Guard0x11a6cde20>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1444: p109 = getfield_gc_pure_r(p103, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p107, 4302750960, descr=<Guard0x104b9ef70>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1468: p110 = getfield_gc_pure_r(p108, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p110, ConstPtr(ptr54), descr=<Guard0x104b9ef20>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
+debug_merge_point(0, 0, '(cons AppRand0_448 AppRand1_284).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}')
++1491: p111 = getfield_gc_pure_r(p108, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_class(p111, ConstClass(W_Symbol), descr=<Guard0x104b9eed0>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
+guard_class(p109, 4302699896, descr=<Guard0x104b9ee80>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1520: p112 = getfield_gc_pure_r(p109, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p112, ConstPtr(ptr61), descr=<Guard0x104b9ee30>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1543: p113 = getfield_gc_pure_r(p109, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++1547: p114 = getfield_gc_pure_r(p109, descr=<FieldP pycket.small_list.LetContSize1.inst__vals_w_0 40>)
+guard_nonnull_class(p114, 4302713992, descr=<Guard0x11a6cdda8>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1569: p115 = getfield_gc_pure_r(p109, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p113, 4302750960, descr=<Guard0x104b9ede0>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1594: p116 = getfield_gc_pure_r(p114, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p116, ConstPtr(ptr68), descr=<Guard0x104b9ed90>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
+debug_merge_point(0, 0, '(cons AppRand0_448 AppRand1_284).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}')
++1617: p117 = getfield_gc_pure_r(p114, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_class(p117, ConstClass(W_Symbol), descr=<Guard0x104b9ed40>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
+guard_class(p115, 4302699896, descr=<Guard0x104b9ecf0>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1648: p118 = getfield_gc_pure_r(p115, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p118, ConstPtr(ptr73), descr=<Guard0x104b9eca0>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1671: p119 = getfield_gc_pure_r(p115, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++1675: p120 = getfield_gc_pure_r(p115, descr=<FieldP pycket.small_list.LetContSize1.inst__vals_w_0 40>)
+guard_nonnull_class(p120, 4302713992, descr=<Guard0x11a6cdd30>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1697: p121 = getfield_gc_pure_r(p115, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p119, 4302750960, descr=<Guard0x104b9ec50>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1720: p122 = getfield_gc_pure_r(p120, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p122, ConstPtr(ptr80), descr=<Guard0x104b9ec00>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
+debug_merge_point(0, 0, '(cons AppRand0_448 AppRand1_284).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
+debug_merge_point(0, 0, 'Label(safe_return_multi_vals:pycket.interpreter:573).element1{|}.cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. cons2{element1{|}. |}}}}}}')
++1743: p123 = getfield_gc_pure_r(p120, descr=<FieldP rpython.tool.pairtype.W_StructSize1.inst___storage_0 16>)
+guard_class(p123, ConstClass(W_Symbol), descr=<Guard0x104b9ebb0>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
+guard_class(p121, 4302699896, descr=<Guard0x104b9eb60>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1773: p124 = getfield_gc_pure_r(p121, descr=<FieldP pycket.interpreter.LetCont.inst_counting_ast 32>)
+guard_value(p124, ConstPtr(ptr85), descr=<Guard0x104b9eb10>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1796: p125 = getfield_gc_pure_r(p121, descr=<FieldP pycket.cont.Cont.inst_env 16>)
++1800: p126 = getfield_gc_pure_r(p121, descr=<FieldP pycket.small_list.LetContSize1.inst__vals_w_0 40>)
+guard_nonnull_class(p126, 4302713992, descr=<Guard0x11a6cdcb8>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1823: p127 = getfield_gc_pure_r(p121, descr=<FieldP pycket.cont.Cont.inst_prev 24>)
+guard_class(p125, 4302750960, descr=<Guard0x104b9eac0>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
++1846: p128 = getfield_gc_pure_r(p126, descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+guard_value(p128, ConstPtr(ptr92), descr=<Guard0x104b9ea70>) [p89, p16, p15, p13, p31, p43, p55, p69, p81, p87, p86]
+debug_merge_point(0, 0, '(cons AppRand0_448 AppRand1_284).element1{|}.cons2{element1{|}. |}')
+p129 = new_with_vtable(descr=<SizeDescr 72>)
+setfield_gc(p129, ConstPtr(ptr130), descr=<FieldP pycket.values_struct.W_Struct.inst__shape 8>)
+setfield_gc(p129, p69, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_0 16>)
+setfield_gc(p129, p55, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_1 24>)
+setfield_gc(p129, p43, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_2 32>)
+setfield_gc(p129, p31, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_3 40>)
+setfield_gc(p129, p13, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_4 48>)
+setfield_gc(p129, p15, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_5 56>)
+setfield_gc(p129, p16, descr=<FieldP rpython.tool.pairtype.W_StructSize7.inst___storage_6 64>)
+jump(p125, p126, p123, p117, p111, p105, p99, p93, p81, p129, p127, descr=TargetToken(4370149008))
++2096: --end of the loop--
+[3583774f5b] jit-log-opt-loop}
