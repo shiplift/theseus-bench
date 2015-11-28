@@ -327,15 +327,15 @@ if (error_processing) {
 
   dat <- bench.summary[
     bench.summary$vm != "SMLNJ" 
-    & bench.summary$vm != "MLton" 
+    & bench.summary$vm != "MLton"
     & bench.summary$vm != "LambUncached"
     & bench.summary$vm != "Python"
   ,]
   dat$vm <- factor(dat$vm, levels = c("Lamb", # "LambUncached",
                                       "PycketShapes",
                                       "PycketOrig",  
-                                      "MLton","SMLNJ","OCaml",
                                       "Racket", # "Pycket",
+                                      "MLton","SMLNJ","OCaml",
                                       "Python", "Pypy"))
   levels(dat$vm)[levels(dat$vm) == "Lamb"] <- "Prototype"
 
@@ -373,7 +373,7 @@ if (error_processing) {
       axis.text.x  = element_text(size=8),
       axis.title.y = element_text(face="bold", size=8),
       axis.text.y  = element_text(size=8), #angle=45, hjust=0.2, vjust=0.5,
-      legend.position=c(0.60, .7),
+      legend.position=c(0.70, .7),
       plot.margin = unit(c(-2,-0.1,-2,-1),"mm"),
       legend.text = element_text(size=7),
       legend.title = element_text(size=7, face="bold"),

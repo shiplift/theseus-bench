@@ -1,4 +1,4 @@
-type element = E ;;
+type 'a element = E of 'a ;;
 
 type 'a lst = Nil | Cons of  'a * 'a lst ;;
 exception Empty;;
@@ -13,6 +13,8 @@ let tail = function
     Nil -> raise Empty
   | Cons(a, b) -> b
 ;;
+
+let e = E(1);;
 
 
 let ocaml_reverse list =
@@ -30,7 +32,7 @@ let ocaml_reverse list =
 let make_list num =
   let rec aux acc = function
     | 0 -> acc
-    | n -> aux (Cons (E, acc)) (n - 1) in
+    | n -> aux (Cons (e, acc)) (n - 1) in
   aux Nil num;;
 
 (* let make_list num = *)

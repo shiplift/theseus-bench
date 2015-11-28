@@ -1,11 +1,14 @@
 structure SMLFilter =
 struct
 
-datatype element = E | F;
+datatype 'a element = E of 'a | F of 'a;
 datatype 'a Lst = Nil | Cons of 'a * 'a Lst;
 exception Empty;
 
-datatype 'a box = Box of (element -> bool) * 'a;
+datatype ('a, 'b) box = Box of 'a * 'b;
+val e = E(1);
+val f = F(2);
+
 
 fun cons a b = Cons (a, b);
 fun head Nil = raise Empty
@@ -31,7 +34,7 @@ fun make_list num =
     let
         fun aux acc 0 = acc
           | aux acc n = let
-              val elem = if (n mod 2) = 0 then E else F
+              val elem = if (n mod 2) = 0 then e else f
           in
               aux (elem :: acc) (n - 1)
           end
@@ -61,8 +64,8 @@ end
 
 
 
-fun flt E = true
-  | flt F = false;
+fun flt (E _) = true
+  | flt (F _) = false;
 
 fun len lst =
     let

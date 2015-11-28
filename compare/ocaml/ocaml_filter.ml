@@ -1,9 +1,9 @@
-type element = E | F ;;
+type 'a element = E of 'a | F of 'a ;;
 
 type 'a lst = Nil | Cons of  'a * 'a lst ;;
 exception Empty;;
 
-type 'a box = Box of (element -> bool) * 'a;;
+type ('a, 'b) box = Box of 'a * 'b;;
 
 let cons a b = Cons(a, b) ;;
 
@@ -16,6 +16,10 @@ let tail = function
   | (Cons(a, b)) -> b
 ;;
 
+
+let e = E(1)
+and f = F(2)
+;;
 
 let rec ocaml_filter p = function
   | Nil -> Nil
@@ -31,7 +35,7 @@ let make_list num =
   let rec aux acc = function
     | 0 -> acc
     | n -> let elem =
-             if (n mod 2) = 0 then E else F
+             if (n mod 2) = 0 then e else f
            in aux (Cons (elem, acc)) (n - 1) in
   aux Nil num;;
 
@@ -65,8 +69,8 @@ let len lst =
   aux 0 lst
 
 let flt = function
-  | E -> true
-  | F -> false
+  | e -> true
+  | f -> false
 ;;
 
 (**)

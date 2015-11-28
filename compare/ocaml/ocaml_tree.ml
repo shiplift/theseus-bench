@@ -9,9 +9,13 @@
  * Adapted for lamb-bench by Tobias Pape
  *)
 
-type element = E | F ;;
+type 'a element = E of 'a | F of 'a ;;
 
 type 'a tree = Leaf of 'a | Node of 'a tree * 'a * 'a tree
+
+let e = E(1)
+and f = F(2)
+;;
 
 let rec make d e =
   if d = 0 then Leaf e
@@ -23,8 +27,8 @@ let rec make d e =
 
 let rec iter i niter d =
   if i <= niter then
-    let _ = make d E in
-    let _ = make d F in
+    let _ = make d e in
+    let _ = make d f in
     iter (i+1) niter d
   (* else *)
   (*   Printf.printf "%i\t trees of depth %i\n" (2 * niter) d *)
@@ -38,16 +42,16 @@ let rec loop_depths d max_depth =
     loop_depths (d+1) max_depth
 
 let rec check = function
-  | Leaf e -> E
-  | Node(l, e, r) ->
+  | Leaf el -> e
+  | Node(l, el, r) ->
      let _ = check l in
      check r
 
 let ocaml_tree num =
   let max_depth = num in
   let stretch_depth = max_depth + 1 in
-  let _ = make stretch_depth E in
-  let long_lived_tree = make max_depth E in
+  let _ = make stretch_depth e in
+  let long_lived_tree = make max_depth e in
   let _ = loop_depths min_depth max_depth in
   check long_lived_tree
 

@@ -1,11 +1,13 @@
 structure SMLMap =
 struct
 
-datatype element = E | F;
+datatype 'a element = E of 'a | F of 'a;
 datatype 'a Lst = Nil | Cons of 'a * 'a Lst;
 exception Empty;
 
-datatype 'a box = Box of (element -> element) * 'a;
+datatype ('a, 'b) box = Box of 'a * 'b;
+val e = E(1);
+val f = F(2);
 
 fun cons a b = Cons (a, b);
 fun head Nil = raise Empty
@@ -37,7 +39,7 @@ fun sml_map1 (Box(f,l)) = sml_map f l;
 fun make_list num =
     let
         fun aux acc 0 = acc
-          | aux acc n = aux (E :: acc) (n - 1)
+          | aux acc n = aux (e :: acc) (n - 1)
     in
         aux [] num
     end;
@@ -61,8 +63,8 @@ in
     res
 end
 
-fun swap E = F
-  | swap F = E;
+fun swap (E _) = f
+  | swap (F _) = e;
 
 fun len lst =
     let

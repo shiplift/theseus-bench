@@ -1,11 +1,13 @@
 structure SMLAppend =
 struct
 
-datatype element = E;
+datatype 'a element = E of 'a;
 datatype 'a Lst = Nil | Cons of 'a * 'a Lst;
 exception Empty;
 
-datatype 'a box = Box of 'a * 'a;
+datatype ('a, 'b) box = Box of 'a * 'b;
+
+val e = E(1);
 
 fun cons a b = Cons (a, b);
 fun head Nil = raise Empty
@@ -24,7 +26,7 @@ fun sml_append1 (Box(a,b)) = sml_append a b;
 fun make_list num =
     let
         fun aux acc 0 = acc
-          | aux acc n = aux (cons E acc) (n - 1)
+          | aux acc n = aux (cons e acc) (n - 1)
     in
         aux Nil num
     end;

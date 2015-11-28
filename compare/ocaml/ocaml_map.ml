@@ -1,9 +1,9 @@
-type element = E | F ;;
+type 'a element = E of 'a | F of 'a ;;
 
 type 'a lst = Nil | Cons of  'a * 'a lst ;;
 exception Empty;;
 
-type 'a box = Box of (element -> element) * 'a;;
+type ('a, 'b) box = Box of 'a * 'b;;
 
 let cons a b = Cons(a, b) ;;
 
@@ -16,6 +16,9 @@ let tail = function
   | (Cons(a, b)) -> b
 ;;
 
+let e = E(1)
+and f = F(2)
+;;
 
 (* let rec ocaml_map f = function *)
 (*   | [] -> [] *)
@@ -30,7 +33,7 @@ let ocaml_map1 (Box(f,l)) = ocaml_map f l;;
 let make_list num =
   let rec aux acc = function
     | 0 -> acc
-    | n -> aux (Cons (E, acc)) (n - 1) in
+    | n -> aux (Cons (e, acc)) (n - 1) in
   aux Nil num;;
 
 
@@ -54,8 +57,8 @@ let time f x =
   res
 
 let swap = function
-  | E -> F
-  | F -> E
+  | e -> f
+  | f -> e
 ;;
 
 let listnum a =
