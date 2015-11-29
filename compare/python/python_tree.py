@@ -39,10 +39,11 @@ class Node(object):
         return False
 
 class Element(object):
-    pass
+    def __init__(self, v):
+        self.v = v
 
-E = Element()
-F = Element()
+E = Element(1)
+F = Element(2)
 
 def make(item, d):
     if d == 0:
