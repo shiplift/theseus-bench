@@ -136,20 +136,26 @@ error_processing = (nrow(bench[bench$vm == 'Lamb' & bench$criterion=="total" & b
 if (error_processing) {
   print(">> with ep")
   bench.cpu$vm <- factor(bench.cpu$vm, levels = c("Lamb","LambUncached",
-                                      "MLton","SMLNJ","OCaml",
-                                      "Racket", "Pycket",
-                                      "Python", "Pypy"))
+                                                  "PycketShapes", "PycketOrig", "Pycket",
+                                                  "Racket",                                                  "MLton","SMLNJ","OCaml",
+                                                  "Python", "Pypy"))
   levels(bench.cpu$vm)[levels(bench.cpu$vm) == "Lamb"] <- "Prototype"
+  levels(bench.cpu$vm)[levels(bench.cpu$vm) == "PycketShapes"] <- "Pycket (optimized)"
+  levels(bench.cpu$vm)[levels(bench.cpu$vm) == "PycketOrig"] <- "Pycket (original)"
   bench.mem$vm <- factor(bench.mem$vm, levels = c("Lamb","LambUncached",
-                                                  "MLton","SMLNJ","OCaml",
-                                                  "Racket", "Pycket",
+                                                  "PycketShapes", "PycketOrig", "Pycket",
+                                                  "Racket",                                                  "MLton","SMLNJ","OCaml",
                                                   "Python", "Pypy"))
   levels(bench.mem$vm)[levels(bench.mem$vm) == "Lamb"] <- "Prototype"
+  levels(bench.mem$vm)[levels(bench.mem$vm) == "PycketShapes"] <- "Pycket (optimized)"
+  levels(bench.mem$vm)[levels(bench.mem$vm) == "PycketOrig"] <- "Pycket (original)"
   bench.tree$vm <- factor(bench.tree$vm, levels = c("Lamb","LambUncached",
-                                                  "MLton","SMLNJ","OCaml",
-                                                  "Racket", "Pycket",
-                                                  "Python", "Pypy"))
+                                                    "PycketShapes", "PycketOrig", "Pycket",
+                                                    "Racket",                                                  "MLton","SMLNJ","OCaml",
+                                                    "Python", "Pypy"))
   levels(bench.tree$vm)[levels(bench.tree$vm) == "Lamb"] <- "Prototype"
+  levels(bench.tree$vm)[levels(bench.tree$vm) == "PycketShapes"] <- "Pycket (optimized)"
+  levels(bench.tree$vm)[levels(bench.tree$vm) == "PycketOrig"] <- "Pycket (original)"
   
   #bench.err <- bootstrapTo(bench.tot, 'benchmark', 'vm', 'Racket', 'value')
   bench.summary <- ddply(bench.cpu, .(benchmark,vm), summarise,
@@ -208,16 +214,38 @@ if (error_processing) {
     labels
   }
 
+
   dat <- bench.summary[bench.summary$vm != "SMLNJ" & bench.summary$vm != "LambUncached",]
   if (nrow(dat) > 0) {
+    if (mean(dat$mean) > 1000) {
+      .scale = 1/1000
+      .ylab <- "Execution time (s)"
+    } else {
+      .scale = 1
+      .ylab <- "Execution time (ms)"
+    }
+    .y.icon.max <- 750
+    .y.max.steps <- 1000
+    dat$isCapped <- " "
+    .needs.cap <- dat[!is.na(dat$mean) & dat$mean > CAPPING,]
+    if (nrow(.needs.cap) > 0) {
+      dat[!is.na(dat$mean) & dat$mean > CAPPING,]$median <- CAPPING
+      dat[!is.na(dat$mean) & dat$mean > CAPPING,]$stdev <- 0
+      dat[!is.na(dat$mean) & dat$mean > CAPPING,]$err095 <- 0
+      dat[!is.na(dat$mean) & dat$mean > CAPPING,]$cnfIntHigh <- CAPPING
+      dat[!is.na(dat$mean) & dat$mean > CAPPING,]$cnfIntLow <- CAPPING    
+      dat[!is.na(dat$mean) & dat$mean > CAPPING,]$isCapped <- paste0("> ", format(.needs.cap$mean * .scale,digits=0))
+      dat[!is.na(dat$mean) & dat$mean > CAPPING,]$mean <- CAPPING
+    }
+    
     dodge <- position_dodge(width=.8)
-    ymax <- round_any(max(bench.summary$mean), 1000, ceiling)
-    ggplot(data = dat, aes(x=benchmark,y=mean,group=interaction(benchmark,vm),fill=vm,)) + 
+    ymax <- round_any(max(dat$mean), .y.max.steps, ceiling) *.scale
+    p <- ggplot(data = dat, aes(x=benchmark,y=mean*.scale,group=interaction(benchmark,vm),fill=vm,)) + 
       geom_bar(stat="identity", position=dodge, width=.75, aes(fill = vm))+
-      #geom_errorbar(aes(ymin=cnfIntLow, ymax=cnfIntHigh),  position=dodge, color=I("black"), size=.2, width=.6) +  
-      geom_point(position=dodge,aes(y=max(500,min(mean)), ymax=ymax, shape=vm),size=2, color="grey90",stat="identity") +
+      geom_errorbar(aes(ymin=cnfIntLow*.scale, ymax=cnfIntHigh*.scale),  position=dodge, color=I("black"), size=.2, width=.6) +  
+      geom_point(position=dodge,aes(y=max(.y.icon.max*.scale,min(mean*.scale)), ymax=ymax, shape=vm),size=2, color="grey90",stat="identity") +
       # xlab("Benchmark") +
-      ylab("Execution time (s)") +
+      ylab(.ylab) +
       coord_cartesian() +    
       theme_bw(base_size=8, base_family="Helvetica") +
       theme(
@@ -227,7 +255,7 @@ if (error_processing) {
         axis.text.x  = element_text(size=8),
         axis.title.y = element_text(face="bold", size=8),
         axis.text.y  = element_text(size=8), #angle=45, hjust=0.2, vjust=0.5,
-        legend.position=c(0.40, .65),
+        legend.position=c(0.75, .65),
         plot.margin = unit(c(1,-0.1,-2,-1),"mm"),
         legend.text = element_text(size=7),
         legend.title = element_text(size=7, face="bold"),
@@ -237,28 +265,50 @@ if (error_processing) {
         legend.key.size=unit(3,"mm")
       ) +
       scale_y_continuous(
-          labels=function(x) x / 1000,
-          breaks=seq(0,ymax, 2000),
+          breaks=seq(0, ymax, .y.max.steps * .scale), 
           limits=c(0,ymax),
           expand=c(0,0)) +
       scale_fill_brewer(name = "Implementation", type="qual", palette="Set1") +
       scale_shape(name = "Implementation", solid = FALSE) +
       facet_null()  
-      
+    if (nrow(.needs.cap) > 0){
+      p <- p + 
+        geom_text(position=position_dodge(width=.9), angle=90,aes(y=((CAPPING * .scale) *.9), ymax=ymax*.scale,label=isCapped), size=2) 
+    }
+    p
+
     gg.file <- paste0(input.basename, "-cpu.pdf")
     ggsave(gg.file, width=figure.width, height=figure.height, units=c("in"), colormodel='rgb', useDingbats=FALSE)
     embed_fonts(gg.file, options=pdf.embed.options)  
+    
+        
   }
   
   #dat <- subset(bench.cpu, vm == "ulamb-c" | vm == "ulambi-c")
   dat <- bench.summary.mem[bench.summary.mem$vm != "SMLNJ" & bench.summary.mem$vm != "LambUncached",]
   if (nrow(dat) > 0) {
+    CAPPING = 4e6
+    .scale = 1e-6
+    .y.icon.max <- 750
+    .y.max.steps <- 1e6
+    dat$isCapped <- " "
+    .needs.cap <- dat[!is.na(dat$mean) & dat$mean > CAPPING,]
+    if (nrow(.needs.cap) > 0) {
+      dat[!is.na(dat$mean) & dat$mean > CAPPING,]$median <- CAPPING
+      dat[!is.na(dat$mean) & dat$mean > CAPPING,]$stdev <- 0
+      dat[!is.na(dat$mean) & dat$mean > CAPPING,]$err095 <- 0
+      dat[!is.na(dat$mean) & dat$mean > CAPPING,]$cnfIntHigh <- CAPPING
+      dat[!is.na(dat$mean) & dat$mean > CAPPING,]$cnfIntLow <- CAPPING    
+      dat[!is.na(dat$mean) & dat$mean > CAPPING,]$isCapped <- paste0("> ", format(.needs.cap$mean * .scale,digits=2))
+      dat[!is.na(dat$mean) & dat$mean > CAPPING,]$mean <- CAPPING
+    }
+    
     dodge <- position_dodge(width=.8)
-    ymax <- round_any(max(dat$mean), 1e6, ceiling)
-    ggplot(data = dat, aes(x=benchmark,y=mean,group=interaction(benchmark,vm),fill=vm,)) + 
+    ymax <- round_any(max(dat$mean), .y.max.steps, ceiling)
+    p <- ggplot(data = dat, aes(x=benchmark,y=mean,group=interaction(benchmark,vm),fill=vm,)) + 
       geom_bar(stat="identity", position=dodge, width=.75, aes(fill = vm))+
       #geom_errorbar(aes(ymin=cnfIntLow, ymax=cnfIntHigh),  position=dodge, color=I("black"), size=.33) +
-      geom_point(position=dodge,aes(y=max(4e5,min(mean)), ymax=ymax, shape=vm),size=2, color="grey90",stat="identity") +
+      geom_point(position=dodge,aes(y=max(.y.icon.max,min(mean)), ymax=ymax, shape=vm),size=2, color="grey90",stat="identity") +
       ylab("Memory consumption (GB)") +
       coord_cartesian() +    
       theme_bw(base_size=8, base_family="Helvetica") +
@@ -269,7 +319,7 @@ if (error_processing) {
         axis.text.x  = element_text(size=8),
         axis.title.y = element_text(face="bold", size=8),
         axis.text.y  = element_text(size=8), #angle=45, hjust=0.2, vjust=0.5,
-        legend.position=c(0.40, .65),
+        legend.position=c(0.88, .65),
         plot.margin = unit(c(1,-0.1,-2,-1),"mm"),
         legend.text = element_text(size=7),
         legend.title = element_text(size=7, face="bold"),
@@ -280,12 +330,18 @@ if (error_processing) {
       ) +
       scale_y_continuous(
         labels=ylabsformat,
-         breaks=seq(0,ymax, 1e6), 
+         breaks=seq(0,ymax, .y.max.steps), 
          limits=c(0,ymax),
         expand=c(0,0)) +
       scale_fill_brewer(name = "Implementation", type="qual", palette="Set1") +
       scale_shape(name = "Implementation", solid = FALSE) +
       facet_null()  
+    if (nrow(.needs.cap) > 0){
+      p <- p + 
+        geom_text(position=position_dodge(width=.9), angle=90,aes(y=(CAPPING *.9), ymax=ymax*.scale,label=isCapped), size=2) 
+    }
+    
+    p
     
     gg.file <- paste0(input.basename, "-mem.pdf")
     ggsave(gg.file, width=figure.width, height=figure.height, units=c("in"), colormodel='rgb', useDingbats=FALSE)
