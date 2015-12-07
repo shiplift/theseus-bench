@@ -42,8 +42,8 @@ class Element(object):
     def __init__(self, v):
         self.v = v
 
-E = Element(1)
-F = Element(2)
+E = Element([False])
+F = Element([False])
 
 def make_list(number, acc=null):
     while number >= 0:

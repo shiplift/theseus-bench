@@ -5,7 +5,7 @@ datatype 'a element = E of 'a;
 datatype 'a Lst = Nil | Cons of 'a * 'a Lst;
 exception Empty;
 
-val e = E(1);
+val e = E([false]);
 
 fun cons a b = Cons (a, b);
 fun head Nil = raise Empty

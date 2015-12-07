@@ -16,9 +16,10 @@ let tail = function
   | (Cons(a, b)) -> b
 ;;
 
-let e = E(1)
-and f = F(2)
+let e = E([false])
+and f = F([false])
 ;;
+
 
 (* let rec ocaml_map f = function *)
 (*   | [] -> [] *)
@@ -56,10 +57,7 @@ let time f x =
   in
   res
 
-let swap = function
-  | e -> f
-  | f -> e
-;;
+let swap x = if (x = e) then f else e;;
 
 let listnum a =
   try

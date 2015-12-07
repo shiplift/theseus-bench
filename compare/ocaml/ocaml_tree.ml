@@ -13,8 +13,8 @@ type 'a element = E of 'a | F of 'a ;;
 
 type 'a tree = Leaf of 'a | Node of 'a tree * 'a * 'a tree
 
-let e = E(1)
-and f = F(2)
+let e = E([false])
+and f = F([false])
 ;;
 
 let rec make d e =

@@ -17,8 +17,8 @@ let tail = function
 ;;
 
 
-let e = E(1)
-and f = F(2)
+let e = E([false])
+and f = F([false])
 ;;
 
 let rec ocaml_filter p = function
@@ -68,9 +68,7 @@ let len lst =
   in
   aux 0 lst
 
-let flt = function
-  | e -> true
-  | f -> false
+let flt x = (x = e)
 ;;
 
 (**)

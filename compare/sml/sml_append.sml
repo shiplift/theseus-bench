@@ -7,7 +7,7 @@ exception Empty;
 
 datatype ('a, 'b) box = Box of 'a * 'b;
 
-val e = E(1);
+val e = E([false]);
 
 fun cons a b = Cons (a, b);
 fun head Nil = raise Empty

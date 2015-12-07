@@ -12,9 +12,8 @@
            (printf "0:RESULT-cpu:ms: ~a.0\n0:RESULT-total:ms: ~a.0\n0:RESULT-gc:ms: ~a.0\n"
                    cpu user gc)
            (apply values v)))])))
-(struct element (x))
 (letrec
-    ([e (element 'a)]
+    ([e '(#f)]
      [head car]
      [tail cdr]
      [racket-append (lambda (a b)

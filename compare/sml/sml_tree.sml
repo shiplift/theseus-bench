@@ -14,8 +14,8 @@ struct
 datatype 'a element = E of 'a | F of 'a;
 datatype 'a tree = Leaf of 'a | Node of 'a tree * 'a * 'a tree
 
-val e = E(1);
-val f = F(2);
+val e = E([false]);
+val f = F([false]);
 
 
 fun make 0 e = Leaf (e)

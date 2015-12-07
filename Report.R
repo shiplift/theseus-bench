@@ -121,6 +121,16 @@ normalizeTo <- function(df, supergroup, group, val, var, vars=c(var)) {
 # --- shaping data
 
 bench <- droplevels(bench[c('criterion','vm','benchmark','value', 'unit', 'input_sizes')])
+
+bench <- bench[
+  bench$vm != "SMLNJ" 
+  & bench$vm != "MLton"
+  & bench$vm != "LambUncached"
+  & bench$vm != "OCaml"
+  & bench$vm != "Python"
+  ,]
+
+
 bench.tot <- droplevels(bench[bench$criterion == 'total',,drop=TRUE])
 bench.cpu <- droplevels(bench[bench$criterion == "cpu",,drop=TRUE])
 bench.mem <- droplevels(bench[bench$criterion == "mem",,drop=TRUE])
@@ -137,25 +147,30 @@ if (error_processing) {
   print(">> with ep")
   bench.cpu$vm <- factor(bench.cpu$vm, levels = c("Lamb","LambUncached",
                                                   "PycketShapes", "PycketOrig", "Pycket",
-                                                  "Racket",                                                  "MLton","SMLNJ","OCaml",
+                                                  "Racket", 
+                                                  "MLton","SMLNJ","OCaml",
                                                   "Python", "Pypy"))
   levels(bench.cpu$vm)[levels(bench.cpu$vm) == "Lamb"] <- "Prototype"
   levels(bench.cpu$vm)[levels(bench.cpu$vm) == "PycketShapes"] <- "Pycket (optimized)"
   levels(bench.cpu$vm)[levels(bench.cpu$vm) == "PycketOrig"] <- "Pycket (original)"
   bench.mem$vm <- factor(bench.mem$vm, levels = c("Lamb","LambUncached",
                                                   "PycketShapes", "PycketOrig", "Pycket",
-                                                  "Racket",                                                  "MLton","SMLNJ","OCaml",
+                                                  "Racket",                                          
+                                                  "MLton","SMLNJ","OCaml",
                                                   "Python", "Pypy"))
   levels(bench.mem$vm)[levels(bench.mem$vm) == "Lamb"] <- "Prototype"
   levels(bench.mem$vm)[levels(bench.mem$vm) == "PycketShapes"] <- "Pycket (optimized)"
   levels(bench.mem$vm)[levels(bench.mem$vm) == "PycketOrig"] <- "Pycket (original)"
   bench.tree$vm <- factor(bench.tree$vm, levels = c("Lamb","LambUncached",
                                                     "PycketShapes", "PycketOrig", "Pycket",
-                                                    "Racket",                                                  "MLton","SMLNJ","OCaml",
+                                                    "Racket",                          
+                                                    "MLton","SMLNJ","OCaml",
                                                     "Python", "Pypy"))
   levels(bench.tree$vm)[levels(bench.tree$vm) == "Lamb"] <- "Prototype"
   levels(bench.tree$vm)[levels(bench.tree$vm) == "PycketShapes"] <- "Pycket (optimized)"
   levels(bench.tree$vm)[levels(bench.tree$vm) == "PycketOrig"] <- "Pycket (original)"
+  
+
   
   #bench.err <- bootstrapTo(bench.tot, 'benchmark', 'vm', 'Racket', 'value')
   bench.summary <- ddply(bench.cpu, .(benchmark,vm), summarise,
@@ -385,6 +400,7 @@ if (error_processing) {
     bench.summary$vm != "SMLNJ" 
     & bench.summary$vm != "MLton"
     & bench.summary$vm != "LambUncached"
+    & bench.summary$vm != "OCaml"
     & bench.summary$vm != "Python"
   ,]
   dat$vm <- factor(dat$vm, levels = c("Lamb", # "LambUncached",

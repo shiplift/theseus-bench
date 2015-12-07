@@ -16,7 +16,7 @@ let tail = function
   | Cons(a, b) -> b
 ;;
 
-let e = E(1)
+let e = E([false])
 ;;
 
 (* let rec ocaml_append a b = *)

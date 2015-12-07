@@ -6,8 +6,8 @@ datatype 'a Lst = Nil | Cons of 'a * 'a Lst;
 exception Empty;
 
 datatype ('a, 'b) box = Box of 'a * 'b;
-val e = E(1);
-val f = F(2);
+val e = E([false]);
+val f = F([false]);
 
 
 fun cons a b = Cons (a, b);
@@ -64,8 +64,7 @@ end
 
 
 
-fun flt (E _) = true
-  | flt (F _) = false;
+fun flt x = (x = e);
 
 fun len lst =
     let

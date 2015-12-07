@@ -20,8 +20,7 @@
 
 (struct node (left val right))
 (struct leaf (val))
-(struct element (x))
-(define E (element 'e))
+(define E '(#f))
 
 (define (make item d)
   (if (= d 0)
