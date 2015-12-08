@@ -63,7 +63,7 @@ bench <- read.delim(tsv_name, comment.char = "#", header=FALSE,
 # figure.width <- 3.5
 # figure.height <- 2
 figure.width <- 7
-figure.height <- 3
+figure.height <- 4
 
 
 
@@ -222,12 +222,12 @@ if (error_processing) {
     }
   }
   
-  ylabsformat <- function(x) {
-    max.order <- floor(log10(max(x)))
-    min.order <- floor(log10(min(x[x != 0.0])))
-    labels <- sapply(x, function(y) yformat(y, max.order, min.order))
-    labels
-  }
+#   ylabsformat <- function(x) {
+#     max.order <- floor(log10(max(x)))
+#     min.order <- floor(log10(min(x[x != 0.0])))
+#     labels <- sapply(x, function(y) yformat(y, max.order, min.order))
+#     labels
+#   }
 
 
   dat <- bench.summary[bench.summary$vm != "SMLNJ" & bench.summary$vm != "LambUncached",]
@@ -239,7 +239,7 @@ if (error_processing) {
       .scale = 1
       .ylab <- "Execution time (ms)"
     }
-    .y.icon.max <- 750
+    .y.icon.max <- 100
     .y.max.steps <- 1000
     dat$isCapped <- " "
     .needs.cap <- dat[!is.na(dat$mean) & dat$mean > CAPPING,]
@@ -280,6 +280,7 @@ if (error_processing) {
         legend.key.size=unit(3,"mm")
       ) +
       scale_y_continuous(
+        labels=function(x) {paste0('  ', x)},
           breaks=seq(0, ymax, .y.max.steps * .scale), 
           limits=c(0,ymax),
           expand=c(0,0)) +
@@ -302,10 +303,10 @@ if (error_processing) {
   #dat <- subset(bench.cpu, vm == "ulamb-c" | vm == "ulambi-c")
   dat <- bench.summary.mem[bench.summary.mem$vm != "SMLNJ" & bench.summary.mem$vm != "LambUncached",]
   if (nrow(dat) > 0) {
-    CAPPING = 4e6
+    #CAPPING = 5e6
     .scale = 1e-6
     .y.icon.max <- 750
-    .y.max.steps <- 1e6
+    .y.max.steps <- 2.5e5
     dat$isCapped <- " "
     .needs.cap <- dat[!is.na(dat$mean) & dat$mean > CAPPING,]
     if (nrow(.needs.cap) > 0) {
@@ -344,7 +345,8 @@ if (error_processing) {
         legend.key.size=unit(3,"mm")
       ) +
       scale_y_continuous(
-        labels=ylabsformat,
+#         labels=ylabsformat,
+        labels=function (x) {x * .scale },
          breaks=seq(0,ymax, .y.max.steps), 
          limits=c(0,ymax),
         expand=c(0,0)) +
