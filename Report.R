@@ -368,8 +368,8 @@ if (error_processing) {
 
   ltx <- function(t,ref,name, X) {
     len <- ncol(t)/2
-    .just = rep(c('S',paste0('@{}>{\\smaller\\ensuremath{\\pm}}r@{\\,\\si{', X , '}}')), len)
-    .just = c('@{}S', .just[2:length(.just)])
+    .just = rep(c('r',paste0('@{}>{\\smaller\\ensuremath{\\pm}}r@{\\,\\si{', X , '}}')), len)
+    .just = c('@{}r', .just[2:length(.just)])
     out <- latex(t
                 ,file=name
                 ,rowlabel="Benchmark"
