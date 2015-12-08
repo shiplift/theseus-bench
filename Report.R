@@ -365,33 +365,80 @@ if (error_processing) {
     embed_fonts(gg.file, options=pdf.embed.options)
   }
 
-  f <- (function() {
-    c <- bench.summary[bench.summary$vm != "SMLNJ" & bench.summary$vm != "LambUncached",]
-    m <- bench.summary.mem[bench.summary.mem$vm != "SMLNJ" & bench.summary.mem$vm != "LambUncached",]
-    m$mean = m$mean / 1024
-    data.frame(benchmark=c$benchmark, vm=droplevels(c$vm), time_mean=c$mean, time_error=c$err095,memory_mean=m$mean, memory_error=m$err095) })()
-  
-  g <- dcast(melt(f, id.vars=c('benchmark','vm')), benchmark ~ vm + variable)
-  d <- g[2:length(g)]
-  rownames(d) <- g$benchmark
-  colnames(d) <- sapply(colnames(d), function(x) {sedit(x, '_', ' ')})
 
-
-  (function() {
-    len <- length(d)/2
-    out <- latex(d
-                ,file=paste0(input.basename, "-numbers.tex")
+  ltx <- function(t,ref,name, X) {
+    len <- ncol(t)/2
+    .just = rep(c('S',paste0('@{}>{\\smaller\\ensuremath{\\pm}}r@{\\,\\si{', X , '}}')), len)
+    .just = c('@{}S', .just[2:length(.just)])
+    out <- latex(t
+                ,file=name
                 ,rowlabel="Benchmark"
                 ,rowlabel.just="@{}l"
                 ,booktabs=TRUE
                 ,table.env=FALSE, center="none"
-                #,size="footnotesize"
                 ,size="scriptsize"
-                ,colheads=rep(c('time', '', 'memory', ''), len/2)
-                ,col.just=rep(c('@{}r','@{}>{\\smaller\\ensuremath{\\pm}}r','@{\\,\\si{\\milli\\second}}r','@{\\,\\si{\\mega\\byte}}>{\\smaller\\ensuremath{\\pm}}r@{\\,\\si{\\kilo\\byte}}'), len/2)
-                ,cgroup=levels(f$vm)
-                ,cdec=rep(0, len*2)
-    )})()
+                 ,colheads=rep(c('mean','error'), len)
+                ,col.just=.just
+                ,cgroup=levels(as.factor(ref$vm))
+                ,cdec=rep(0, len*2))
+    }
+
+
+  cpu.ref <-data.frame(benchmark=bench.summary$benchmark,
+                              vm=droplevels(bench.summary$vm),
+                              mean=bench.summary$mean,
+                              error=bench.summary$err095)
+  .c <- dcast(melt(cpu.ref,
+                   id.vars = c('benchmark', 'vm')),
+              benchmark ~ vm + variable)
+  cpu <- .c[2:length(.c)]
+  colnames(cpu) <-  sapply(colnames(cpu), function (x) {sedit(x, '_', ' ')})
+  rownames(cpu) <- .c$benchmark
+
+  ltx(cpu,cpu.ref,paste0(input.basename, "-cpu-numbers.tex"), '\\milli\\seconds')
+
+  mem.ref <-data.frame(benchmark=bench.summary.mem$benchmark,
+                              vm=droplevels(bench.summary.mem$vm),
+                              mean=bench.summary.mem$mean,
+                              error=bench.summary.mem$err095)
+  .m <- dcast(melt(mem.ref,
+                   id.vars = c('benchmark', 'vm')),
+              benchmark ~ vm + variable)
+  mem <- .m[2:length(.m)]
+  colnames(mem) <-  sapply(colnames(mem), function (x) {sedit(x, '_', ' ')})
+  rownames(mem) <- .m$benchmark
+
+  ltx(mem,mem.ref,paste0(input.basename, "-mem-numbers.tex"), '\\kilo\\byte')
+
+ 
+  #'@{\\,\\si{\\mega\\byte}}>{\\smaller\\ensuremath{\\pm}}r@{\\,\\si{\\kilo\\byte}}'
+#   f <- (function() {
+#     c <- bench.summary[bench.summary$vm != "SMLNJ" & bench.summary$vm != "LambUncached",]
+#     m <- bench.summary.mem[bench.summary.mem$vm != "SMLNJ" & bench.summary.mem$vm != "LambUncached",]
+#     m$mean = m$mean / 1024
+#     data.frame(benchmark=c$benchmark, vm=droplevels(c$vm), time_mean=c$mean, time_error=c$err095,memory_mean=m$mean, memory_error=m$err095) })()
+#   
+#   g <- dcast(melt(f, id.vars=c('benchmark','vm')), benchmark ~ vm + variable)
+#   d <- g[2:length(g)]
+#   rownames(d) <- g$benchmark
+#   colnames(d) <- sapply(colnames(d), function(x) {sedit(x, '_', ' ')})
+# 
+# 
+#   (function() {
+#     len <- length(d)/2
+#     out <- latex(d
+#                 ,file=paste0(input.basename, "-numbers.tex")
+#                 ,rowlabel="Benchmark"
+#                 ,rowlabel.just="@{}l"
+#                 ,booktabs=TRUE
+#                 ,table.env=FALSE, center="none"
+#                 #,size="footnotesize"
+#                 ,size="scriptsize"
+#                 ,colheads=rep(c('time', '', 'memory', ''), len/2)
+#                 ,col.just=rep(c('@{}r','@{}>{\\smaller\\ensuremath{\\pm}}r','@{\\,\\si{\\milli\\second}}r','@{\\,\\si{\\mega\\byte}}>{\\smaller\\ensuremath{\\pm}}r@{\\,\\si{\\kilo\\byte}}'), len/2)
+#                 ,cgroup=levels(f$vm)
+#                 ,cdec=rep(0, len*2)
+#     )})()
 } else { # ERROR CORRECTION
   print(">> w/o ep")
   bench.summary <- ddply(bench.cpu, .(benchmark,vm))
