@@ -2,4 +2,4 @@
 PROGRAM=`echo $0 | sed 's%.*/%%'`
 PROGDIR="$(cd `dirname $0`; echo $PWD)"
 
-PYCKET=$PROGDIR/pycket/pycket-c-orig $PROGDIR/PYCKET_RUN "$@"
+PYCKET=$PROGDIR/pycket/pycket-c-master $PROGDIR/PYCKET_RUN "$@"
