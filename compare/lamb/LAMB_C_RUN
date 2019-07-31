@@ -1,5 +1,5 @@
 #!/bin/sh
-[ -n "$SHIELDED_RUNNER" ] && [ -z "$RUN_SHIELDED" ] && exec "$SHIELDED_RUNNER" "$@"
+[ -n "$SHIELDED_RUNNER" ] && [ -z "$RUN_SHIELDED" ] && exec "$SHIELDED_RUNNER" "$0" "$@"
 
 ARGS="-E"
 while [ "`expr \"x$1\" : \"x\(.\{2\}\)\"`" = "-A" ]; do

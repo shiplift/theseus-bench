@@ -1,5 +1,5 @@
 #!/bin/sh
-[ -n "$SHIELDED_RUNNER" ] && [ -z "$RUN_SHIELDED" ] && exec "$SHIELDED_RUNNER" "$@"
+[ -n "$SHIELDED_RUNNER" ] && [ -z "$RUN_SHIELDED" ] && exec "$SHIELDED_RUNNER" "$0" "$@"
 PROGRAM=`echo $0 | sed 's%.*/%%'`
 PROGDIR="$(cd `dirname $0`; echo $PWD)"
 

@@ -1,5 +1,5 @@
 #!/bin/sh
-[ -n "$SHIELDED_RUNNER" ] && [ -z "$RUN_SHIELDED" ] && exec "$SHIELDED_RUNNER" "$@"
+[ -n "$SHIELDED_RUNNER" ] && [ -z "$RUN_SHIELDED" ] && exec "$SHIELDED_RUNNER" "$0" "$@"
 
 ARGS="-nodisplay -nosound -mmap 10240m"
 #ARGS=""
