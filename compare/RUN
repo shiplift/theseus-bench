@@ -1,7 +1,7 @@
 #!/bin/sh
 # -*- tab-width: 2; sh-use-smie: nil; -*-
 
-SHIELD_FILE=~/.shielded_run
+SHIELD_FILE=/tmp/topa.shielded_run
 
 [ -e "$SHIELD_FILE" ] || exit 7 #whatever
 
