@@ -16,7 +16,7 @@ else
   CPU_NUM=0
 fi
 
-echo >"$SHIELD_FILE"
+echo "#!/bin/sh >"$SHIELD_FILE"
 
 MAX_SAMPLE_FILE="/proc/sys/kernel/perf_event_max_sample_rate"
 MAX_SAMPLE_MUST="1"
@@ -35,7 +35,7 @@ if [ -e "$MAX_SAMPLE_FILE" ]; then
   MAX_SAMPLE_BACK="`cat $MAX_SAMPLE_FILE`"
   if [ "x$MAX_SAMPLE_BACK" != "x$MAX_SAMPLE_MUST" ]; then
     echo $MAX_SAMPLE_MUST | sudo tee "$MAX_SAMPLE_FILE"
-    echo 'echo $MAX_SAMPLE_BACK | sudo tee "$MAX_SAMPLE_FILE"' >"$SHIELD_FILE"
+    echo 'echo $MAX_SAMPLE_BACK | sudo tee "$MAX_SAMPLE_FILE"' >>"$SHIELD_FILE"
   fi
 fi
 
@@ -47,7 +47,7 @@ if [ -d "$SYS_CPUFREQ" ];then
       PSTATE_NOTURBO_BACK="`cat $PSTATE_NOTURBO_FILE`"
       if [ "x$PSTATE_NOTURBO_FILE" != "x$PSTATE_NOTURBO_MUST" ]; then
         echo $PSTATE_NOTURBO_MUST | sudo tee "$PSTATE_NOTURBO_FILE"
-        echo 'echo $PSTATE_NOTURBO_BACK | sudo tee "$PSTATE_NOTURBO_FILE"' >"$SHIELD_FILE"
+        echo 'echo $PSTATE_NOTURBO_BACK | sudo tee "$PSTATE_NOTURBO_FILE"' >>"$SHIELD_FILE"
       fi
     fi
   fi
@@ -57,19 +57,19 @@ if [ -d "$SYS_CPUFREQ" ];then
       if [ -e "$SYS_CPUFREQ/scaling_max_freq" ]; then
         SCALING_MAX_BACK="`cat $SYS_CPUFREQ/scaling_max_freq`"
         echo $SCALING_MAX_MUST | sudo tee $SYS_CPUFREQ/scaling_max_freq
-        echo "echo $SCALING_MAX_BACK | sudo tee $SYS_CPUFREQ/scaling_max_freq" >"$SHIELD_FILE"
+        echo "echo $SCALING_MAX_BACK | sudo tee $SYS_CPUFREQ/scaling_max_freq" >>"$SHIELD_FILE"
       fi
       if [ -e "$SYS_CPUFREQ/scaling_min_freq" ]; then
         SCALING_MIN_BACK="`cat $SYS_CPUFREQ/scaling_min_freq`"
         echo $SCALING_MIN_MUST | sudo tee $SYS_CPUFREQ/scaling_min_freq
-        echo "echo $SCALING_MIN_BACK | sudo tee $SYS_CPUFREQ/scaling_min_freq" >"$SHIELD_FILE"
+        echo "echo $SCALING_MIN_BACK | sudo tee $SYS_CPUFREQ/scaling_min_freq" >>"$SHIELD_FILE"
       fi
     fi
   fi
   if command -v cpufreq-set 2>&1 >/dev/null; then
     GOVERNOR="`cat $SYS_CPUFREQ/scaling_governor`"
     if [ "x$GOVERNOR" != "performance" ]; then
-      echo "sudo cpufreq-set -r -c $CPU_NUM -g $GOVERNOR" >"$SHIELD_FILE"
+      echo "sudo cpufreq-set -r -c $CPU_NUM -g $GOVERNOR" >>"$SHIELD_FILE"
       sudo cpufreq-set -r -c $CPU_NUM -g performance
     fi
   fi
