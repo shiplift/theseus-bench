@@ -47,7 +47,7 @@ if [ -d "$SYS_CPUFREQ" ];then
       PSTATE_NOTURBO_BACK="`cat $PSTATE_NOTURBO_FILE`"
       if [ "x$PSTATE_NOTURBO_FILE" != "x$PSTATE_NOTURBO_MUST" ]; then
         echo $PSTATE_NOTURBO_MUST | sudo tee "$PSTATE_NOTURBO_FILE"
-        echo 'echo $PSTATE_NOTURBO_BACK | sudo tee "$PSTATE_NOTURBO_FILE"' >>"$SHIELD_FILE"
+        echo "echo $PSTATE_NOTURBO_BACK | sudo tee \"$PSTATE_NOTURBO_FILE\"" >>"$SHIELD_FILE"
       fi
     fi
   fi
@@ -69,15 +69,15 @@ if [ -d "$SYS_CPUFREQ" ];then
   if command -v cpufreq-set 2>&1 >/dev/null; then
     GOVERNOR="`cat $SYS_CPUFREQ/scaling_governor`"
     if [ "x$GOVERNOR" != "performance" ]; then
-      echo "sudo cpufreq-set -r -c $CPU_NUM -g $GOVERNOR" >>"$SHIELD_FILE"
       sudo cpufreq-set -r -c $CPU_NUM -g performance
+      echo "sudo cpufreq-set -r -c $CPU_NUM -g $GOVERNOR" >>"$SHIELD_FILE"
     fi
   fi
 fi
 
 if command -v cset 2>&1 >/dev/null; then
   sudo cset shield --cpu=$CPU_NUM --kthread=on
-  echo "sudo cset shield --reset" >$"SHIELD_FILE"
+  echo "sudo cset shield --reset" >>"$SHIELD_FILE"
 fi
 
 echo "DONE"
