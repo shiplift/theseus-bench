@@ -67,9 +67,9 @@ if [ -d "$SYS_CPUFREQ" ];then
     fi
   fi
   if command -v cpufreq-set 2>&1 >/dev/null; then
-    GOVENOR="`cat $SYS_CPUFREQ/scaling_govenor`"
-    if [ "x$GOVENOR" != "performance" ]; then
-      echo "sudo cpufreq-set -r -c $CPU_NUM -g $GOVENOR" >"$SHIELD_FILE"
+    GOVERNOR="`cat $SYS_CPUFREQ/scaling_governor`"
+    if [ "x$GOVERNOR" != "performance" ]; then
+      echo "sudo cpufreq-set -r -c $CPU_NUM -g $GOVERNOR" >"$SHIELD_FILE"
       sudo cpufreq-set -r -c $CPU_NUM -g performance
     fi
   fi
