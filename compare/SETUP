@@ -16,7 +16,7 @@ else
   CPU_NUM=0
 fi
 
-echo "#!/bin/sh >"$SHIELD_FILE"
+echo "#!/bin/sh" >"$SHIELD_FILE"
 
 MAX_SAMPLE_FILE="/proc/sys/kernel/perf_event_max_sample_rate"
 MAX_SAMPLE_MUST="1"
