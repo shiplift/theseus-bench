@@ -3,4 +3,5 @@
 PROGRAM=`echo $0 | sed 's%.*/%%'`
 PROGDIR="$(cd `dirname $0`; echo $PWD)"
 
-PYCKET=$PROGDIR/pycket/pycket-c-master exec $PROGDIR/PYCKET_RUN "$@"
+RSQUEAK="$PROGDIR/rsqueak-master" exec "$PROGDIR/RSQUEAK_RUN" "$@"
+

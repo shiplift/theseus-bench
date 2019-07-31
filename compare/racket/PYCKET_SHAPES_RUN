@@ -1,5 +1,6 @@
 #!/bin/sh
+[ -n "$SHIELDED_RUNNER" ] && [ -z "$RUN_SHIELDED" ] && exec "$SHIELDED_RUNNER" "$@"
 PROGRAM=`echo $0 | sed 's%.*/%%'`
 PROGDIR="$(cd `dirname $0`; echo $PWD)"
 
-PYCKET=$PROGDIR/pycket/pycket-c-shapes $PROGDIR/PYCKET_RUN "$@"
+PYCKET=$PROGDIR/pycket/pycket-c-shapes exec $PROGDIR/PYCKET_RUN "$@"

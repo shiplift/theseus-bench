@@ -1,0 +1,79 @@
+#!/bin/sh
+# -*- tab-width: 2; sh-use-smie: nil; -*-
+
+SHIELD_FILE=~/.shielded_run
+
+[ -e "$SHIELD_FILE" ] && exit 7 #whatever
+
+if command -v lscpu 2>&1 >/dev/null; then
+  NUM_CPU=`lscpu -p=cpu | wc -l`
+  if [ "$NUM_CPU" -ge 64 ]; then
+    CPU_NUM=63
+  else
+    CPU_NUM==`lscpu -p=cpu | tail -n 1`
+  fi
+else
+  CPU_NUM=0
+fi
+
+echo >"$SHIELD_FILE"
+
+MAX_SAMPLE_FILE="/proc/sys/kernel/perf_event_max_sample_rate"
+MAX_SAMPLE_MUST="1"
+MAX_SAMPLE_BACK=""
+
+PSTATE_NOTURBO_FILE="/sys/devices/system/cpu/intel_pstate/no_turbo"
+PSTATE_NOTURBO_MUST="1"
+PSTATE_NOTURBO_BACK=""
+
+SCALING_MAX_MUST="2400000"
+SCALING_MAX_BACK=""
+SCALING_MIN_MUST="2400000"
+SCALING_MIN_BACK=""
+
+if [ -e "$MAX_SAMPLE_FILE" ]; then
+  MAX_SAMPLE_BACK="`cat $MAX_SAMPLE_FILE`"
+  if [ "x$MAX_SAMPLE_BACK" != "x$MAX_SAMPLE_MUST" ]; then
+    echo $MAX_SAMPLE_MUST | sudo tee "$MAX_SAMPLE_FILE"
+    echo 'echo $MAX_SAMPLE_BACK | sudo tee "$MAX_SAMPLE_FILE"' >"$SHIELD_FILE"
+  fi
+fi
+
+SYS_CPUFREQ="/sys/devices/system/cpu/cpu$CPU_NUM/cpufreq"
+if [ -d "$SYS_CPUFREQ" ];then
+  if [ -e "$SYS_CPUFREQ/scaling_driver" -a \
+      "`cat $SYS_CPUFREQ/scaling_driver`" = "intel_pstate" ]; then
+    if [ -e "$PSTATE_NOTURBO_FILE" ]; then
+      PSTATE_NOTURBO_BACK="`cat $PSTATE_NOTURBO_FILE`"
+      if [ "x$PSTATE_NOTURBO_FILE" != "x$PSTATE_NOTURBO_MUST" ]; then
+        echo $PSTATE_NOTURBO_MUST | sudo tee "$PSTATE_NOTURBO_FILE"
+        echo 'echo $PSTATE_NOTURBO_BACK | sudo tee "$PSTATE_NOTURBO_FILE"' >"$SHIELD_FILE"
+      fi
+    fi
+  fi
+  if [ -e "$SYS_CPUFREQ/cpuinfo_max_freq" ]; then
+    CPU_MAX="`cat $SYS_CPUFREQ/cpuinfo_max_freq`"
+    if [ "$CPU_MAX" -ge "$SCALING_MAX_MUST" ]; then
+      if [ -e "$SYS_CPUFREQ/scaling_max_freq" ]; then
+        SCALING_MAX_BACK="`cat $SYS_CPUFREQ/scaling_max_freq`"
+        echo $SCALING_MAX_MUST | sudo tee $SYS_CPUFREQ/scaling_max_freq
+        echo 'echo $SCALING_MAX_BACK | sudo tee $SYS_CPUFREQ/scaling_max_freq'
+
+      fi
+      if [ -e "$SYS_CPUFREQ/scaling_min_freq" ]; then
+        SCALING_MIN_BACK="`cat $SYS_CPUFREQ/scaling_min_freq`"
+        echo $SCALING_MIN_MUST | sudo tee $SYS_CPUFREQ/scaling_min_freq
+      fi
+    fi
+  fi
+  if command -v cpufreq-set 2>&1 >/dev/null; then
+    GOVENOR="`cat $SYS_CPUFREQ/scaling_govenor`"
+    if [ "x$GOVENOR" != "performance" ]; then
+      echo "sudo cpufreq-set -r -c $CPU_NUM -g $GOVENOR" >"$SHIELD_FILE"
+      sudo cpufreq-set -r -c $CPU_NUM -g performance
+    fi
+  fi
+fi
+
+
+echo "DONE"

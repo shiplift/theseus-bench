@@ -1,0 +1,58 @@
+#!/bin/sh
+# -*- tab-width: 2; sh-use-smie: nil; -*-
+
+SHIELD_FILE=~/.shielded_run
+
+[ -e "$SHIELD_FILE" ] || exit 7 #whatever
+
+if command -v lscpu 2>&1 >/dev/null; then
+  NUM_CPU=`lscpu -p=cpu | wc -l`
+  if [ "$NUM_CPU" -ge 64 ]; then
+    CPU_NUM=63
+  else
+    CPU_NUM==`lscpu -p=cpu | tail -n 1`
+  fi
+else
+  CPU_NUM=0
+fi
+
+
+_in_range () {
+  RANGE="$1"
+  WHAT="$2"
+  MIN=`echo "$RANGE" | xargs | cut -d- -f 1`
+  MAX=`echo "$RANGE" | xargs | cut -d- -f 2`
+  [ "$WHAT" -ge "$MIN" ] && [ "$WHAT" -le "$MAX" ]
+}
+
+
+EXEC="exec"
+_exec_cset () {
+  WHAT="$1"
+  shift
+  UID="`id -u`"
+  MAYBE_SUDO=""
+  if [ "0" -ne "$UID" ]; then
+    MAYBE_USER="--user=\"$UID\""
+    MAYBE_SUDO="sudo PATH=\"$PATH\""
+  fi
+  exec $MAYBE_SUDO cset shield $MAYBE_USER --exec "$WHAT" -- "$@"
+}
+
+
+if command -v cset 2>&1 >/dev/null; then
+  if cset shield 2>&1 >/dev/null; then
+    RANGE="`cset shield 2>&1 | grep '\"user\"' | sed -e 's/.*CPUSPEC(\(.*\)).*/\1/'`"
+    if _in_range "$RANGE" "$CPU_NUM"; then
+      EXEC=_exec_cset
+    else
+      printf "Cset setup, but our CPU (%d) not shielded, so not using" "$CPU_NUM" 1>&2
+    fi
+  else
+    printf "%s" "Cset not set up, not using" 1>&2
+  fi
+fi
+
+export RUN_SHIELDED=1
+
+$EXEC "$@"

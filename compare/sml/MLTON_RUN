@@ -1,4 +1,5 @@
 #!/bin/sh
+[ -n "$SHIELDED_RUNNER" ] && [ -z "$RUN_SHIELDED" ] && exec "$SHIELDED_RUNNER" "$@"
 
 if [ "`basename $PWD`" = "compare" ]; then
     cd sml

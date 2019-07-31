@@ -1,0 +1,9 @@
+#!/bin/sh
+# -*- tab-width: 2; sh-use-smie: nil; -*-
+
+SHIELD_FILE=~/.shielded_run
+if [ -e "$SHIELD_FILE" ]; then
+  sh "$SHIELD_FILE"
+  rm "$SHIELD_FILE"
+fi
+echo "DONE"

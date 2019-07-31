@@ -1,15 +1,15 @@
 #!/bin/sh
 [ -n "$SHIELDED_RUNNER" ] && [ -z "$RUN_SHIELDED" ] && exec "$SHIELDED_RUNNER" "$@"
 
-ARGS="-nodisplay -nosound -mmap 10240m"
-#ARGS=""
-
+ARGS="--silent"
 while [ "`expr \"x$1\" : \"x\(.\{2\}\)\"`" = "-A" ]; do
   ARGS="$ARGS `expr \"x$1\" : \"x.\{2\}\(.*\)\"`"
   shift
 done
 
-SQUEAK=squeak
+if [ "x$RSQUEAK" = "x" ]; then
+    RSQUEAK=rsqueak
+fi
 
 if [ "`basename $PWD`" = "compare" ]; then
     cd squeak
@@ -17,10 +17,21 @@ fi
 
 
 if [ "x$IMAGE" = "x" ]; then
-    IMAGE=squeak.image
+    IMAGE=rsqueak.image
 fi
-FIL="./squeak_$1.st"
+
+MESSAGE="valuesBench`echo \"$1\" | awk '{print toupper(substr($0,0,1))substr($0,2)}'`"
 shift
+
+if [ $# -ge 1 ]; then
+    EXTRA="$1"
+    shift
+    BENCHARGS="-m $MESSAGE -n $EXTRA"
+else
+    BENCHARGS="-m $MESSAGE"
+fi
+
+
 
 OS=`uname -s`
 if [ "$OS" = "Linux" ]; then
@@ -29,4 +40,4 @@ if [ "$OS" = "Linux" ]; then
   DOIT=/usr/bin/time
 fi
 
-exec $DOIT $SQUEAK $ARGS $IMAGE $FIL "$@"
+exec $DOIT $RSQUEAK $ARGS $BENCHARGS $IMAGE "$@"
