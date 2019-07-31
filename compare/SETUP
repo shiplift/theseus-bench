@@ -57,12 +57,12 @@ if [ -d "$SYS_CPUFREQ" ];then
       if [ -e "$SYS_CPUFREQ/scaling_max_freq" ]; then
         SCALING_MAX_BACK="`cat $SYS_CPUFREQ/scaling_max_freq`"
         echo $SCALING_MAX_MUST | sudo tee $SYS_CPUFREQ/scaling_max_freq
-        echo 'echo $SCALING_MAX_BACK | sudo tee $SYS_CPUFREQ/scaling_max_freq'
-
+        echo "echo $SCALING_MAX_BACK | sudo tee $SYS_CPUFREQ/scaling_max_freq" >"$SHIELD_FILE"
       fi
       if [ -e "$SYS_CPUFREQ/scaling_min_freq" ]; then
         SCALING_MIN_BACK="`cat $SYS_CPUFREQ/scaling_min_freq`"
         echo $SCALING_MIN_MUST | sudo tee $SYS_CPUFREQ/scaling_min_freq
+        echo "echo $SCALING_MIN_BACK | sudo tee $SYS_CPUFREQ/scaling_min_freq" >"$SHIELD_FILE"
       fi
     fi
   fi
