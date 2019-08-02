@@ -28,4 +28,7 @@ fi
 
 rm -f $FIL.lambc
 $LAMB -R $ARGS "$FIL" "$@" 2>&1 >/dev/null
+export PYPY_GC_MIN=1GB
+export PYPY_GC_GROWTH=2.5
+
 exec $DOIT $LAMB -W $ARGS "$FIL" "$@"

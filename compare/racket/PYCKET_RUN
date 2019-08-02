@@ -38,4 +38,6 @@ if [ "$OS" = "Linux" ]; then
   DOIT=/usr/bin/time
 fi
 
+export PYPY_GC_MIN=1GB
+export PYPY_GC_GROWTH=2.5
 exec $DOIT $PYCKET $ARGS $FIL "$@"
