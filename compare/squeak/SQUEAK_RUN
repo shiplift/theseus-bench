@@ -1,8 +1,8 @@
 #!/bin/sh
 [ -n "$SHIELDED_RUNNER" ] && [ -z "$RUN_SHIELDED" ] && exec "$SHIELDED_RUNNER" "$0" "$@"
 
-#ARGS="-nodisplay -nosound -mmap 10240m"
-ARGS="-nodisplay -nosound -mmap 30720m"
+ARGS="-noevents -nohandlers -nodisplay -nosound"
+ARGS="$ARGS -mmap 30720m -stackpages 200 -cogminjumps 8 -codesize 5600k -eden 64m"
 #ARGS=""
 
 while [ "`expr \"x$1\" : \"x\(.\{2\}\)\"`" = "-A" ]; do
