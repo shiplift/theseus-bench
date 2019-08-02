@@ -3,6 +3,7 @@
 
 import sys
 import time
+import gcreport
 
 sys.setrecursionlimit(1000 * sys.getrecursionlimit())
 
@@ -46,11 +47,14 @@ def main(args):
     num = int(args[1]) if len(args) > 1 else 20000000
     lst = make_list(num)
     lst2 = make_list(num)
+    gc1 = gcreport.current_gc_time()
     t1 = time.clock()
     res = lst.reverse()
     t2 = time.clock()
+    gc2 = gcreport.current_gc_time()
     t = (t2 - t1) * 1000
-    print "0:RESULT-cpu:ms: %s\n0:RESULT-total:ms: %s\n0:RESULT-gc:ms: 0.0\n" % (t, t)
+    gc = (gc2 - gc1) * 1.0
+    print "0:RESULT-cpu:ms: %s\n0:RESULT-total:ms: %s\n0:RESULT-gc:ms: %s\n" % (t, t, gc)
     assert not res.is_null()
     return 0
 
