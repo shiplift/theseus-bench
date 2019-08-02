@@ -1,5 +1,5 @@
 | default num res |
-default := 20000000.
+default := 18000000.
 num := (Smalltalk commandLine arguments ifEmpty: [default] ifNotEmpty: [:a | a first asNumber]).
-res := [num valuesBenchReverse] on: Error do: [1].
+res := [num valuesBenchTree] on: Error do: [1].
 Smalltalk quitPrimitive: res.
