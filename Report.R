@@ -153,6 +153,7 @@ if (error_processing) {
   levels(bench.cpu$vm)[levels(bench.cpu$vm) == "Lamb"] <- "Prototype"
   levels(bench.cpu$vm)[levels(bench.cpu$vm) == "PycketShapes"] <- "Pycket (optimized)"
   levels(bench.cpu$vm)[levels(bench.cpu$vm) == "PycketOrig"] <- "Pycket (original)"
+  levels(bench.cpu$vm)[levels(bench.cpu$vm) == "Pypy"] <- "PyPy"
   bench.mem$vm <- factor(bench.mem$vm, levels = c("Lamb","LambUncached",
                                                   "PycketShapes", "PycketOrig", "Pycket",
                                                   "Racket",                                          
@@ -161,6 +162,7 @@ if (error_processing) {
   levels(bench.mem$vm)[levels(bench.mem$vm) == "Lamb"] <- "Prototype"
   levels(bench.mem$vm)[levels(bench.mem$vm) == "PycketShapes"] <- "Pycket (optimized)"
   levels(bench.mem$vm)[levels(bench.mem$vm) == "PycketOrig"] <- "Pycket (original)"
+  levels(bench.mem$vm)[levels(bench.mem$vm) == "Pypy"] <- "PyPy"
   bench.tree$vm <- factor(bench.tree$vm, levels = c("Lamb","LambUncached",
                                                     "PycketShapes", "PycketOrig", "Pycket",
                                                     "Racket",                          
@@ -169,6 +171,7 @@ if (error_processing) {
   levels(bench.tree$vm)[levels(bench.tree$vm) == "Lamb"] <- "Prototype"
   levels(bench.tree$vm)[levels(bench.tree$vm) == "PycketShapes"] <- "Pycket (optimized)"
   levels(bench.tree$vm)[levels(bench.tree$vm) == "PycketOrig"] <- "Pycket (original)"
+  levels(bench.tree$vm)[levels(bench.tree$vm) == "Pypy"] <- "PyPy"
   
 
   
@@ -395,7 +398,7 @@ if (error_processing) {
   colnames(cpu) <-  sapply(colnames(cpu), function (x) {sedit(x, '_', ' ')})
   rownames(cpu) <- .c$benchmark
 
-  ltx(cpu,cpu.ref,paste0(input.basename, "-cpu-numbers.tex"), '\\milli\\seconds')
+  ltx(cpu,cpu.ref,paste0(input.basename, "-cpu-numbers.tex"), '\\milli\\second')
 
   mem.ref <-data.frame(benchmark=bench.summary.mem$benchmark,
                               vm=droplevels(bench.summary.mem$vm),
