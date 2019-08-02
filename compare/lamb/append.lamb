@@ -50,11 +50,11 @@ time       ≔ λ. fun, arg              ↦ μ(time$cont0, fun, arg, μ(gctime)
 lamb_append ≔ λ.
               1. Nil(), B      ↦ B
               2. Cons(h, t), B ↦ Cons(h, μ(lamb_append, t, B))
-main$cont ≔ λ. 1. Box(l, m) ↦ μ(lamb_append, l, m)
+main$cont ≔ λ. Box(l, m) ↦ μ(lamb_append, l, m)
 
 num ≔ μ(λ.
-        1. Nil()      ↦ 10000000
-        2. Cons(h, _) ↦ μ(⟪strtol⟫, h), arguments)
+        1. nil()      ↦ 10000000
+        2. cons(h, _) ↦ μ(⟪strtol⟫, h), arguments)
 l ≔ μ(make_list, num)
 m ≔ μ(make_list, num)
 μ(time, main$cont, Box(l, m))
