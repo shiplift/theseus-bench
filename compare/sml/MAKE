@@ -4,11 +4,13 @@ mlton sml_filter.mlb
 mlton sml_append.mlb
 mlton sml_map.mlb
 mlton sml_reverse.mlb
+mlton sml_reversen.mlb
 mlton sml_tree.mlb
 
 ml-build sml_filter.cm SMLFilter.main sml_filter_image
 ml-build sml_append.cm SMLAppend.main sml_append_image
 ml-build sml_map.cm SMLMap.main sml_map_image
 ml-build sml_reverse.cm SMLReverse.main sml_reverse_image
+ml-build sml_reversen.cm SMLReversen.main sml_reversen_image
 ml-build sml_tree.cm SMLTree.main sml_tree_image
 

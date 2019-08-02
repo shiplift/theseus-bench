@@ -1,0 +1,6 @@
+local
+    $(SML_LIB)/basis/basis.mlb
+    sml_reversen.sml
+in
+    sml_reversen_mlton.sml
+end
