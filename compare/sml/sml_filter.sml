@@ -42,25 +42,7 @@ fun make_list num =
         aux [] num
     end;
 
-fun time_string t =
-    Real.toString ((Time.toReal t) * 1000.0);
 
-
-fun time (mlton, action, arg) = let
-    val tot_timer = Timer.startRealTimer ()
-    val cpu_timer = Timer.startCPUTimer ()
-    val res = action arg
-    val cpu_times = Timer.checkCPUTimer cpu_timer
-    val tot_times = Timer.checkRealTimer tot_timer
-    val _ = print ("0:RESULT-cpu:ms: " ^ (time_string (Time.+ (#usr cpu_times, #sys cpu_times))) ^ "\n")
-    val _ = if mlton then
-                print ("0:RESULT-total:ms: " ^ (time_string tot_times) ^ "\n")
-            else
-                (* Cheat here, the total thing seems bogus on SML/NJ *)
-                print ("0:RESULT-total:ms: " ^ (time_string (Time.+ (#usr cpu_times, #sys cpu_times))) ^ "\n")
-in
-    res
-end
 
 
 
@@ -81,7 +63,7 @@ fun main (prog_name, args) =
     let
         val num = listnum (args)
         val l = (make_list num)
-        val res = time ((prog_name = "mlton"), sml_filter1, (Box (flt, l)))
+        val res = Timed.timed (sml_filter1, (Box (flt, l)))
         val _ = Int.toString (List.length res)
     in
         0

@@ -64,24 +64,6 @@ fun sml_tree num =
         check long_lived_tree
     end;
 
-fun time_string t =
-    Real.toString ((Time.toReal t) * 1000.0);
-
-fun time (mlton, action, arg) = let
-    val tot_timer = Timer.startRealTimer ()
-    val cpu_timer = Timer.startCPUTimer ()
-    val res = action arg
-    val cpu_times = Timer.checkCPUTimer cpu_timer
-    val tot_times = Timer.checkRealTimer tot_timer
-    val _ = print ("0:RESULT-cpu:ms: " ^ (time_string (Time.+ (#usr cpu_times, #sys cpu_times))) ^ "\n")
-    val _ = if mlton then
-                print ("0:RESULT-total:ms: " ^ (time_string tot_times) ^ "\n")
-            else
-                (* Cheat here, the total thing seems bogus on SML/NJ *)
-                print ("0:RESULT-total:ms: " ^ (time_string (Time.+ (#usr cpu_times, #sys cpu_times))) ^ "\n")
-in
-    res
-end
 
 fun treenum [] = 18
   | treenum (x::xs) = (min_depth - 1) + (Option.valOf (Int.fromString x) div 1000000);
@@ -92,7 +74,7 @@ fun tst (E _) = 1
 fun main (prog_name, args) =
     let
         val num = treenum (args)
-        val res = time ((prog_name = "mlton"), sml_tree, num)
+        val res = Timed.timed (sml_tree, num)
         val _ = Int.toString (tst res)
     in
         0

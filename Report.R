@@ -1,5 +1,25 @@
 #! /usr/bin/env Rscript
 
+# figure.width <- 3.5
+# figure.height <- 2
+figure.width <- 7
+figure.height <- 4
+
+
+tsv_name.default <- "output/current.tsv"
+"#
+tsv_name.default <- 'output/20190803-nanobenches-all.tsv'
+"#
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+if (FALSE) {
+  setwd("/Users/tobias/dev/pypy/lamb-bench")
+  cmd.line <- FALSE
+} else {
+  cmd.line <- TRUE
+}
+
 pkgs = c(
   "reshape2",
   "plyr",
@@ -10,135 +30,69 @@ pkgs = c(
   "tools",
   "quantreg",
   "locfit",
-  "xlsx"
+  "dplyr"
 )
 
-use <- function(pkg) {
-  if (!require(pkg, character.only=TRUE)) { install.packages(pkg) }
-  library(pkg,character.only=TRUE)
-}
-sapply(pkgs, use)
-if (!require(extrafont)) {
-  install.packages("devtools")
-  library(devtools)
-  install_github("Rttf2pt1", "wch")
-  install_github("extrafont", "wch")
-}
-library(extrafont)
-loadfonts(quiet=TRUE)
-if (length(fonts()) == 0) {
-  font_import(prompt=FALSE)
-}
-
-pdf.embed.options <- "-dEmbedAllFonts=true -dPDFSETTINGS=/prepress -dCompatibilityLevel=1.4 -dSubsetFonts=true -dHaveTrueTypeFonts=true"
-# ---- cmd line ----
-
-if (FALSE) {
-  setwd("/Users/tobias/dev/pypy/lamb-bench")
-}
-
+source("./help.R")
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 if (length(commandArgs(trailingOnly=TRUE)) > 0) {
-  tsv_name = commandArgs(trailingOnly=TRUE)[1]
   if (length(commandArgs(trailingOnly=TRUE)) > 1) {
     CAPPING <- as.numeric(commandArgs(trailingOnly=TRUE)[2])
   } else {
     CAPPING <- Inf
   }
 } else {
-  tsv_name <- "output/current-report.tsv"
   CAPPING <- 10000
 }
 
-if (!file.exists(tsv_name)) {
-  stop("Cannot open input file ", tsv_name)
-}
-
-input.basename = file_path_sans_ext(tsv_name)
 print(paste0(">> ", input.basename))
 
 bench <- read.delim(tsv_name, comment.char = "#", header=FALSE,
                     col.names=c('timestamp', 'value', 'unit', 'criterion', 'benchmark', 'vm', 'suite', 'extra_args', 'warump', 'cores', 'input_sizes', 'variable_values'))
 
-# figure.width <- 3.5
-# figure.height <- 2
-figure.width <- 7
-figure.height <- 4
+error_processing = (nrow(bench[bench$vm == 'Lamb' & bench$criterion=="total" & bench$benchmark == "map",]) != 1)
 
-
-
-# ------ functions -----
-confInterval095Error <- function (samples) {
-  if (length(sample) < 30)
-    qnorm(0.975) * sd(samples) / sqrt(length(samples))
-  else
-    qt(0.975, df=length(samples)-1) * sd(samples) / sqrt(length(samples))
-}
-
-div_mean_x_y = function(data, indices, extraid) {
-  indexx = indices[extraid == "x"]
-  indexy = indices[extraid == "y"]
-  mean(data[indexx]) / mean(data[indexy])
-}
-
-normalize_value_bootstrap_confidence = function(x, y, R=1000) {
-  # x and y need to be *vectors* of all the values
-  # the result is the confidence interval of mean(x) / mean(y)
-  total <- c(x,y)
-  id <- as.factor(c(rep("x",length(x)),rep("y",length(y))))
-  
-  b <- boot(total, div_mean_x_y, strata=id, R=R, extraid=id)
-  norm <- boot.ci(b, type=c("norm"))$normal
-  dimnames(norm) <- list(NULL,c("conf", "upper", "lower"))
-  norm
-}
-
-bootstrapTo <- function(df, supergroup, group, val, var) {
-  cmp <- df[(df[[group]] == val),]
-  doIt <- function(X) {
-    ident <- (X[[supergroup]])[[1]]
-    subs <- cmp[(cmp[[supergroup]] == ident),]
-    comparee <- subs[[var]]
-    normalize_value_bootstrap_confidence(X[[var]], comparee)
-  }
-  ddply(df, c(supergroup,group), doIt)  
-}
-
-normalizeTo <- function(df, supergroup, group, val, var, vars=c(var)) {
-  data <- df
-  sg <- droplevels(df[[supergroup]])
-  indexes <- which(df[[group]] == val)
-  norm.factor <- (df[[var]])[indexes]
-  names(norm.factor) <- sg[indexes]
-  for (normvar in vars) {
-    divis <- norm.factor[ sg ]
-    res <- df[[normvar]]/divis
-    data[[paste0(normvar,".norm")]] <- res
-  }
-  data
-}
 
 # --- shaping data
 
-bench <- droplevels(bench[c('criterion','vm','benchmark','value', 'unit', 'input_sizes')])
+#bench <- droplevels(bench[c('criterion','vm','benchmark','value', 'unit', 'input_sizes')])
+bench <- droplevels(bench[c('criterion','vm','benchmark','value', 'unit')])
 
-bench <- bench[
-  bench$vm != "SMLNJ" 
-  & bench$vm != "MLton"
-  & bench$vm != "LambUncached"
-  & bench$vm != "OCaml"
-  & bench$vm != "Python"
-  ,]
+# bench <- bench[
+#   bench$vm != "SMLNJ" 
+#   & bench$vm != "MLton"
+#   & bench$vm != "LambUncached"
+#   & bench$vm != "OCaml"
+#   & bench$vm != "Python"
+#   ,]
+
 
 
 bench.tot <- droplevels(bench[bench$criterion == 'total',,drop=TRUE])
 bench.cpu <- droplevels(bench[bench$criterion == "cpu",,drop=TRUE])
 bench.mem <- droplevels(bench[bench$criterion == "mem",,drop=TRUE])
+bench.gc  <- droplevels(bench[bench$criterion == "gc",,drop=TRUE])
+for (vm in levels(bench$vm)) {
+  for (benchmark in levels(bench.gc$benchmark)) {
+    if (nrow(bench.gc[bench.gc$vm == vm & bench.gc$benchmark == benchmark,]) <= 0 ) {
+      .x <- data.frame(criterion=levels(bench.cpu$criterion)[1],
+                 vm=vm,benchmark=benchmark,value=NA,
+                 unit=levels(bench.gc$unit)[1])
+      bench.gc <- rbind(bench.gc, .x)
+      if (error_processing) { for (. in 1:9) bench.gc <- rbind(bench.gc, .x) }
+    } else {
+      if (sum(bench.gc[bench.gc$vm == vm & bench.gc$benchmark == benchmark,]$value) == 0) {
+        bench.gc[bench.gc$vm == vm & bench.gc$benchmark == benchmark,]$value <- NA
+      }
+    }
+  }
+}
+
 
 bench.tree <- bench[(bench$criterion == "cpu" | bench$criterion == "mem") & bench$benchmark == "tree",,drop=TRUE]
 
 
-error_processing = (nrow(bench[bench$vm == 'Lamb' & bench$criterion=="total" & bench$benchmark == "map",]) != 1)
 
 
 #--------------------------------------------------------------------------------------------------------
@@ -530,7 +484,7 @@ if (error_processing) {
 
   gg.file <- paste0(input.basename, "-norm-col.pdf")
   ggsave(gg.file, width=figure.width, height=figure.height, units=c("in"), colormodel='rgb', useDingbats=FALSE)
-  embed_fonts(gg.file, options="-dPDFSETTINGS=/prepress")
+  embed_fonts(gg.file, options=pdf.embed.options)
 
 }
 
