@@ -16,10 +16,11 @@ fun timed (action, arg) =
          self = {utime = a_selfu, stime = a_selfs}, ...} =
       MLton.Rusage.rusage ()
     val a = Time.now ()
-    val _ = print_time ("total", (Time.- (a, b)))
+    val total = Time.- (a, b)
     val cpu = Time.- (Time.+ (a_selfu, a_selfs), Time.+ (b_selfu, b_selfs))
-    val _ = print_time ("cpu", cpu)
     val gc = Time.- (Time.+ (a_gcu, a_gcs), Time.+ (b_gcu, b_gcs))
+    val _ = print_time ("cpu", cpu)
+    val _ = print_time ("total", total)
     val _ = print_time ("gc", gc)
   in
     res
