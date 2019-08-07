@@ -49,6 +49,7 @@ let time f x =
   let () = Printf.printf "0:RESULT-cpu:ms: %f\n0:RESULT-total:ms: %f\n"
                          ((cpu_stop -. cpu_start) *. 1000.0)
                          ((tot_stop -. tot_start) *. 1000.0)
+  let () = Printf.printf "0:RESULT-gc:ms: %f\n" 0.0
   in
   res
 ;;
