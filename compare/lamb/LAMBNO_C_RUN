@@ -1,0 +1,34 @@
+#!/bin/sh
+[ -n "$SHIELDED_RUNNER" ] && [ -z "$RUN_SHIELDED" ] && exec "$SHIELDED_RUNNER" "$0" "$@"
+
+ARGS="-E -s 99999999 -w 0"
+while [ "`expr \"x$1\" : \"x\(.\{2\}\)\"`" = "-A" ]; do
+  ARGS="$ARGS `expr \"x$1\" : \"x.\{2\}\(.*\)\"`"
+  shift
+done
+
+FIL="$1.lamb"
+shift
+
+if [ "`basename $PWD`" = "compare" ]; then
+    cd lamb
+fi
+
+if [ ! -x lamb ]; then
+  exit 1
+fi
+LAMB=./lamb
+
+OS=`uname -s`
+if [ "$OS" = "Linux" ]; then
+  ulimit -s 1048576
+  export TIME="0:RESULT-mem:kbyte: %M.0"
+  DOIT=/usr/bin/time
+fi
+
+rm -f $FIL.lambc
+$LAMB -R $ARGS "$FIL" "$@" 2>&1 >/dev/null
+export PYPY_GC_MIN=1GB
+export PYPY_GC_GROWTH=2.5
+
+exec $DOIT $LAMB -W $ARGS "$FIL" "$@"
