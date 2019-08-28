@@ -141,22 +141,22 @@ if (error_processing) {
 '
 
   dodge <- position_dodge(width=.8)
+  .palette <- "Set1"
+  .palette <- "Paired"
 
   ymax <- ceiling_steps(dat.max, .y.max.steps) * .scale
   p <- ggplot(data = dat, aes(x=benchmark,y=cpu_mean*.scale,group=interaction(benchmark,vm),fill=vm,)) +
-    geom_bar(stat="identity", position=dodge, width=.75, aes(fill = vm))+
+    geom_col(position=dodge, width=.75)+ #, aes(fill = vm))+
     geom_errorbar(aes(ymin=(cpu_mean - cpu_err095) * .scale, ymax=c(cpu_mean + cpu_err095) * .scale),  position=dodge, color=I("black"), size=.2, width=.6) +
     scale_y_continuous(
       labels=function(x) {paste0('  ', x)},
         breaks=seq(0, ymax, .y.max.steps * .scale),
         limits=c(0,ymax),
         expand=c(0,0)) +
-    #scale_fill_brewer(name = "Implementation", type="qual", palette="Paired") +
-    scale_fill_brewer(name = "Implementation", type="qual", palette="Set2") +
-    new_scale_fill()+
-    geom_bar(stat="identity", position=dodge, width=.75, aes(y=gc_mean*.scale,fill = vm))+
+    geom_col(position=dodge, width=.75, fill="white", aes(y=gc_mean*.scale))+
+    geom_col(position=dodge, width=.75, aes(y=gc_mean*.scale,fill = vm, alpha=0.6))+
+    scale_fill_brewer(name = "Implementation", type="qual", .palette) +
     # xlab("Benchmark") +
-    scale_fill_brewer(name = "Implementation", type="qual", palette="Set3") +
     geom_point(position=dodge,aes(y=max(.y.icon.max*.scale,min(cpu_mean*.scale)), shape=vm),size=2, color="grey90",stat="identity") +
     scale_shape(name = "Implementation", solid = FALSE) +
     ylab(.ylab) +
