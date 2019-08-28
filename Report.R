@@ -9,6 +9,7 @@ figure.height <- 4
 tsv_name.default <- "output/current.tsv"
 "#
 tsv_name.default <- 'output/20190803-nanobenches-all.tsv'
+tsv_name.default <- 'output/20190807-nanobenches-all.tsv'
 "#
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -82,6 +83,9 @@ bench <- bench %>%
 bench <- bench %>% filter(vm %ni% c('SMLNJ', 'MLton', 'OCaml', 'Python'))
 "
 
+"
+bench <- bench %>% filter(vm %ni% c('SMLNJ', 'MLton', 'OCaml', 'Python','PyPy','Squeak','Racket'))
+"
 
 
 #--------------------------------------------------------------------------------------------------------
@@ -121,6 +125,7 @@ if (error_processing) {
   }
   .y.icon.max <- 100
   .y.max.steps <- 1000
+  .needs.cap <- tibble()
 '.
     dat$isCapped <- " "
     .needs.cap <- dat[!is.na(dat$mean) & dat$mean > CAPPING,]
@@ -146,11 +151,12 @@ if (error_processing) {
         breaks=seq(0, ymax, .y.max.steps * .scale),
         limits=c(0,ymax),
         expand=c(0,0)) +
-    scale_fill_brewer(name = "Implementation", type="qual", palette="Set1") +
+    #scale_fill_brewer(name = "Implementation", type="qual", palette="Paired") +
+    scale_fill_brewer(name = "Implementation", type="qual", palette="Set2") +
     new_scale_fill()+
     geom_bar(stat="identity", position=dodge, width=.75, aes(y=gc_mean*.scale,fill = vm))+
     # xlab("Benchmark") +
-    scale_fill_brewer(name = "Implementation", type="qual", palette="Set2") +
+    scale_fill_brewer(name = "Implementation", type="qual", palette="Set3") +
     geom_point(position=dodge,aes(y=max(.y.icon.max*.scale,min(cpu_mean*.scale)), shape=vm),size=2, color="grey90",stat="identity") +
     scale_shape(name = "Implementation", solid = FALSE) +
     ylab(.ylab) +
@@ -168,7 +174,7 @@ if (error_processing) {
       legend.text = element_text(size=7),
       legend.title = element_text(size=7, face="bold"),
       legend.background = element_rect(fill="gray90", size=0),
-      legend.margin = unit(-.5, "cm"),
+      legend.spacing = unit(-.5, "cm"),
       legend.key=element_rect(fill="white"),
       legend.key.size=unit(3,"mm")
     ) +
