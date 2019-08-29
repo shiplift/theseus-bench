@@ -3,6 +3,7 @@
 p ≔ ⟪print_result_string⟫
 clock ≔ ⟪clock⟫
 gctime ≔ ⟪gctime⟫
+# type E | F.
 
 # type Nil, Cons(,)
 cons ≔ λ. A, B ↦ Cons(A, B)
@@ -10,11 +11,16 @@ head ≔ λ. Cons(A, B) ↦ A
 tail ≔ λ. Cons(A, B) ↦ B
 
 make_list$aux ≔ λ.
-                1. acc, 0 ↦ acc
-                2. acc, n ↦ μ(make_list$aux,
-                              μ(cons, 1, acc),
-                              μ(⟪minus_int⟫, n, 1))
-make_list ≔ λ. n ↦ μ(make_list$aux, Nil(), n)
+                1. acc, 0, _ ↦ acc
+                2. acc, n, 1 ↦ μ(make_list$aux,
+                                 μ(cons, E(), acc),
+                                 μ(⟪minus_int⟫, n, 1),
+                                 0)
+                3. acc, n, 0 ↦ μ(make_list$aux,
+                                 μ(cons, F(), acc),
+                                 μ(⟪minus_int⟫, n, 1),
+                                 1)
+make_list ≔ λ. n ↦ μ(make_list$aux, Nil(), n, 1)
 
 
 time$cont6 ≔ λ. res, _                ↦ res
@@ -34,17 +40,17 @@ time$cont0 ≔ λ. fun, arg, gc1         ↦ μ(time$cont1, fun, arg, gc1, μ(cl
 time       ≔ λ. fun, arg              ↦ μ(time$cont0, fun, arg, μ(gctime))
 
 f ≔ λ.
-    1. _,    Nil(),     _ ↦ Nil()
-    2. pred, Cons(h,t), 1 ↦ Cons(h, μ(f, pred, t, Nil()))
-    3. pred, Cons(h,t), 0 ↦ μ(f, pred, t, Nil())
-    4. pred, Cons(h,t), _ ↦ μ(f, pred, Cons(h, t), μ(pred, h))
-filter ≔ λ. 1. pred, lst ↦ μ(f, pred, lst, Nil())
+    1. _,    Nil(),     _       ↦ Nil()
+    2. pred, Cons(h,t), True()  ↦ Cons(h, μ(f, pred, t, Nil()))
+    3. pred, Cons(h,t), False() ↦ μ(f, pred, t, Nil())
+    4. pred, Cons(h,t), _       ↦ μ(f, pred, Cons(h, t), μ(pred, h))
+filter ≔ λ. pred, lst ↦ μ(f, pred, lst, Nil())
 
 flt ≔ λ.
-      1. 0 ↦ 1
-      2. 1 ↦ 0
+      1. E() ↦ True()
+      2. _   ↦ False()
 
-main$cont ≔ λ. 1. Box(fun, l) ↦ μ(filter, fun, l)
+main$cont ≔ λ. Box(fun, l) ↦ μ(filter, fun, l)
 
 num ≔ μ(λ.
         1. nil()      ↦ 5000000

@@ -11,7 +11,7 @@ tsv_name.default <- "output/current.tsv"
 tsv_name.default <- 'output/20190803-nanobenches-all.tsv'
 tsv_name.default <- 'output/20190807-nanobenches-all.tsv'
 tsv_name.default <- 'output/20190828-nanobenches-all.tsv'
-tsv_name.default <- 'output/20190829-nanobenches-all.tsv'
+tsv_name.default <- 'output/20190829b-nanobenches-all.tsv'
 "#
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -87,25 +87,30 @@ bench <- bench %>%
     spread(key=criterion, value=value) %>% #spread
     select(vm, benchmark, total, cpu, gc, mem) #order, lose row_id
 
-"
-bench <- bench %>% filter(vm %ni% c('SMLNJ', 'MLton', 'OCaml', 'Python'))
-"
-
-"
-bench <- bench %>% filter(vm %ni% c('SMLNJ', 'MLton', 'OCaml', 'Python','PyPy','Squeak','Racket'))
-"
-
 
 #--------------------------------------------------------------------------------------------------------
 
 if (error_processing) {
   print(">> with ep")
 
-  bench.summary <- bench %>% group_by(benchmark, vm) %>%
+  bench.summary.s <- bench %>% group_by(benchmark, vm) %>%
     summarize_at(vars(cpu,total,gc,mem), list(
       ~mean(.),~median(.),stdev=sd,
-      err095=confInterval095Error)) %>%
+      err095=confInterval095Error,
+      max=~max(mean(.)+confInterval095Error(.),median(.)+confInterval095Error(.),
+              mean(.)+sd(.),median(.)+sd(.)))) %>%
     select(benchmark, vm, starts_with("total"), starts_with("cpu"), starts_with("gc"), starts_with("mem"))
+
+  bench.summary <- as_tibble(bench.summary.s)
+  "
+  bench.summary <- bench.summary.s %>% filter(vm %ni% c('SMLNJ', 'MLton', 'OCaml', 'Python'))
+  "
+
+  "
+  bench.summary <- bench.summary.s %>% filter(vm %ni% c('SMLNJ', 'MLton', 'OCaml', 'Python','PyPy','Squeak','Racket'))
+  #  bench.summary <- bench.summary.s %>% filter(grepl('^RSqueak', vm))
+  "
+
 
   yformat <- function(x, max.order, min.order) {
     if (x <= 0 | is.na(x))
@@ -138,9 +143,14 @@ if (error_processing) {
   }
 
   #dat <- as_tibble(bench.summary)
-  dat <- bench.summary # %>% filter(vm %ni% c("SMLNJ","Python"))
+  dat <- bench.summary
+  "
+  dat <- bench.summary %>% filter(vm %ni% c('SMLNJ','Python'))
+  dat <- bench.summary %>% filter(benchmark %in% c('tree'))
+  "
 
-  dat.max <- dat %>% ungroup %>% summarise_at(vars(matches('(gc|cpu|total)_(mean|median|cnfIntHigh)')), ~max(.,na.rm=TRUE)) %>% max
+
+  dat.max <- dat %>% ungroup %>% summarise_at(vars(matches('(gc|cpu|total)_max')), ~max(.,na.rm=TRUE)) %>% max
   dat.mean <- dat %>% ungroup %>% summarise_at(vars(matches('(gc|cpu|total)_mean')), ~geomean(.,na.rm=TRUE)) %>% gather %>% deframe %>% geomean
 
   if (dat.mean > 1000) {
@@ -208,7 +218,7 @@ if (error_processing) {
 
 
   dat <- bench.summary # %>% filter(vm %ni% c("SMLNJ","Python"))
-  dat.max <- dat %>% ungroup %>% summarise_at(vars(matches('mem_(mean|median|cnfIntHigh)')), ~max(.,na.rm=TRUE)) %>% max
+  dat.max <- dat %>% ungroup %>% summarise_at(vars(matches('mem_max')), ~max(.,na.rm=TRUE)) %>% deframe
 
   #CAPPING = 5e6
   .viewscale = 1e-6
@@ -234,7 +244,7 @@ if (error_processing) {
               aes(x=benchmark,y=mem_mean*.scale,group=interaction(benchmark,vm),fill=vm)
   ) + default.theme.t() +
     geom_col(position=dodge, width=.75, aes(fill = vm))+
-    geom_errorbar(aes(ymin=(mem_mean - mem_err095) * .scale, ymax=(mem_mean + mem_err095) * .scale),  position=dodge, color=I("black"), size=.2, width=.6) +
+    #geom_errorbar(aes(ymin=(mem_mean - mem_err095) * .scale, ymax=(mem_mean + mem_err095) * .scale),  position=dodge, color=I("black"), size=.2, width=.6) +
     geom_point(position=dodge,aes(y=max(.y.icon.max,min(mem_mean)), shape=vm),size=2, color="grey90",stat="identity") +
     ylab("Memory consumption (GB)") +
     coord_cartesian() +
