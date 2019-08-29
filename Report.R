@@ -10,6 +10,7 @@ tsv_name.default <- "output/current.tsv"
 "#
 tsv_name.default <- 'output/20190803-nanobenches-all.tsv'
 tsv_name.default <- 'output/20190807-nanobenches-all.tsv'
+tsv_name.default <- 'output/20190828-nanobenches-all.tsv'
 "#
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -51,18 +52,23 @@ if (length(commandArgs(trailingOnly=TRUE)) > 0) {
 print(paste0(">> ", input.basename))
 
 bench <- read_tsv(tsv_name, comment = "#",
-                    col_names=c('timestamp', 'value', 'unit', 'criterion', 'benchmark', 'vm', 'suite', 'extra_args', 'warump', 'cores', 'input_sizes', 'variable_values'))
+                  # col_names=c('timestamp', 'value', 'unit', 'criterion', 'benchmark', 'vm', 'suite', 'extra_args', 'warump', 'cores', 'input_sizes', 'variable_values')
+                  col_names=c('timestamp', 'value', 'unit', 'criterion', 'benchmark', 'vm', 'suite', 'extra_args', 'warump', 'cores', 'input_sizes', 'variable_values'),
+                  col_types=cols(timestamp=col_skip(),value=col_number(),unit=col_factor(),criterion=col_factor(),benchmark=col_factor(), vm=col_factor(), suite=col_factor(), extra_args=col_guess(), warump=col_logical(), cores=col_number(), input_sizes=col_character(), variable_values=col_skip())
+                  )
 error_processing = (nrow(bench %>% filter(vm == 'Lamb' & criterion=="total" & benchmark == "map")) != 1)
 
 bench <- bench %>%
-  mutate(vm = fct_relevel(vm, "Lamb", "PycketShapes", "PycketOrig", "Racket", "RSqueakShapes", "RSqueakOrig", "Squeak",  "Pypy", "Python", "MLton", "OCaml", "SMLNJ")) %>%
+  mutate(benchmark = fct_relevel(benchmark, "reverse",  "reversen", "append",  "map", "filter", "tree")) %>%
+  mutate(vm = fct_relevel(vm, "Lamb", "LambNoopt","PycketShapes", "PycketOrig", "Racket", "RSqueakShapes", "RSqueakOrig", "Squeak",  "Pypy", "Python", "MLton", "OCaml", "SMLNJ")) %>%
   mutate(vm = fct_recode(vm,
-    "Prototype"           = "Lamb",
-    "Pycket (optimized)"  = "PycketShapes",
-    "Pycket (original)"   = "PycketOrig",
-    "RSqueak (optimized)" = "RSqueakShapes",
-    "RSqueak (original)"  = "RSqueakOrig",
-    "PyPy"                = "Pypy"
+    "Prototype"                 = "Lamb",
+    "Prototype (not optimized)" = "LambNoopt",
+    "Pycket (optimized)"        = "PycketShapes",
+    "Pycket (original)"         = "PycketOrig",
+    "RSqueak (optimized)"       = "RSqueakShapes",
+    "RSqueak (original)"        = "RSqueakOrig",
+    "PyPy"                      = "Pypy"
   ))
 
 # --- shaping data
@@ -99,16 +105,35 @@ if (error_processing) {
       err095=confInterval095Error)) %>%
     select(benchmark, vm, starts_with("total"), starts_with("cpu"), starts_with("gc"), starts_with("mem"))
 
+  yformat <- function(x, max.order, min.order) {
+    if (x <= 0 | is.na(x))
+      "0"
+    else {
+      start.vs.min <- x %/% 10^min.order
+      start.vs.max <- x %/% 10^max.order
+      if (
+        (start.vs.min %% 2 == 1)
+        #           (start.vs.max < 1 & start.vs.min %% 2 == 1) |
+        #           (start.vs.min %% 5 == 0)
+      ) {
+        if (x < 1e6) {
+          format(x/1e6, scientific=FALSE)
+        } else {
+          paste0(as.integer(x/1e6))
+        }
+      } else {
+        ""
+      }
+    }
+  }
 
-#   ylabsformat <- function(x) {
-#     max.order <- floor(log10(max(x)))
-#     min.order <- floor(log10(min(x[x != 0.0])))
-#     labels <- sapply(x, function(y) yformat(y, max.order, min.order))
-#     labels
-#   }
 
-
-  #dat <- bench.summary[bench.summary$vm != "SMLNJ" & bench.summary$vm != "LambUncached",]
+  ylabsformat <- function(x) {
+    max.order <- floor(log10(max(x)))
+    min.order <- floor(log10(min(x[x != 0.0])))
+    labels <- sapply(x, function(y) yformat(y, max.order, min.order))
+    labels
+  }
 
   #dat <- as_tibble(bench.summary)
   dat <- bench.summary # %>% filter(vm %ni% c("SMLNJ","Python"))
@@ -141,43 +166,30 @@ if (error_processing) {
 '
 
   dodge <- position_dodge(width=.8)
+  .palette <- "Set1"
+  .palette <- "Paired"
+  .direction=1
+  .direction=-1
 
   ymax <- ceiling_steps(dat.max, .y.max.steps) * .scale
-  p <- ggplot(data = dat, aes(x=benchmark,y=cpu_mean*.scale,group=interaction(benchmark,vm),fill=vm,)) +
-    geom_bar(stat="identity", position=dodge, width=.75, aes(fill = vm))+
-    geom_errorbar(aes(ymin=(cpu_mean - cpu_err095) * .scale, ymax=c(cpu_mean + cpu_err095) * .scale),  position=dodge, color=I("black"), size=.2, width=.6) +
+  p <- ggplot(data = dat,
+              aes(x=benchmark,y=cpu_mean*.scale,group=interaction(benchmark,vm),fill=vm,)
+  ) + default.theme.t() +
+    #geom_col(position=dodge, width=.75)+
+    #geom_errorbar(aes(ymin=(cpu_mean - cpu_err095) * .scale, ymax=(cpu_mean + cpu_err095) * .scale),  position=dodge, color=I("black"), size=.2, width=.6) +
     scale_y_continuous(
       labels=function(x) {paste0('  ', x)},
         breaks=seq(0, ymax, .y.max.steps * .scale),
         limits=c(0,ymax),
         expand=c(0,0)) +
-    #scale_fill_brewer(name = "Implementation", type="qual", palette="Paired") +
-    scale_fill_brewer(name = "Implementation", type="qual", palette="Set2") +
-    new_scale_fill()+
-    geom_bar(stat="identity", position=dodge, width=.75, aes(y=gc_mean*.scale,fill = vm))+
+    geom_col(position=dodge, width=.75, fill="white", alpha=0.33, aes(y=gc_mean*.scale))+
+    geom_errorbar(aes(ymin=(gc_mean - gc_err095) * .scale, ymax=(gc_mean + gc_err095) * .scale),  position=dodge, color="white", size=.2, width=.6) +
+    scale_fill_brewer(name = "Implementation", type="qual", direction=.direction, palette=.palette) +
     # xlab("Benchmark") +
-    scale_fill_brewer(name = "Implementation", type="qual", palette="Set3") +
     geom_point(position=dodge,aes(y=max(.y.icon.max*.scale,min(cpu_mean*.scale)), shape=vm),size=2, color="grey90",stat="identity") +
     scale_shape(name = "Implementation", solid = FALSE) +
     ylab(.ylab) +
     coord_cartesian() +
-    theme_bw(base_size=8, base_family="Helvetica") +
-    theme(
-      rect = element_rect(),
-      axis.title.x =  element_blank(),
-      #   axis.text.x  = element_text(size=8, angle=45, hjust=1),
-      axis.text.x  = element_text(size=8),
-      axis.title.y = element_text(face="bold", size=8),
-      axis.text.y  = element_text(size=8), #angle=45, hjust=0.2, vjust=0.5,
-      legend.position=c(0.75, .65),
-      plot.margin = unit(c(1,-0.1,-2,-1),"mm"),
-      legend.text = element_text(size=7),
-      legend.title = element_text(size=7, face="bold"),
-      legend.background = element_rect(fill="gray90", size=0),
-      legend.spacing = unit(-.5, "cm"),
-      legend.key=element_rect(fill="white"),
-      legend.key.size=unit(3,"mm")
-    ) +
     facet_null()
   if (nrow(.needs.cap) > 0){
     p <- p +
@@ -192,9 +204,11 @@ if (error_processing) {
 
 
   dat <- bench.summary # %>% filter(vm %ni% c("SMLNJ","Python"))
+  dat.max <- dat %>% ungroup %>% summarise_at(vars(matches('mem_(mean|median|cnfIntHigh)')), ~max(.,na.rm=TRUE)) %>% max
 
   #CAPPING = 5e6
-  .scale = 1e-6
+  .viewscale = 1e-6
+  .scale = 1
   .y.icon.max <- 750
   .y.max.steps <- 2.5e5
   '
@@ -211,45 +225,28 @@ if (error_processing) {
   }
   '
 
-  dodge <- position_dodge(width=.8)
-  ymax <- ceiling_steps(dat.max, .y.max.steps)
-  p <- ggplot(data = dat, aes(x=benchmark,y=mem_mean,group=interaction(benchmark,vm),fill=vm,)) +
-    geom_bar(stat="identity", position=dodge, width=.75, aes(fill = vm))+
-    geom_errorbar(aes(ymin=mem_cnfIntLow, ymax=mem_cnfIntHigh),  position=dodge, color=I("black"), size=.33) +
-    geom_point(position=dodge,aes(y=max(.y.icon.max,min(mem_mean)), ymax=ymax, shape=vm),size=2, color="grey90",stat="identity") +
+  ymax <- ceiling_steps(dat.max, .y.max.steps) *.scale
+  p <- ggplot(data = dat,
+              aes(x=benchmark,y=mem_mean*.scale,group=interaction(benchmark,vm),fill=vm)
+  ) + default.theme.t() +
+    geom_col(position=dodge, width=.75, aes(fill = vm))+
+    geom_errorbar(aes(ymin=(mem_mean - mem_err095) * .scale, ymax=(mem_mean + mem_err095) * .scale),  position=dodge, color=I("black"), size=.2, width=.6) +
+    geom_point(position=dodge,aes(y=max(.y.icon.max,min(mem_mean)), shape=vm),size=2, color="grey90",stat="identity") +
     ylab("Memory consumption (GB)") +
     coord_cartesian() +
-    theme_bw(base_size=8, base_family="Helvetica") +
-    theme(
-      rect = element_rect(),
-      axis.title.x =  element_blank(),
-      #   axis.text.x  = element_text(size=8, angle=45, hjust=1),
-      axis.text.x  = element_text(size=8),
-      axis.title.y = element_text(face="bold", size=8),
-      axis.text.y  = element_text(size=8), #angle=45, hjust=0.2, vjust=0.5,
-      legend.position=c(0.88, .65),
-      plot.margin = unit(c(1,-0.1,-2,-1),"mm"),
-      legend.text = element_text(size=7),
-      legend.title = element_text(size=7, face="bold"),
-      legend.background = element_rect(fill="gray90", size=0),
-      legend.margin = unit(-.5, "cm"),
-      legend.key=element_rect(fill="white"),
-      legend.key.size=unit(3,"mm")
-    ) +
     scale_y_continuous(
-#         labels=ylabsformat,
-      labels=function (x) {x * .scale },
+       #labels=ylabsformat,
+       labels=function (x) {x * .viewscale },
        breaks=seq(0,ymax, .y.max.steps),
        limits=c(0,ymax),
       expand=c(0,0)) +
-    scale_fill_brewer(name = "Implementation", type="qual", palette="Set1") +
+    scale_fill_brewer(name = "Implementation", type="qual", palette=.palette, direction = .direction) +
     scale_shape(name = "Implementation", solid = FALSE) +
     facet_null()
   if (nrow(.needs.cap) > 0){
     p <- p +
       geom_text(position=position_dodge(width=.9), angle=90,aes(y=(CAPPING *.9), ymax=ymax*.scale,label=isCapped), size=2)
   }
-
   p
 
   gg.file <- paste0(input.basename, "-mem.pdf")
