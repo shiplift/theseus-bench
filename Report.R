@@ -11,6 +11,7 @@ tsv_name.default <- "output/current.tsv"
 tsv_name.default <- 'output/20190803-nanobenches-all.tsv'
 tsv_name.default <- 'output/20190807-nanobenches-all.tsv'
 tsv_name.default <- 'output/20190828-nanobenches-all.tsv'
+tsv_name.default <- 'output/20190829-nanobenches-all.tsv'
 "#
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -29,6 +30,7 @@ pkgs = c(
   "ggnewscale",
   "tools",
   "cowplot"
+  #"tikzDevice"
 
   #"ggplot2",
   #"quantreg",
@@ -175,15 +177,15 @@ if (error_processing) {
   p <- ggplot(data = dat,
               aes(x=benchmark,y=cpu_mean*.scale,group=interaction(benchmark,vm),fill=vm,)
   ) + default.theme.t() +
-    #geom_col(position=dodge, width=.75)+
-    #geom_errorbar(aes(ymin=(cpu_mean - cpu_err095) * .scale, ymax=(cpu_mean + cpu_err095) * .scale),  position=dodge, color=I("black"), size=.2, width=.6) +
+    geom_col(position=dodge, width=.75)+
+    geom_errorbar(aes(ymin=(cpu_mean - cpu_err095) * .scale, ymax=(cpu_mean + cpu_err095) * .scale),  position=dodge, color=I("black"), size=.2, width=.6) +
     scale_y_continuous(
       labels=function(x) {paste0('  ', x)},
         breaks=seq(0, ymax, .y.max.steps * .scale),
         limits=c(0,ymax),
         expand=c(0,0)) +
     geom_col(position=dodge, width=.75, fill="white", alpha=0.33, aes(y=gc_mean*.scale))+
-    geom_errorbar(aes(ymin=(gc_mean - gc_err095) * .scale, ymax=(gc_mean + gc_err095) * .scale),  position=dodge, color="white", size=.2, width=.6) +
+    geom_errorbar(aes(ymin=(gc_mean - gc_err095) * .scale, ymax=(gc_mean + gc_err095) * .scale),  position=dodge, color="black", alpha=.5, size=.2, width=.6) +
     scale_fill_brewer(name = "Implementation", type="qual", direction=.direction, palette=.palette) +
     # xlab("Benchmark") +
     geom_point(position=dodge,aes(y=max(.y.icon.max*.scale,min(cpu_mean*.scale)), shape=vm),size=2, color="grey90",stat="identity") +
@@ -201,6 +203,8 @@ if (error_processing) {
   ggsave(gg.file, width=figure.width, height=figure.height, units=c("in"), colormodel='rgb', useDingbats=FALSE)
   embed_fonts(gg.file, options=pdf.embed.options)
 
+  #gg.file <- paste0(input.basename, "-cpu-pic.tex")
+  #ggsave(gg.file, device=tikz, width=figure.width, height=figure.height, units=c("in"))
 
 
   dat <- bench.summary # %>% filter(vm %ni% c("SMLNJ","Python"))
