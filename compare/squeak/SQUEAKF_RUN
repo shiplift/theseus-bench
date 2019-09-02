@@ -20,16 +20,7 @@ fi
 if [ "x$IMAGE" = "x" ]; then
     IMAGE=squeak.image
 fi
-
-case "$1" in 
-    append)   WHAT=concat;;
-    reverse)  WHAT=reversed;;
-    reversen) WHAT=reversedn;;
-    filter)   WHAT=select;;
-    map)      WHAT=collect;;
-    *)        WHAT=$1;;
-esac
-FIL="./squeak_$WHAT.st"
+FIL="./squeak_$1.st"
 shift
 
 OS=`uname -s`

@@ -11,7 +11,7 @@ tsv_name.default <- "output/current.tsv"
 tsv_name.default <- 'output/20190803-nanobenches-all.tsv'
 tsv_name.default <- 'output/20190807-nanobenches-all.tsv'
 tsv_name.default <- 'output/20190828-nanobenches-all.tsv'
-tsv_name.default <- 'output/20190829b-nanobenches-all.tsv'
+tsv_name.default <- 'output/20190829c-nanobenches-all.tsv'
 "#
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -101,15 +101,14 @@ if (error_processing) {
               mean(.)+sd(.),median(.)+sd(.)))) %>%
     select(benchmark, vm, starts_with("total"), starts_with("cpu"), starts_with("gc"), starts_with("mem"))
 
-  bench.summary <- as_tibble(bench.summary.s)
   "
+  bench.summary <- as_tibble(bench.summary.s)
   bench.summary <- bench.summary.s %>% filter(vm %ni% c('SMLNJ', 'MLton', 'OCaml', 'Python'))
+  bench.summary <- bench.summary.s %>% filter(grepl('^RSqueak', vm))
+  bench.summary <- bench.summary.s %>% filter(vm %ni% c('SMLNJ', 'MLton', 'OCaml', 'Python','PyPy','Squeak','Racket','RSqueak (original)', 'RSqueak (optimized)'))
   "
 
-  "
   bench.summary <- bench.summary.s %>% filter(vm %ni% c('SMLNJ', 'MLton', 'OCaml', 'Python','PyPy','Squeak','Racket'))
-  #  bench.summary <- bench.summary.s %>% filter(grepl('^RSqueak', vm))
-  "
 
 
   yformat <- function(x, max.order, min.order) {

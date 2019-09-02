@@ -20,15 +20,7 @@ if [ "x$IMAGE" = "x" ]; then
     IMAGE=rsqueak.image
 fi
 
-case "$1" in 
-    append)   WHAT=Concat;;
-    reverse)  WHAT=Reversed;;
-    reversen) WHAT=Reversedn;;
-    filter)   WHAT=Select;;
-    map)      WHAT=Collect;;
-    *)        WHAT="`echo \"$1\" | awk '{print toupper(substr($0,0,1))substr($0,2)}'`";;
-esac
-MESSAGE="valuesBench$WHAT"
+MESSAGE="valuesBench`echo \"$1\" | awk '{print toupper(substr($0,0,1))substr($0,2)}'`"
 shift
 
 if [ $# -ge 1 ]; then
