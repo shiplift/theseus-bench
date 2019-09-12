@@ -2,6 +2,7 @@
 #Aribtraty precision integers via binary representation. LSB( … ( … ( …  MSB())))
 
 print_int ≔ ⟪print_int⟫
+gctime ≔ ⟪gctime⟫
 - ≔ ⟪minus_int⟫
 + ≔ ⟪plus_int⟫
 / ≔ ⟪div_int⟫
@@ -12,20 +13,21 @@ print_int ≔ ⟪print_int⟫
 
 p ≔ ⟪print_result_string⟫
 clock ≔ ⟪clock⟫
-time$cont4 ≔ λ.
-             1. res, _           ↦ res
-time$cont3 ≔ λ.
-             1. res, diff        ↦ μ(time$cont4, res, μ(p, diff))
-time$cont2 ≔ λ.
-             1. res, start, stop ↦ μ(time$cont3,
-                                     res,
-                                     μ(⟪minus_float⟫, stop, start))
-time$cont1 ≔ λ.
-             1. res, start       ↦ μ(time$cont2, res, start, μ(clock))
-time$cont0 ≔ λ.
-             1. fun, arg, start  ↦ μ(time$cont1, μ(fun, arg), start)
-time       ≔ λ.
-             1. fun, arg         ↦ μ(time$cont0, fun, arg, μ(clock))
+time$cont6 ≔ λ. res, _                ↦ res
+time$cont5 ≔ λ. res, diff, gcdiff     ↦ μ(time$cont6,
+                                          res,
+                                          μ(p, diff, diff, gcdiff))
+time$cont4 ≔ λ. res, gc1, t1, t2, gc2 ↦ μ(time$cont5,
+                                          res,
+                                          μ(⟪minus_float⟫, t2, t1),
+                                          μ(⟪minus_float⟫, gc2, gc1))
+time$cont3 ≔ λ. res, gc1, t1, t2      ↦ μ(time$cont4,
+                                          res,
+                                          gc1, t1, t2, μ(gctime))
+time$cont2 ≔ λ. res, gc1, t1          ↦ μ(time$cont3, res, gc1, t1, μ(clock))
+time$cont1 ≔ λ. fun, arg, gc1, t1     ↦ μ(time$cont2, μ(fun, arg), gc1, t1)
+time$cont0 ≔ λ. fun, arg, gc1         ↦ μ(time$cont1, fun, arg, gc1, μ(clock))
+time       ≔ λ. fun, arg              ↦ μ(time$cont0, fun, arg, μ(gctime))
 
 # Eon(): end of a number
 
@@ -34,12 +36,12 @@ arpn-as-int ≔ λ.
               2. One(X),  Result, Rank ↦ μ(arpn-as-int, X, μ(+, Result, Rank), μ(*, 2, Rank))
               3. Zero(X), Result, Rank ↦ μ(arpn-as-int, X, Result, μ(*, 2, Rank))
 
-arbitrary-precision-number-as-int ≔ λ. 1. X ↦ μ(arpn-as-int, X, 0, 1)
+arbitrary-precision-number-as-int ≔ λ. X ↦ μ(arpn-as-int, X, 0, 1)
 
 arpn-as-bint ≔ λ. 
-              1. Eon(),   Result, _    ↦ Result
-              2. One(X),  Result, Rank ↦ μ(arpn-as-bint, X, μ(⟪plus_bignumber⟫, Result, Rank), μ(⟪mult_bignumber⟫, μ(⟪int_to_bignumber⟫, 2), Rank))
-              3. Zero(X), Result, Rank ↦ μ(arpn-as-bint, X, Result, μ(⟪mult_bignumber⟫, μ(⟪int_to_bignumber⟫, 2), Rank))
+               1. Eon(),   Result, _    ↦ Result
+               2. One(X),  Result, Rank ↦ μ(arpn-as-bint, X, μ(⟪plus_bignumber⟫, Result, Rank), μ(⟪mult_bignumber⟫, μ(⟪int_to_bignumber⟫, 2), Rank))
+               3. Zero(X), Result, Rank ↦ μ(arpn-as-bint, X, Result, μ(⟪mult_bignumber⟫, μ(⟪int_to_bignumber⟫, 2), Rank))
 
 arbitrary-precision-number-as-bint ≔ λ. 1. X ↦ μ(arpn-as-bint, X,
                                                   μ(⟪int_to_bignumber⟫, 0),
@@ -54,7 +56,7 @@ int-as-arpn ≔ λ.
               2. 0,      0 ↦ Zero(Eon())
               3. Number, 1 ↦ One(μ(int-as-arpn, μ(/, Number, 2), μ(%, Number, 2)))
               4. Number, 0 ↦ Zero(μ(int-as-arpn, μ(/, Number, 2), μ(%, Number, 2)))
-int-as-arbitrary-precision-number ≔ λ. 1. X ↦ μ(int-as-arpn, μ(/, X, 2), μ(%, X, 2))
+int-as-arbitrary-precision-number ≔ λ. X ↦ μ(int-as-arpn, μ(/, X, 2), μ(%, X, 2))
 
 +.$0 ≔ λ.
        0. Eon(),    Eon(),  X ↦ X
@@ -79,11 +81,11 @@ int-as-arbitrary-precision-number ≔ λ. 1. X ↦ μ(int-as-arpn, μ(/, X, 2), 
       15.  One(X), Zero(Y),  One(_) ↦ Zero(μ(+.$0, X, Y,  One(Eon())))
       16.  One(X),  One(Y),  One(_) ↦  One(μ(+.$0, X, Y,  One(Eon())))
       
-+. ≔ λ. 1. X, Y ↦ μ(+.$0, X, Y, Zero(Eon()))
++. ≔ λ. X, Y ↦ μ(+.$0, X, Y, Zero(Eon()))
 
-p_$0 ≔ λ. 1. X, _ ↦ X
-p_ ≔ λ. 1. X ↦ μ(p_$0, X, μ(print_int, μ(arbitrary-precision-number-as-int, X)))
-p__ ≔ λ. 1. X ↦ μ(p_$0, X, μ(print_int, X))
+p_$0 ≔ λ. X, _ ↦ X
+p_   ≔ λ. X ↦ μ(p_$0, X, μ(print_int, μ(arbitrary-precision-number-as-int, X)))
+p__  ≔ λ. X ↦ μ(p_$0, X, μ(print_int, X))
 
 *. ≔ λ.
      1. Zero(Eon()), X ↦ Zero(Eon())
@@ -129,21 +131,24 @@ p__ ≔ λ. 1. X ↦ μ(p_$0, X, μ(print_int, X))
 #   One(Zero(Zero(One(One(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(One(Eon())))))))))))))))),
 #   Zero(One(Zero(One(One(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(Zero(One(One(Eon()))))))))))))))))))))
 
-main ≔ λ. 1. Box(a, b) ↦ μ(*., a, b)
+main ≔ λ. Box(a, b) ↦ μ(*., a, b)
 
 widen$0 ≔ λ.
           1. m, 0, _ ↦ m
           2. m, n, 1 ↦ μ(widen$0, One(m), μ(-, n, 1), 0)
           3. m, n, 0 ↦ μ(widen$0, Zero(m), μ(-, n, 1), 1)
 
-widen ≔ λ. 1. X, Y ↦ μ(widen$0, X, Y, 0)
+widen ≔ λ. X, Y ↦ μ(widen$0, X, Y, 0)
 
 
 # 200000000000
 num ≔ μ(λ.
         1. nil()      ↦ 400
         2. cons(h, _) ↦  μ(/, μ(⟪strtol⟫, h), 40000), arguments)
-μ(⟪print_bignumber⟫,
-  μ(arbitrary-precision-number-as-bint,
+µ(λ. _ ↦ nil(),
     μ(time, main, Box(μ(widen, μ(int-as-arbitrary-precision-number, 47), num),
-                      μ(widen, μ(int-as-arbitrary-precision-number, 53), μ(+, num, 17))))))
+                      μ(widen, μ(int-as-arbitrary-precision-number, 53), μ(+, num, 17)))))
+# μ(⟪print_bignumber⟫,
+#   μ(arbitrary-precision-number-as-bint,
+#     μ(time, main, Box(μ(widen, μ(int-as-arbitrary-precision-number, 47), num),
+#                       μ(widen, μ(int-as-arbitrary-precision-number, 53), μ(+, num, 17))))))
