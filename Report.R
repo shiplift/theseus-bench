@@ -6,13 +6,15 @@ figure.width <- 16/cm(1) # (28 picas +  (28*0.25) picas + (3*11) point)  in cm
 figure.height <- 11.5/cm(1) # 28 pica in cm ~ 11.85 -> 11.5
 
 
-tsv_name.default <- "output/current.tsv"
+input_name.default <- "output/current.tsv"
 "#
-tsv_name.default <- 'output/20190803-nanobenches-all.tsv'
-tsv_name.default <- 'output/20190807-nanobenches-all.tsv'
-tsv_name.default <- 'output/20190828-nanobenches-all.tsv'
-tsv_name.default <- 'output/20190829c-nanobenches-all.tsv'
-tsv_name.default <- 'output/20190902-nanobenches-all.tsv'
+input_name.default <- 'output/20190803-nanobenches-all.tsv'
+input_name.default <- 'output/20190807-nanobenches-all.tsv'
+input_name.default <- 'output/20190828-nanobenches-all.tsv'
+input_name.default <- 'output/20190829c-nanobenches-all.tsv'
+input_name.default <- 'output/20190902-nanobenches-all.tsv'
+
+input_name.squeak <- 'output/20190902-squeakparadigmtest.tsv'
 "#
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -27,13 +29,12 @@ if (FALSE) {
 pkgs = c(
   "EnvStats",
   "tidyverse",
-  "magrittr",
   "boot",
   "Hmisc",
-  #"ggnewscale",
   "tools",
   "cowplot",
-  "ggpubr"
+  "ggpubr",
+  NULL
 )
 
 source("./help.R")
@@ -43,32 +44,31 @@ source("./help.R")
 print(paste0(">> ", input.basename))
 
 
-bench <- read_benchmark(tsv_name)
+bench <- read_benchmark(input_name)
 
 bench.summary.s <- bench %>% benchmark_summarize
-
+benches.summary.s <- bench.summary.s %>% benchmark_nest
 
 #--------------------------------------------------------------------------------------------------------
 "
 bench.summary <- bench.summary.s %>% as_tibble
-bench.summary <- bench.summary.s %>% filter(vm %ni% c('SMLNJ', 'MLton', 'OCaml', 'Python'))
+bench.summary <- bench.summary.s %>% filter(vm %ni% c('SML/NJ', 'MLton', 'OCaml', 'Python'))
 bench.summary <- bench.summary.s %>% filter(grepl('^RSqueak', vm))
-bench.summary <- bench.summary.s %>% filter(vm %ni% c('SMLNJ', 'MLton', 'OCaml', 'Python','PyPy','Squeak','Racket','RSqueak (original)', 'RSqueak (optimized)'))
+bench.summary <- bench.summary.s %>% filter(vm %ni% c('SML/NJ', 'MLton', 'OCaml', 'Python','PyPy','Squeak','Racket','RSqueak (original)', 'RSqueak (optimized)'))
 "
 
-bench.summary <- bench.summary.s %>% filter(vm %ni% c('SMLNJ', 'MLton', 'OCaml', 'Python','PyPy','Squeak','Racket'))
+bench.summary <- bench.summary.s %>% filter(vm %ni% c('SML/NJ', 'MLton', 'OCaml', 'Python','PyPy','Squeak','Racket'))
+
+benches.summary <- benches.summary.s %>% filter(TRUE)
+
 
 dodge <- position_dodge(width=.8)
-.palette <- "Set1"
-.palette <- "Paired"
-.direction=1
-.direction=-1
 
-process_executiontime <- function(dat, basename='plot', omitLegend=TRUE) {
+process_executiontime <- function(dat, basename='plot', partname=NULL, omitLegend=TRUE, ...) {
 
-  dat %<>% as_tibble
+  dat %<>% filter(TRUE)
   "
-  dat <- dat %>% filter(vm %ni% c('SMLNJ','Python'))
+  dat <- dat %>% filter(vm %ni% c('SML/NJ','Python'))
   dat <- dat %>% filter(benchmark %in% c('tree'))
   "
 
@@ -80,69 +80,62 @@ process_executiontime <- function(dat, basename='plot', omitLegend=TRUE) {
     gather %>% deframe %>% geomean
   dat.maxima <- dat %>% ungroup %>%
     select(matches('(gc|cpu|total)_max')) %>%
-    gather %>% pull
+    gather %>%
+    filter(!is.na(value)) %>% pull
 
   n.outliers <- rosnerTest(dat.maxima,k=min(10, floor(length(dat.maxima) * 0.1)),warn=FALSE)$n.outliers
 
-  CAPPING <- sort(dat.maxima,decreasing=TRUE)[n.outliers + 1]
+  CAPPING <- if (n.outliers <= 0) { Inf } else { sort(dat.maxima,decreasing=TRUE)[n.outliers + 1] }
+  .capped <- CAPPING < Inf
 
   if (dat.mean > 1000) {
-    .scale = 1/1000
+    .scale <- 1/1000
     .ylab <- "Execution time (s)"
   } else {
     .scale = 1
     .ylab <- "Execution time (ms)"
   }
   .y.icon.max <- 100
-  .y.max.steps <- 1000
+  .ylim <- if(.capped) { ceiling(CAPPING*.scale) } else { Inf }
+  .y.max.steps <- if (.ylim > 15) {2500} else {1000}
 
+
+  .grouping <- sapply(group_vars(dat),as.name)
   dat %<>% ungroup %>%
-    mutate(cappingInfo=makeCappingInfo(., c('cpu', 'gc', 'total'), CAPPING)) %>%
-    group_by(benchmark, vm)
+    mutate(cappingInfo=makeCappingInfo(., c('cpu', 'gc', 'total'), capping = CAPPING,scale = .scale)) %>%
+    group_by(!!!.grouping)
 
   ymax <- ceiling_steps(dat.max, .y.max.steps) * .scale
   p <- ggplot(data = dat,
-              aes(x=benchmark,y=cpu_mean*.scale,group=interaction(benchmark,vm),fill=vm,)
+              aes(x=benchmark,y=cpu_mean*.scale,group=interaction(benchmark,vm),fill=vm,shape=vm)
   ) + default.theme.t(fakeLegend=omitLegend) +
     geom_col(position=dodge, width=.75)+
     geom_errorbar(aes(ymin=(cpu_mean - cpu_err095) * .scale, ymax=(cpu_mean + cpu_err095) * .scale),  position=dodge, color=I("black"), size=.2, width=.6) +
     scale_y_continuous(
-      labels=function(x) {paste0('  ', x)},
-        breaks=seq(0, ymax, .y.max.steps * .scale),
+      trans=timing_trans(low=0,high=ymax,step=.y.max.steps*.scale,viewlimit=c(0,.ylim),scale=.scale),
+      # labels=function(x) {paste0(' ', x)},
+      #   breaks=seq(0, ymax, .y.max.steps * .scale),
         limits=c(0,ymax),
         expand=c(0,0)) +
     geom_col(position=dodge, width=.75, fill="white", alpha=0.25, aes(y=gc_mean*.scale))+
     geom_errorbar(aes(ymin=(gc_mean - gc_err095) * .scale, ymax=(gc_mean + gc_err095) * .scale),  position=dodge, color="black", alpha=.5, size=.2, width=.6) +
-    scale_fill_brewer(name = "Implementation", type="qual", direction=.direction, palette=.palette) +
-    # xlab("Benchmark") +
-    geom_point(position=dodge,aes(y=max(.y.icon.max*.scale,min(cpu_mean*.scale)), shape=vm),size=2, color="grey90",stat="identity") +
-    scale_shape(name = "Implementation", solid = FALSE) +
-    ylab(.ylab) +
-    coord_cartesian(ylim=c(0,ceiling(CAPPING*.scale))) +
-    facet_null()
+
+    geom_point(position=dodge,aes(y=max(.y.icon.max*.scale,min(cpu_mean*.scale))),size=2, color="grey90",stat="identity") +
+    scale_fill_manual(name = "Implementation",values=as.character(dat$color)) +
+    scale_shape_manual(name = "Implementation",values=dat$shape) +
+    coord_cartesian(ylim=(if (.capped) c(0,.ylim) else NULL))  +
+    ylab(.ylab)
   if (.capped){
     p <- p +
-      geom_text(position=position_dodge(width=.9), angle=90,aes(y=((CAPPING * .scale) *.9), label=cappingInfo), size=2)
+     geom_text(position=position_dodge(width=.9), angle=90,aes(y=((CAPPING * .scale) *.9), label=cappingInfo, family=base_family), size=2)
   }
 
   if (omitLegend) {
-    legend <- get_legend(p + theme(
-      legend.position = c(0,1),
-      legend.direction = "vertical",legend.justification=c(0,1) ,legend.box.just = "top",
-      legend.box.margin = margin(0, 0, 0, 0)))
-      #
-    gg.file <- paste0(basename, "-cpu-legend.pdf")
-    ggsave2(gg.file, plot=legend, colormodel='rgb')
-    embed_fonts(gg.file, options=pdf.embed.options)
     p <- p + theme(legend.position="none")
   }
-  p
 
-
-  gg.file <- paste0(basename, "-cpu.pdf")
-  ggsave(gg.file, width=figure.width, height=figure.height, units=c("in"), colormodel='rgb', useDingbats=FALSE)
-  embed_fonts(gg.file, options=pdf.embed.options)
-
+  aspect <- if (!is.null(partname)) { paste0(partname, '-', 'cpu' )} else { 'cpu' }
+  save.plot(basename=basename,aspect=aspect,plot=p, ...)
   #gg.file <- paste0(basename, "-cpu-pic.tex")
   #ggsave(gg.file, device=tikz, width=figure.width, height=figure.height, units=c("in"))
   p
@@ -150,56 +143,85 @@ process_executiontime <- function(dat, basename='plot', omitLegend=TRUE) {
 
 
 
-process_memory <- function(dat, basename='plot') {
+process_memory <- function(dat, basename='plot', partname=NULL, omitLegend=TRUE, ...) {
 
-  dat %<>% as_tibble
+  dat %<>% filter(TRUE)
   "
-  dat %<>% filter(vm %ni% c('SMLNJ','Python'))
+  dat %<>% filter(vm %ni% c('SML/NJ','Python'))
   "
   dat.max <- dat %>% ungroup %>% summarise_at(vars(matches('mem_max')), ~max(.,na.rm=TRUE)) %>% deframe
   dat.maxima <- dat %>% ungroup %>% .$mem_max
 
   n.outliers <- rosnerTest(dat.maxima,k=min(10, floor(length(dat.maxima) * 0.1)),warn=FALSE)$n.outliers
-  CAPPING <- if (n.outliers <= 0) { Inf } else { sort(dat.maxima,decreasing=TRUE)[n.outliers + 1] }
+  #CAPPING <- if (n.outliers <= 0) { Inf } else { geomean(sort(dat.maxima,decreasing=TRUE)[n.outliers:(n.outliers+1)]) }
+  .capped <- CAPPING < Inf
+  if (n.outliers <= 0) {
+    CAPPING <- Inf
+    .capped <- FALSE
+  } else {
+    #geomean(sort(dat.maxima,decreasing=TRUE)[n.outliers:(n.outliers+1)])
+    CAPPING <- sort(dat.maxima,decreasing=TRUE)[min(n.outliers+1,length(dat.maxima))]
+    .capped <- TRUE
+  }
 
-  dat %<>% ungroup %>%
-    mutate(cappingInfo=makeCappingInfo(., c('mem'), CAPPING)) %>%
-    group_by(benchmark, vm)
 
   .viewscale = 1e-6
   .scale = 1
-  .y.icon.max <- 750
-  #.y.max.steps <- 2.5e5
-  .y.max.steps <- 5e5
+  .ylab <- "Memory consumption (GB)"
+  .ylim <- if(!.capped) { Inf } else {
+    .caporder <- floor(log10(CAPPING))
+    10^.caporder * ceiling_steps((CAPPING / 10^.caporder) + 0.24,0.25)
+    #.capmag <- (.ylim %/% 10^.caporder) + 0.24
+    #ceiling(CAPPING)
+  }
+
+  .y.max.steps <- if (log10(.ylim) < 7) {
+    2.5e5
+  } else {
+    5e5
+  }
+  .y.icon.max <- if (log10(.ylim) - log10(min(dat$mem_mean)) >= 2) {
+    min(dat$mem_mean) * .9
+  } else if (.ylim < 5e6 ) {
+    10^floor(log10(.ylim)) * 0.25
+  } else {
+    10^floor(log10(.ylim)) * 0.75
+  }
+
+  .grouping <- group_vars(dat)
+  dat %<>% ungroup %>%
+    mutate(cappingInfo=makeCappingInfo(., c('mem'), capping=CAPPING,
+                                       scale = .scale, viewscale = .viewscale)) %>%
+    group_by(!!!.grouping)
+
 
   ymax <- ceiling_steps(dat.max, .y.max.steps) *.scale
   p <- ggplot(data = dat,
-              aes(x=benchmark,y=mem_mean*.scale,group=interaction(benchmark,vm),fill=vm)
-  ) + default.theme.t(fakeLegend=TRUE) +
-    geom_col(position=dodge, width=.75, aes(fill = vm))+
-    #geom_errorbar(aes(ymin=(mem_mean - mem_err095) * .scale, ymax=(mem_mean + mem_err095) * .scale),  position=dodge, color=I("black"), size=.2, width=.6) +
-    geom_point(position=dodge,aes(y=max(.y.icon.max,min(mem_mean)), shape=vm),size=2, color="grey90",stat="identity") +
-    ylab("Memory consumption (GB)") +
-    coord_cartesian() +
+              aes(x=benchmark,y=mem_mean*.scale,group=interaction(benchmark,vm),fill=vm,shape=vm)
+  ) + default.theme.t(fakeLegend=omitLegend) +
+    geom_col(position=dodge, width=.75)+
     scale_y_continuous(
-       #labels=ylabsformat,
-       labels=function (x) {x * .viewscale },
-       breaks=seq(0,ymax, .y.max.steps),
-       limits=c(0,ymax),
+      trans=mem_trans(low=0,high=ymax,step=.y.max.steps,viewlimit=c(0,.ylim),scale=.scale,viewscale=.viewscale),
+      limits=c(0,ymax),
       expand=c(0,0)) +
-    scale_fill_brewer(name = "Implementation", type="qual", palette=.palette, direction = .direction) +
-    scale_shape(name = "Implementation", solid = FALSE) +
-    facet_null()
+    geom_point(position=dodge,aes(y=.y.icon.max),size=2, color="grey90",stat="identity") +
+    scale_fill_manual(name = "Implementation",values=as.character(dat$color)) +
+    scale_shape_manual(name = "Implementation",values=dat$shape) +
+    coord_cartesian(ylim=(if(.capped) c(0,.ylim) else NULL)) +
+    ylab(.ylab)
+
+  if (mean(dat$mem_err095) * .viewscale > 0.0001) {
+    p <- p +
+      geom_errorbar(aes(ymin=(mem_mean - mem_err095) * .scale, ymax=(mem_mean + mem_err095) * .scale),  position=dodge, color=I("black"), size=.2, width=.6)
+  }
   if (.capped) {
     p <- p +
-      geom_text(position=position_dodge(width=.9), angle=90,aes(y=(CAPPING *.9), ymax=ymax*.scale,label=cappingInfo), size=2)
+      geom_text(position=position_dodge(width=.9), angle=90,aes(y=(CAPPING *.9),label=cappingInfo), size=2)
   }
   p <- p + theme(legend.position="none")
   p
-
-  gg.file <- paste0(basename, "-mem.pdf")
-  ggsave(gg.file, width=figure.width, height=figure.height, units=c("in"), colormodel='rgb', useDingbats=FALSE)
-  embed_fonts(gg.file, options=pdf.embed.options)
+  aspect <-if (!is.null(partname)) { paste0(partname, '-', 'mem' )} else { 'mem' }
+  save.plot(basename=basename,aspect=aspect,plot=p, ...)
   p
 }
 
@@ -252,8 +274,8 @@ ltx(mem,mem.ref,paste0(input.basename, '-mem-numbers.tex'), '\\kilo\\byte')
 
   #'@{\\,\\si{\\mega\\byte}}>{\\smaller\\ensuremath{\\pm}}r@{\\,\\si{\\kilo\\byte}}'
 #   f <- (function() {
-#     c <- bench.summary[bench.summary$vm != 'SMLNJ' & bench.summary$vm != 'LambUncached',]
-#     m <- bench.summary.mem[bench.summary.mem$vm != 'SMLNJ' & bench.summary.mem$vm != 'LambUncached',]
+#     c <- bench.summary[bench.summary$vm != 'SML/NJ' & bench.summary$vm != 'LambUncached',]
+#     m <- bench.summary.mem[bench.summary.mem$vm != 'SML/NJ' & bench.summary.mem$vm != 'LambUncached',]
 #     m$mean = m$mean / 1024
 #     data.frame(benchmark=c$benchmark, vm=droplevels(c$vm), time_mean=c$mean, time_error=c$err095,memory_mean=m$mean, memory_error=m$err095) })()
 #
@@ -282,8 +304,33 @@ ltx(mem,mem.ref,paste0(input.basename, '-mem-numbers.tex'), '\\kilo\\byte')
 "
 
 "make"
+"
+set_datacontext(input_name)
+"
+report_vms(file = paste0(input.basename.pure, '-all-legend.pdf'))
+report_dflt_vms(file = paste0(input.basename.pure, '-legend.pdf'))
+report_squeak_vms(file = paste0(input.basename.pure, '-squeak-legend.pdf'))
+
 process_executiontime(bench.summary, basename=input.basename)
 process_memory(bench.summary, basename=input.basename)
+
+pwalk(benches.summary, function(benchmark,data){
+  dat <- data %>% mutate(benchmark=benchmark)
+  process_executiontime(dat, basename=input.basename.parts,  partname=benchmark)
+  process_memory(dat, basename=input.basename.parts,  partname=benchmark)
+})
+
+
+print(">> squeak vs squeak")
+
+set_datacontext(input_name.squeak)
+bench.sq <- read_benchmark(input_name.squeak)
+bench.sq.summary <- bench.sq %>% benchmark_summarize
+
+process_executiontime(bench.sq.summary, basename=input.basename)
+process_memory(bench.sq.summary, basename=input.basename)
+
+
 
 print(">> done")
 #
