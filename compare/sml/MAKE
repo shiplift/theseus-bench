@@ -1,16 +1,25 @@
 #!/bin/sh
+set -e
 
 mlton sml_filter.mlb
+mlton sml_filtern.mlb
 mlton sml_append.mlb
+mlton sml_appendn.mlb
 mlton sml_map.mlb
+mlton sml_mapn.mlb
 mlton sml_reverse.mlb
 mlton sml_reversen.mlb
 mlton sml_tree.mlb
+mlton sml_treen.mlb
 
 ml-build sml_filter.cm SMLFilter.main sml_filter_image
+ml-build sml_filtern.cm SMLFiltern.main sml_filtern_image
 ml-build sml_append.cm SMLAppend.main sml_append_image
+ml-build sml_appendn.cm SMLAppendn.main sml_appendn_image
 ml-build sml_map.cm SMLMap.main sml_map_image
+ml-build sml_mapn.cm SMLMapn.main sml_mapn_image
 ml-build sml_reverse.cm SMLReverse.main sml_reverse_image
 ml-build sml_reversen.cm SMLReversen.main sml_reversen_image
 ml-build sml_tree.cm SMLTree.main sml_tree_image
+ml-build sml_treen.cm SMLTreen.main sml_treen_image
 

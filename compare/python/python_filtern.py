@@ -1,0 +1,79 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import sys
+import time
+import gcreport
+
+sys.setrecursionlimit(1000 * sys.getrecursionlimit())
+
+
+class Cons(object):
+    __slots__ = ("car", "cdr")
+    def __init__(self, car, cdr):
+        self.car = car
+        self.cdr = cdr
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) and
+                other.car == self.car and
+                other.cdr == self.cdr)
+    def __hash__(self):
+        return hash(self.car) ^ hash(self.cdr)
+    def head(self):
+        return self.car
+    def tail(self):
+        return self.cdr
+    def is_null(self):
+        return self is null
+
+    def filter(self, cnd):
+        aux = null
+        while not self.is_null():
+            hd = self.head()
+            if cnd(hd):
+                aux = Cons(self.head(), aux)
+            self = self.tail()
+        while not aux.is_null():
+            self = Cons(aux.head(), self)
+            aux = aux.tail()
+        return self
+
+null = Cons(None, None)
+
+E = 17
+F = 36
+
+
+def flt(elem):
+    return elem == E
+
+def make_list(number, acc=null):
+    while number >= 0:
+        acc = Cons(E if number % 2 == 0 else F, acc)
+        number -= 1
+    return acc
+
+def main(args):
+    num = int(args[1]) if len(args) > 1 else 5000000
+    lst = make_list(num)
+    gc1 = gcreport.current_gc_time()
+    t1 = time.clock()
+    res = lst.filter(flt)
+    t2 = time.clock()
+    gc2 = gcreport.current_gc_time()
+    t = (t2 - t1) * 1000
+    gc = (gc2 - gc1) * 1.0
+    print "0:RESULT-cpu:ms: %s\n0:RESULT-total:ms: %s\n0:RESULT-gc:ms: %s\n" % (t, t, gc)
+    assert not res.is_null()
+    return 0
+
+if __name__ == '__main__':
+    try:
+        sys.exit(main(sys.argv))
+    except SystemExit:
+        pass
+    except:
+        import pdb, traceback
+        _type, value, tb = sys.exc_info()
+        traceback.print_exception(_type, value, tb)
+        pdb.post_mortem(tb)

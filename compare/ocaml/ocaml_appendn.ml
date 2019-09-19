@@ -2,6 +2,8 @@
 type 'a lst = Nil | Cons of  'a * 'a lst ;;
 exception Empty;;
 
+type 'a box = Box of 'a * 'a;;
+
 let cons a b = Cons(a, b) ;;
 
 let head = function
@@ -13,20 +15,34 @@ let tail = function
   | Cons(a, b) -> b
 ;;
 
-let e = 17;;
+let e = 17
+;;
 
+(* let rec ocaml_append a b = *)
+(*   match a with *)
+(*   | [] -> b *)
+(*   | x::xs -> x :: (ocaml_append xs b) *)
 
-let ocaml_reverse list =
-    let rec aux acc = function
-      | Nil -> acc
-      | (Cons(h,t)) -> aux (Cons (h, acc)) t in
-    aux Nil list;;
+let rec ocaml_append a b =
+  match a with
+  | Nil -> b
+  | Cons(x, xs) -> cons x (ocaml_append xs b)
 
-(* let ocaml_reverse list = *)
+(* let ocaml_append a b = *)
 (*     let rec aux acc = function *)
-(*       | [] -> acc *)
-(*       | h::t -> aux (h::acc) t in *)
-(*     aux [] list;; *)
+(*         | [] -> acc *)
+(*         | x::xs -> aux (x::acc) xs *)
+(*     loop b (List.rev a) *)
+
+(* let ocaml_append a b = *)
+(*     let rec aux acc = function *)
+(*         | Nil -> acc *)
+(*         | (Cons(h,t)) -> aux (Cons(h, acc)) t *)
+(*     in *)
+(*     aux b (ocaml_reverse a) *)
+
+let ocaml_append1 = function
+    Box(a,b) -> ocaml_append a b
 
 let make_list num =
   let rec aux acc = function
@@ -52,16 +68,16 @@ let time f x =
   let () = Printf.printf "0:RESULT-gc:ms: %f\n" 0.0
   in
   res
-;;
 
 let listnum a =
   try
     int_of_string (Array.get a 1)
-  with _ -> 20000000
+  with _ -> 10000000
 
 let _ =
   let num = (listnum Sys.argv) in
   let l = (make_list num) in
-  let _ = time ocaml_reverse l in
+  let m = (make_list num) in
+  let _ = time ocaml_append1 (Box (l, m)) in
   0
 ;;

@@ -7,7 +7,7 @@ OCAML=ocamlopt
 
 OS=`uname -s`
 if [ "$OS" = "Darwin" ]; then
-  exec $OCAML -unsafe -noassert -nodynlink -verbose -o $BASE unix.cmxa nums.cmxa $FILE  -ccopt -Wl,-stack_size,0x40000000,-stack_addr,0xf0000000
+  exec $OCAML -unsafe -noassert -nodynlink -verbose -o $BASE unix.cmxa $FILE  -ccopt -Wl,-stack_size,0x40000000,-stack_addr,0xf0000000
 else
   exec $OCAML -unsafe -noassert -nodynlink -verbose -o $BASE unix.cmxa nums.cmxa $FILE
 fi

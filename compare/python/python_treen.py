@@ -1,0 +1,101 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import sys
+import time
+import gcreport
+
+sys.setrecursionlimit(1000 * sys.getrecursionlimit())
+
+
+class Leaf(object):
+    __slots__ = ("val",)
+    def __init__(self, val):
+        self.val = val
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) and
+                other.val == self.val)
+    def __hash__(self):
+        return hash(self.val)
+    def is_leaf(self):
+        return True
+
+class Node(object):
+    __slots__ = ("left", "val", "right")
+    def __init__(self, left, val, right):
+        self.left = left
+        self.val = val
+        self.right = right
+
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) and
+                other.left == self.left and
+                other.val == self.val and
+                other.right == self.right)
+
+    def __hash__(self):
+        return hash(self.left) ^ hash(self.val) ^ hash(self.right)
+
+    def is_leaf(self):
+        return False
+
+E = 17
+F = 36
+
+
+def make(item, d):
+    if d == 0:
+        return Leaf(item)
+    d2 = d - 1
+    left = make(item, d2)
+    right = make(item, d2)
+    return Node(left, item, right)
+
+def check(t):
+    if t.is_leaf():
+        return t.val
+    check(t.left)
+    return check(t.right)
+
+min_depth = 3
+
+
+def python_tree(num):
+    max_depth = num
+    stretch_depth = max_depth + 1
+    _ = make(E, stretch_depth)
+    long_lived_tree = make(E, max_depth)
+
+    for d in range(min_depth, max_depth):
+        iterations = 2 ** (max_depth - d)
+        for i in range(1, iterations + 1):
+            _1 = make(E, d)
+            _2 = make(E, d)
+    return check(long_lived_tree)
+
+def main(args):
+    if len(args) > 1:
+        num = (min_depth - 1) + (int(args[1]) / 1000000)
+    else:
+        num = 18
+    gc1 = gcreport.current_gc_time()
+    t1 = time.clock()
+    res = python_tree(num)
+    t2 = time.clock()
+    gc2 = gcreport.current_gc_time()
+    t = (t2 - t1) * 1000
+    gc = (gc2 - gc1) * 1.0
+    print "0:RESULT-cpu:ms: %s\n0:RESULT-total:ms: %s\n0:RESULT-gc:ms: %s\n" % (t, t, gc)
+    assert res == E
+    return 0
+
+if __name__ == '__main__':
+    try:
+        sys.exit(main(sys.argv))
+    except SystemExit:
+        pass
+    except:
+        import pdb, traceback
+        _type, value, tb = sys.exc_info()
+        traceback.print_exception(_type, value, tb)
+        pdb.post_mortem(tb)

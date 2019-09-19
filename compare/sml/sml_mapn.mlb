@@ -1,0 +1,8 @@
+local
+    $(SML_LIB)/basis/basis.mlb
+    $(SML_LIB)/basis/mlton.mlb
+    timed_mlton.sml
+    sml_mapn.sml
+in
+    sml_mapn_mlton.sml
+end

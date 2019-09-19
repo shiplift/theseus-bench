@@ -2,42 +2,50 @@
 type 'a lst = Nil | Cons of  'a * 'a lst ;;
 exception Empty;;
 
+type ('a, 'b) box = Box of 'a * 'b;;
+
 let cons a b = Cons(a, b) ;;
 
 let head = function
     Nil -> raise Empty
-  | Cons(a, b) -> a
+  | (Cons(a, b)) -> a
 ;;
 let tail = function
     Nil -> raise Empty
-  | Cons(a, b) -> b
+  | (Cons(a, b)) -> b
 ;;
 
-let e = 17;;
 
+let e = 17
+and f = 36
+;;
 
-let ocaml_reverse list =
-    let rec aux acc = function
-      | Nil -> acc
-      | (Cons(h,t)) -> aux (Cons (h, acc)) t in
-    aux Nil list;;
+let rec ocaml_filter p = function
+  | Nil -> Nil
+  | (Cons (h, t)) -> if p h then cons h (ocaml_filter p t) else ocaml_filter p t;;
 
-(* let ocaml_reverse list = *)
-(*     let rec aux acc = function *)
-(*       | [] -> acc *)
-(*       | h::t -> aux (h::acc) t in *)
-(*     aux [] list;; *)
+(* let rec ocaml_filter p = function *)
+(*   | [] -> [] *)
+(*   | x :: xs -> if p x then x :: (ocaml_filter p xs) else ocaml_filter p xs;; *)
+
+let ocaml_filter1 (Box(p,l)) = ocaml_filter p l;;
 
 let make_list num =
   let rec aux acc = function
     | 0 -> acc
-    | n -> aux (Cons (e, acc)) (n - 1) in
+    | n -> let elem =
+             if (n mod 2) = 0 then e else f
+           in aux (Cons (elem, acc)) (n - 1) in
   aux Nil num;;
+
+
 
 (* let make_list num = *)
 (*   let rec aux acc = function *)
 (*     | 0 -> acc *)
-(*     | n -> aux (E :: acc) (n - 1) in *)
+(*     | n -> let elem = *)
+(*              if (n mod 2) = 0 then E else F *)
+(*            in aux (elem :: acc) (n - 1) in *)
 (*   aux [] num;; *)
 
 let time f x =
@@ -52,16 +60,28 @@ let time f x =
   let () = Printf.printf "0:RESULT-gc:ms: %f\n" 0.0
   in
   res
+
+let len lst =
+  let rec aux acc = function
+    | Nil -> acc
+    | (Cons (h, t)) -> aux (acc + 1) t
+  in
+  aux 0 lst
+
+let flt x = (x = e)
 ;;
+
+(**)
 
 let listnum a =
   try
     int_of_string (Array.get a 1)
-  with _ -> 20000000
+  with _ -> 5000000
 
 let _ =
   let num = (listnum Sys.argv) in
   let l = (make_list num) in
-  let _ = time ocaml_reverse l in
+  let res = time ocaml_filter1 (Box (flt, l)) in
+  let _ = (len res) in
   0
 ;;

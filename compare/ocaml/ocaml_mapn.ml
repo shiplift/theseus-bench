@@ -2,37 +2,41 @@
 type 'a lst = Nil | Cons of  'a * 'a lst ;;
 exception Empty;;
 
+type ('a, 'b) box = Box of 'a * 'b;;
+
 let cons a b = Cons(a, b) ;;
 
 let head = function
     Nil -> raise Empty
-  | Cons(a, b) -> a
+  | (Cons(a, b)) -> a
 ;;
 let tail = function
     Nil -> raise Empty
-  | Cons(a, b) -> b
+  | (Cons(a, b)) -> b
 ;;
 
-let e = 17;;
+let e = 17
+and f = 36
+;;
 
 
-let ocaml_reverse list =
-    let rec aux acc = function
-      | Nil -> acc
-      | (Cons(h,t)) -> aux (Cons (h, acc)) t in
-    aux Nil list;;
+(* let rec ocaml_map f = function *)
+(*   | [] -> [] *)
+(*   | h::t -> (f h) :: (ocaml_map f t);; *)
 
-(* let ocaml_reverse list = *)
-(*     let rec aux acc = function *)
-(*       | [] -> acc *)
-(*       | h::t -> aux (h::acc) t in *)
-(*     aux [] list;; *)
+let rec ocaml_map f = function
+  | Nil -> Nil
+  | (Cons(h, t)) -> cons (f h) (ocaml_map f t);;
+
+let ocaml_map1 (Box(f,l)) = ocaml_map f l;;
 
 let make_list num =
   let rec aux acc = function
     | 0 -> acc
     | n -> aux (Cons (e, acc)) (n - 1) in
   aux Nil num;;
+
+
 
 (* let make_list num = *)
 (*   let rec aux acc = function *)
@@ -52,16 +56,17 @@ let time f x =
   let () = Printf.printf "0:RESULT-gc:ms: %f\n" 0.0
   in
   res
-;;
+
+let swap x = if (x = e) then f else e;;
 
 let listnum a =
   try
     int_of_string (Array.get a 1)
-  with _ -> 20000000
+  with _ -> 5000000
 
 let _ =
   let num = (listnum Sys.argv) in
   let l = (make_list num) in
-  let _ = time ocaml_reverse l in
+  let _ = time ocaml_map1 (Box (swap, l)) in
   0
 ;;

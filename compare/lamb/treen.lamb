@@ -1,0 +1,86 @@
+#!/usr/bin/env lamb
+
+currentmilliseconds ≔ ⟪currentmilliseconds⟫
+print_int ≔ ⟪print_int⟫
+- ≔ ⟪-⟫
++ ≔ ⟪+⟫
+/ ≔ ⟪/⟫
+* ≔ ⟪*⟫
+
+p ≔ ⟪print_result_string⟫
+clock ≔ ⟪clock⟫
+gctime ≔ ⟪gctime⟫
+
+time$cont6 ≔ λ. res, _                ↦ res
+time$cont5 ≔ λ. res, diff, gcdiff     ↦ μ(time$cont6,
+                                          res,
+                                          μ(p, diff, diff, gcdiff))
+time$cont4 ≔ λ. res, gc1, t1, t2, gc2 ↦ μ(time$cont5,
+                                          res,
+                                          μ(⟪minus_float⟫, t2, t1),
+                                          μ(⟪minus_float⟫, gc2, gc1))
+time$cont3 ≔ λ. res, gc1, t1, t2      ↦ μ(time$cont4,
+                                          res,
+                                          gc1, t1, t2, μ(gctime))
+time$cont2 ≔ λ. res, gc1, t1          ↦ μ(time$cont3, res, gc1, t1, μ(clock))
+time$cont1 ≔ λ. fun, arg, gc1, t1     ↦ μ(time$cont2, μ(fun, arg), gc1, t1)
+time$cont0 ≔ λ. fun, arg, gc1         ↦ μ(time$cont1, fun, arg, gc1, μ(clock))
+time       ≔ λ. fun, arg              ↦ μ(time$cont0, fun, arg, μ(gctime))
+
+###############################################################################
+
+kMinTreeDepth ≔ 3
+
+MakeTree ≔ λ.
+           1. 0      ↦ Leaf(17)
+           2. iDepth ↦ Node(μ(MakeTree, μ(-, iDepth, 1)),
+                            17,
+                            μ(MakeTree, μ(-, iDepth, 1)))
+
+#debug
+# p_$0 ≔ λ. X, _ ↦ X
+# p_ ≔ λ. X ↦ μ(p_$0, X, μ(print_int, X))
+
+# << ≔ λ.
+#      1. X, 0 ↦ X
+#      2. X, Y ↦ μ(<<, μ(⟪mult_int⟫, X, 2), μ(-, Y, 1))
+<< ≔ ⟪lsl⟫
+
+iter$0 ≔ λ.
+         1. _, _, _, _, _, 0     ↦ nil()
+         2. i, niter, d, _, _, _ ↦ μ(iter$0, μ(+, 1, i), niter, d,
+                                     μ(MakeTree, d), μ(MakeTree, d),
+                                     μ(-, niter, i))
+iter ≔ λ. i, niter, d ↦ μ(iter$0, i, niter, d, nil(), nil(), niter)
+
+niter ≔ λ. max_depth, d  ↦ μ(<<, 1, μ(-, max_depth, d))
+  
+loop_depths$0 ≔ λ. 
+                1. _, _,         _,       _, 0 ↦ nil()
+                2. d, max_depth, nil(),   _, _ ↦ μ(loop_depths$0,
+                                                   d, max_depth, μ(niter, max_depth, d),
+                                                   nil(), nil())
+                3. d, max_depth, numIter, _, _ ↦ μ(loop_depths$0,
+                                                   μ(+, 1, d), max_depth, μ(niter, max_depth, d),
+                                                   μ(iter, 1, numIter, d), μ(-, max_depth, d))
+
+loop_depths ≔ λ. d, max_depth ↦ μ(loop_depths$0, d, max_depth, nil(), nil(), nil())
+
+check$0 ≔ λ.
+          1. Leaf(X),       nil() ↦ 17
+          2. Node(l, X, r), nil() ↦ μ(check$0, μ(check$0, l, nil()), r)
+          3. _,             r     ↦ μ(check$0, r, nil())
+check ≔ λ. X ↦ μ(check$0, X, nil())
+
+tree$cont3 ≔ λ. _, longlived ↦ μ(check, longlived)
+tree$cont2 ≔ λ. max_depth, longlived ↦ μ(tree$cont3, μ(loop_depths, kMinTreeDepth, max_depth), longlived)
+tree$cont1 ≔ λ. max_depth, _ ↦ μ(tree$cont2, max_depth, μ(MakeTree, max_depth))
+tree$cont0 ≔ λ. stretch, max_depth ↦ μ(tree$cont1, max_depth, μ(MakeTree, stretch))
+
+tree ≔ λ. num ↦  μ(tree$cont0, μ(+, 1, num), num)
+
+treenum ≔ λ.
+          1. nil()      ↦ 18
+          2. cons(h, _) ↦ μ(+, μ(-, kMinTreeDepth, 1), μ(/, μ(⟪strtol⟫, h), 1000000))
+num ≔ μ(treenum, arguments)
+μ(time, tree, num)

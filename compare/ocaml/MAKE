@@ -1,8 +1,12 @@
 #!/bin/sh
 
 ./OCAML ocaml_append.ml
+./OCAML ocaml_appendn.ml
 ./OCAML ocaml_filter.ml
+./OCAML ocaml_filtern.ml
 ./OCAML ocaml_map.ml
+./OCAML ocaml_mapn.ml
 ./OCAML ocaml_reverse.ml
 ./OCAML ocaml_reversen.ml
 ./OCAML ocaml_tree.ml
+./OCAML ocaml_treen.ml

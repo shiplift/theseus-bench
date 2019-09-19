@@ -311,6 +311,7 @@ report_vms(file = paste0(input.basename.pure, '-all-legend.pdf'))
 report_dflt_vms(file = paste0(input.basename.pure, '-legend.pdf'))
 report_squeak_vms(file = paste0(input.basename.pure, '-squeak-legend.pdf'))
 
+"base_family <- 'Helvetica'"
 process_executiontime(bench.summary, basename=input.basename)
 process_memory(bench.summary, basename=input.basename)
 
