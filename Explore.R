@@ -23,10 +23,12 @@ pkgs = c(
   'tidyverse',
   'scatterplot3d',
   'plot3Drgl',
-  'texreg',
+  #'texreg',
   'locfit',
+  'ztable',
   NULL
 )
+
 #------------------------------------------------
 source("./help.R")
 
@@ -97,6 +99,7 @@ dat %<>% arrange(max_shape_depth, max_storage_width, substitution_threshold)
 "
 
 
+if (FALSE) {
 "
 
 dat %<>% filter(cpu < 5000)
@@ -120,7 +123,7 @@ scatter3Drgl(x = 0, y = 0, z = 0, add = TRUE, colkey = FALSE,
 .m <- dat %>% single_out(-max_shape_depth) %>% matrix_for_criterion('cpu','min')
 hist3Drgl(z=.m,col=viridis::viridis(colorrange(.m), direction=-1))
 
-
+}
 ##############
 #scatterplot3d(dat$substitution_threshold,dat$max_storage_width,dat$cpu)
 
@@ -298,35 +301,35 @@ base_family='Helvetica'
 #     }
 #   # }
 # )
+#
+# #o <- orm(cpu~max_shape_depth + max_storage_width + substitution_threshold, data=dat)
+# l   <-  lm(cpu~max_shape_depth + max_storage_width + substitution_threshold, data=dat)
+# # g   <- glm(cpu~max_shape_depth + max_storage_width + substitution_threshold, data=dat)
+# l2  <-  lm(cpu~I(max_shape_depth^2) + I(max_storage_width^2) + I(substitution_threshold^2), data=dat)
+# # g2  <- glm(cpu~I(max_shape_depth^2) + I(max_storage_width^2) + I(substitution_threshold^2), data=dat)
+# l2a <-  lm(cpu~poly(max_shape_depth,2) + poly(max_storage_width,2) + poly(substitution_threshold,2), data=dat)
+# # g2a <- glm(cpu~poly(max_shape_depth,2) + poly(max_storage_width,2) + poly(substitution_threshold,2), data=dat)
+# ls  <-  lm(sqrt(cpu)~max_shape_depth + max_storage_width + substitution_threshold, data=dat)
+# # gs  <- glm(sqrt(cpu)~max_shape_depth + max_storage_width + substitution_threshold, data=dat)
+#
+# l2c <-  lm(cpu~poly(max_shape_depth,2) + max_storage_width + substitution_threshold, data=dat)
+# l2s <-  lm(sqrt(cpu)~poly(max_shape_depth,2) + max_storage_width + substitution_threshold, data=dat)
+# l3c <-  lm(cpu~poly(max_shape_depth,3) + max_storage_width + substitution_threshold, data=dat)
+# l3s <-  lm(sqrt(cpu)~poly(max_shape_depth,3) + max_storage_width + substitution_threshold, data=dat)
+# l4c <-  lm(cpu~poly(max_shape_depth,4) + max_storage_width + substitution_threshold, data=dat)
+# l4s <-  lm(sqrt(cpu)~poly(max_shape_depth,4) + max_storage_width + substitution_threshold, data=dat)
+# # g2c <- glm(cpu~poly(max_shape_depth,2) + max_storage_width + substitution_threshold, data=dat)
+#
+#
+# lb  <- lm(cpu~max_shape_depth + max_storage_width + substitution_threshold, data=bench)
+# lbs <- lm(sqrt(cpu)~max_shape_depth + max_storage_width + substitution_threshold, data=bench)
+#
+# # AIC(l   ,g   ,l2  ,g2  ,l2a ,g2a ,ls  ,gs, l2c, g2c )
+# # BIC(l   ,g   ,l2  ,g2  ,l2a ,g2a ,ls  ,gs, l2c, g2c )
+# AIC(l, l2, l2a, ls, l2c)
+# BIC(l, l2, l2a, ls, l2c)
 
-#o <- orm(cpu~max_shape_depth + max_storage_width + substitution_threshold, data=dat)
-l   <-  lm(cpu~max_shape_depth + max_storage_width + substitution_threshold, data=dat)
-# g   <- glm(cpu~max_shape_depth + max_storage_width + substitution_threshold, data=dat)
-l2  <-  lm(cpu~I(max_shape_depth^2) + I(max_storage_width^2) + I(substitution_threshold^2), data=dat)
-# g2  <- glm(cpu~I(max_shape_depth^2) + I(max_storage_width^2) + I(substitution_threshold^2), data=dat)
-l2a <-  lm(cpu~poly(max_shape_depth,2) + poly(max_storage_width,2) + poly(substitution_threshold,2), data=dat)
-# g2a <- glm(cpu~poly(max_shape_depth,2) + poly(max_storage_width,2) + poly(substitution_threshold,2), data=dat)
-ls  <-  lm(sqrt(cpu)~max_shape_depth + max_storage_width + substitution_threshold, data=dat)
-# gs  <- glm(sqrt(cpu)~max_shape_depth + max_storage_width + substitution_threshold, data=dat)
-
-l2c <-  lm(cpu~poly(max_shape_depth,2) + max_storage_width + substitution_threshold, data=dat)
-l2s <-  lm(sqrt(cpu)~poly(max_shape_depth,2) + max_storage_width + substitution_threshold, data=dat)
-l3c <-  lm(cpu~poly(max_shape_depth,3) + max_storage_width + substitution_threshold, data=dat)
-l3s <-  lm(sqrt(cpu)~poly(max_shape_depth,3) + max_storage_width + substitution_threshold, data=dat)
-l4c <-  lm(cpu~poly(max_shape_depth,4) + max_storage_width + substitution_threshold, data=dat)
-l4s <-  lm(sqrt(cpu)~poly(max_shape_depth,4) + max_storage_width + substitution_threshold, data=dat)
-# g2c <- glm(cpu~poly(max_shape_depth,2) + max_storage_width + substitution_threshold, data=dat)
-
-
-lb  <- lm(cpu~max_shape_depth + max_storage_width + substitution_threshold, data=bench)
-lbs <- lm(sqrt(cpu)~max_shape_depth + max_storage_width + substitution_threshold, data=bench)
-
-# AIC(l   ,g   ,l2  ,g2  ,l2a ,g2a ,ls  ,gs, l2c, g2c )
-# BIC(l   ,g   ,l2  ,g2  ,l2a ,g2a ,ls  ,gs, l2c, g2c )
-AIC(l, l2, l2a, ls, l2c)
-BIC(l, l2, l2a, ls, l2c)
-
-screenreg(l = list(l,ls,l2a,l2c,l4s))
+#screenreg(l = list(l,ls,l2a,l2c,l4s))
 
 # ls0 <-  lm(sqrt(cpu)~0 + max_shape_depth + max_storage_width + substitution_threshold, data=dat)
 # gs0 <- glm(sqrt(cpu)~0 + max_shape_depth + max_storage_width + substitution_threshold, data=dat)
@@ -361,6 +364,7 @@ bench.models.p <- bench.models %>% group_modify(function (x, y) {
     ~p_mem_max_storage_width,
     ~p_mem_substitution_threshold,
     cd,cw,ct,md,mw,mt)})
+
 
 # TODO: print model results
 # forall bench: non-correlation hypothesis cannot be rejected for any substitution_threshold.
@@ -510,60 +514,121 @@ lfpreplot2tibble <- function (.preplot) {
   result
 }
 
-bench.dw.raster <- bench.dw %>% group_modify(function (.data, .group) {
-  .t <-   lfpreplot2tibble(bench2lfpreplot(.data))
-  # print(.t)
-  .t
-})
+"
+base_family='Helvetica'
+rm(base_family)
+"
+explore.raster <- function(.data, criterion='Time', tick.unit='s',aspect=c('cpu','NONE')) {
+  p <- ggplot(data=.data,aes(x=max_shape_depth,y=max_storage_width)) +
+    default.theme.t(fakeLegend = TRUE) +
+    # Thank you, Mac OS X, for being useless...
+    # geom_raster(aes_string(fill=criterion)) +
+    geom_tile(aes_string(fill=criterion)) +
+    geom_text(aes(label=Label),
+              lineheight=1,size=2.5,
+              na.rm = TRUE, color='grey95') +
+    scale_fill_viridis_c(direction = -1, labels=function (x) { paste(x, tick.unit) }) +
+    scale_x_continuous(expand=c(0,0),minor_breaks=function(limits) seq(limits[1],limits[2],1)) +
+    scale_y_continuous(expand=c(0,0),minor_breaks=function(limits) seq(limits[1],limits[2],1)) +
+    guides(fill = guide_colourbar(barwidth = unit(0.8,'npc'), label.position = 'top')) +
+    ylab('') +
+    theme(legend.position = 'top') +
+    facet_null()
 
-bench.dw.raster %>% group_walk(function(.pt, benchmark) {
-  .p <- ggplot(data=.pt,aes(x=max_shape_depth,y=max_storage_width)
-         ) + default.theme.t(fakeLegend = TRUE) +
-    #ggtitle(benchmark) +
-    geom_raster(aes(fill=cpu))+
-    #!#geom_point(aes(color=original), shape = 21, size=5,show.legend=FALSE,na.rm=TRUE) +
-    geom_text(aes(label=value),
-              lineheight=1,size=2,
-              na.rm = TRUE, color='grey50')+
-    scale_color_manual(values=c('white')) +
-    scale_fill_viridis_c(direction = -1) +
+  b <- as.character(aspect[2]) %>% gsub('\\[(.+)\\]','-\\1', .)
+  .aspect <- paste(aspect[1],b,sep='-')
+  save.plot(basename=input.basename,aspect=.aspect,plot=p)
+}
+
+explore.raster.merge <- function(.data, criterion='cpu', aspect=c('cpu','NONE'),option='C') {
+  p <- ggplot(data=.data,aes(x=max_shape_depth,y=max_storage_width)) +
+    default.theme.t(fakeLegend = TRUE) +
+    geom_tile(aes_string(fill=criterion)) +
+    scale_fill_viridis_c(direction = -1,option=option,breaks=identity,labels=c('favorable','unfavorable')) +
     scale_x_continuous(expand=c(0,0)) +
     scale_y_continuous(expand=c(0,0)) +
+    guides(fill = guide_colourbar(barwidth = unit(0.6,'npc'), label.position = 'top',title = NULL)) +
+    ylab('') +
+    theme(legend.position = 'top') +
     facet_null()
-  grid::grid.draw(.p)
-})%>% invisible
+  .aspect <- paste(aspect,collapse='-')
+  save.plot(basename=input.basename,aspect=.aspect,plot=p)
+}
+
+bench.dw %>%
+  group_modify(~ lfpreplot2tibble(bench2lfpreplot(.x, criterion='cpu'))) %>%
+  group_walk(function(.data, groups) {
+    .data %>%
+      mutate(Time=round(cpu),Label=round(value)) %>%  #ms
+      explore.raster('Time', 'ms', aspect=c('cpu', as.character(groups$benchmark[1])))
+  }) %>% invisible
 
 
-bench.dw.raster.m <- bench.dw %>% group_modify(function (.data, .group) {
-  .t <-   lfpreplot2tibble(bench2lfpreplot(.data, criterion='mem'))
-  # print(.t)
-  .t
-})
+bench.dw %>%
+  group_modify(~ lfpreplot2tibble(bench2lfpreplot(.x, criterion='mem'))) %>%
+  group_walk(function(.data, groups) {
+    .data %>%
+      mutate(Memory=round(mem/1024),Label=round(value/1024)) %>%  #kbyte->mbyte
+      explore.raster('Memory', 'MB', aspect=c('mem', as.character(groups$benchmark[1])))
+  }) %>% invisible
 
-bench.dw.raster.m %>% group_walk(function(.pt, benchmark) {
-  .p <- ggplot(data=.pt,aes(x=max_shape_depth,y=max_storage_width)
-  ) + default.theme.t(fakeLegend = TRUE) +
-    #ggtitle(benchmark) +
-    geom_raster(aes(fill=mem))+
-    #!#geom_point(aes(color=original), shape = 21, size=5,show.legend=FALSE,na.rm=TRUE) +
-    geom_text(aes(label=value),
-              lineheight=1,size=2,
-              na.rm = TRUE, color='grey50')+
-    scale_color_manual(values=c('white')) +
-    scale_fill_viridis_c(direction = -1) +
-    scale_x_continuous(expand=c(0,0)) +
-    scale_y_continuous(expand=c(0,0)) +
-    facet_null()
-  grid::grid.draw(.p)
-})%>% invisible
-
-
-#facet_wrap(vars(benchmark),labeller=label_parsed)
 
 #handle reverse[n] extra.
 
+bench.dw.rn <- bench.dw.orig %>% filter(benchmark=='reverse[n]')
+bench.dw.rn %>%
+  bench2lfpreplot(criterion='cpu') %>% lfpreplot2tibble %>%
+  mutate(Time=round(cpu/1000),Label=round(value/1000,digits = 1)) %>% #s
+  explore.raster('Time', 's', aspect=c('X-cpu', 'reverse[n]'))
 
+bench.dw.cpu <- bench.dw %>%
+  group_by(niladic,benchmark) %>%
+    group_modify(~ lfpreplot2tibble(bench2lfpreplot(.x, criterion='cpu'))) %>%
+    group_modify(function(.data,group) .data %>% mutate(cpu=scales::rescale(cpu))) %>%
+  group_by(niladic,max_storage_width,max_shape_depth) %>%
+    summarize(cpu=sum(cpu)) %>%
+  group_by(niladic) %>%
+    group_modify(function(.data,group) .data %>% mutate(cpu=scales::rescale(cpu))) %>%
+    group_walk(function(.data,groups)
+      .data %>%
+        explore.raster.merge('cpu', aspect=c('cpu', if_else(groups$niladic, 'E', 'n')))
+    ) %>% invisible
 
+bench.dw.mem <- bench.dw %>%
+  group_by(niladic,benchmark) %>%
+  group_modify(~ lfpreplot2tibble(bench2lfpreplot(.x, criterion='mem'))) %>%
+  group_modify(function(.data,group) .data %>% mutate(mem=scales::rescale(mem))) %>%
+  group_by(niladic,max_storage_width,max_shape_depth) %>%
+  summarize(mem=sum(mem)) %>%
+  group_by(niladic) %>%
+  group_modify(function(.data,group) .data %>% mutate(mem=scales::rescale(mem))) %>%
+  group_walk(function(.data,groups)
+    .data %>%
+      explore.raster.merge('mem', aspect=c('mem', if_else(groups$niladic, 'E', 'n')))
+  ) %>% invisible
+
+bench.dw.nilladic <- full_join(
+  bench.dw.cpu, bench.dw.mem, c("niladic", "max_storage_width", "max_shape_depth")
+) %>%
+  group_by(niladic,max_storage_width,max_shape_depth) %>%
+  mutate(value=cpu+mem,cpu=NULL,mem=NULL) %>%
+  group_by(niladic) %>%
+  group_modify(function(.data,group) .data %>% mutate(value=scales::rescale(value))) %>%
+  group_walk(function(.data,groups)
+    .data %>%
+      explore.raster.merge('value', aspect=c(if_else(groups$niladic, 'E', 'n')))
+  ) %>% invisible
+
+result <- bench.dw.nilladic %>%
+  # pronounce non-niladic
+  mutate(value=ifelse(niladic,value,value*3)) %>%
+  group_by(max_storage_width,max_shape_depth) %>%
+  summarize(value=sum(value)) %>% ungroup %>%
+  mutate(value=scales::rescale(value)) %>%
+  (function(.data) {
+    explore.raster.merge(.data, 'value', aspect=c('result'),option='A')
+    .data
+  })
 
 #
 # EOF
