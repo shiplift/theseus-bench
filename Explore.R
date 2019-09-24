@@ -5,6 +5,7 @@ input_name.default <- "output/explore.tsv"
 input_name.default <- 'output/20140307-cache-envs.tsv'
 input_name.default <- 'output/20140524-explore.tsv'
 input_name.default <- 'output/20140605-explore.tsv'
+input_name.default <- 'output/20190921-explore.tsv'
 "#
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -22,6 +23,7 @@ pkgs = c(
   "scatterplot3d",
   "plot3Drgl",
   "texreg",
+  'locfit',
   NULL
 )
 #------------------------------------------------
@@ -38,21 +40,27 @@ bench.s <- read_tsv(clipboard(), comment='#',
 "
 # --- shaping data
 bench <- bench.s %>%
-  select(benchmark, max_shape_depth, max_storage_width,substitution_threshold,criterion, value) %>%
+  select(vm, benchmark, max_shape_depth, max_storage_width,substitution_threshold,criterion, value) %>%
   spread_measurements %>%
   filter(max_shape_depth<30&max_storage_width<34) %>% #old data
-  select(benchmark, max_shape_depth, max_storage_width, substitution_threshold, cpu, total, mem) %>%
+  factorize(.add_visuals = FALSE) %>%
+  select(-vm,-gc) %>%
   group_by(benchmark)
 
-dat <- bench %>% filter(benchmark == "reverse")
+
+dat <- bench %>% filter(benchmark == "map[n]")
 "
-#dat <- bench %>% filter(benchmark == 'tree')
-dat <- bench %>% filter(benchmark == 'append')
-dat <- bench %>% filter(benchmark == 'map')
-dat <- bench %>% filter(benchmark == 'reverse')
-dat <- bench %>% filter(benchmark == 'reversen')
+dat <- bench %>% filter(benchmark == 'tree[E]')
+dat <- bench %>% filter(benchmark == 'tree[n]')
+dat <- bench %>% filter(benchmark == 'append[E]')
+dat <- bench %>% filter(benchmark == 'append[n]')
+dat <- bench %>% filter(benchmark == 'map[E]')
+dat <- bench %>% filter(benchmark == 'map[n]')
+dat <- bench %>% filter(benchmark == 'reverse[E]')
+dat <- bench %>% filter(benchmark == 'reverse[n]')
+dat <- bench %>% filter(benchmark == 'filter[E]')
+dat <- bench %>% filter(benchmark == 'filter[n]')
 #dat <- bench %>% filter(benchmark == 'arbitraty_precision_ints')
-dat <- bench %>% filter(benchmark == 'filter')
 "
 dat %<>% arrange(max_shape_depth, max_storage_width, substitution_threshold)
 
@@ -87,12 +95,6 @@ dat %<>% arrange(max_shape_depth, max_storage_width, substitution_threshold)
 .vm <- viridis::viridis(ceiling(max(dat$mem)), direction=-1)
 "
 
-v2c <- function(value, ...) {
-  cols <- viridis::viridis(ceiling(diff(range(dat$cpu))), ...)
-  cols[findInterval(value, vec=seq(from=min(value), to=max(value), length.out=min(10000, length(cols))))]
-}
-
-colorrange <- function (x) 10^ceiling(diff(log10(range(x,na.rm=TRUE))))
 
 "
 
@@ -100,7 +102,7 @@ dat %<>% filter(cpu < 5000)
 "
 with(dat, scatter3Drgl(x=max_shape_depth, y=max_storage_width, z=substitution_threshold,
                     xlab='max shape depth',ylab='max storage width', zlab='threshold',
-                    ticktype='detailed', nticks=30,
+                    ticktype='detailed', nticks=30, cex=3,
                     colvar=cpu,col=viridis::viridis(colorrange(cpu), direction=-1)))
 # add another point
 scatter3Drgl(x = 0, y = 0, z = 0, add = TRUE, colkey = FALSE,
@@ -108,35 +110,11 @@ scatter3Drgl(x = 0, y = 0, z = 0, add = TRUE, colkey = FALSE,
 
 with(dat, scatter3Drgl(max_shape_depth, max_storage_width, substitution_threshold,
                        xlab='max shape depth',ylab='max storage width', zlab='threshold',
-                       ticktype='detailed', nticks=30,
+                       ticktype='detailed', nticks=30, cex=3,
                        colvar=mem, col=viridis::viridis(colorrange(mem), direction=-1)))
 # add another point
 scatter3Drgl(x = 0, y = 0, z = 0, add = TRUE, colkey = FALSE,
              pch = 18, cex = 3, col = "black")
-
-
-single_out <- function(.data, arg) {
-  grouped <- .data %>% ungroup %>% select(-benchmark) %>%
-      group_by_at(vars({{ arg }}, -cpu,-total,-mem))
-  groupvars <- sapply(group_vars(grouped),as.name)
-  summed <- grouped %>%
-    summarize_at(vars(cpu,total,mem), list(~max(.),~min(.),~mean(.)))
-  summed %>% ungroup %>%
-    select(!!!groupvars,starts_with('cpu'),starts_with('total'),starts_with('mem'))
-}
-
-matrix_for_criterion <- function(.data, criterion='cpu', part='mean') {
-  component <- paste(criterion,part,sep='_')
-  m <- matrix(nrow=max(.data[,1]),ncol=max(.data[,2]))
-  to.matrix <- function(row, what) {
-    x <- row[[1]]
-    y <- row[[2]]
-    val <- row[[what]]
-    m[x,y] <<-val
-  }
-  apply(.data, 1, to.matrix, component)
-  m
-}
 
 .m <- dat %>% single_out(-max_shape_depth) %>% matrix_for_criterion('cpu','min')
 hist3Drgl(z=.m,col=viridis::viridis(colorrange(.m), direction=-1))
@@ -237,68 +215,69 @@ hist(.tmp$max_shape_depth, breaks=max(.tmp$max_shape_depth)-min(.tmp$max_shape_d
 #       c(fopt.res$par, fopt.res$value, min(.data[[criterion]]), abs(fopt.res$value - min(.data[[criterion]])))))
 #   }
 #   list(params=list(max_shape_depth=fopt.res$par[[1]],
-#                    max_sotrage_width=fopt.res$par[[2]],
+#                    max_storage_width=fopt.res$par[[2]],
 #                    substitution_threshold=fopt.res$par[[3]],
 #                    deviation=abs(fopt.res$value - min(.data[[criterion]]))/min(.data[[criterion]])),
 #        optim_result=fopt.res)
 # }
 
 
-report_optimize <- function(.data, criterion='cpu', silent=FALSE) {
-  v <- sym(criterion)
-  d <- .data %>% arrange(!!v) %>% head(1)
-  print(d)
-    list(params=list(max_shape_depth=2,
-                     max_sotrage_width=2,
-                     substitution_threshold=2,
-                     deviation=0),
-         optim_result=NULL)
-}
+# report_optimize <- function(.data, criterion='cpu', silent=FALSE) {
+#   v <- sym(criterion)
+#   d <- .data %>% arrange(!!v) %>% head(1)
+#   print(d)
+#     list(params=list(max_shape_depth=2,
+#                      max_storage_width=2,
+#                      substitution_threshold=2,
+#                      deviation=0),
+#          optim_result=NULL)
+# }
+#
+# print("=-=-=-=-=")
+#
+# optimize_pars_for_benchmark <- function(benchmark,data, silent=FALSE) {
+#   if (!silent)
+#     print(paste("====",benchmark,"===="))
+#   optimals <- tibble(criterion=character(),
+#                      max_shape_depth=integer(),
+#                      max_storage_width=integer(),
+#                      substitution_threshold=integer(),
+#                      deviation=numeric())
+#   for (criterion in c('cpu','total','mem')) {
+#     opt <- data %>%  report_optimize(criterion, silent=silent)
+#     r <- c(criterion=criterion,  opt$params)
+#     optimals %<>% add_row(!!!r)
+#   }
+#   if (!silent)
+#     print("=-=-=-=-=")
+#   optimals
+# }
+# optimize_pars_for_benchmark_silent <- function(benchmark, data) optimize_pars_for_benchmark(benchmark, data, silent=TRUE)
+#
+# bench.optimals <- bench %>% nest %>%
+#   # mutate(data=map2(benchmark, data, optimize_pars_for_benchmark)) %>%
+#   mutate(data=map2(benchmark, data, optimize_pars_for_benchmark_silent)) %>%
+#   unnest(cols=c(data))
+#
+# bench.optimals.c <- bench.optimals %>% ungroup %>% group_by(criterion) %>% arrange(criterion)
+#
+# bench.optimals.c %<>% filter(criterion!='total')
 
-print("=-=-=-=-=")
-
-optimize_pars_for_benchmark <- function(benchmark,data, silent=FALSE) {
-  if (!silent)
-    print(paste("====",benchmark,"===="))
-  optimals <- tibble(criterion=character(),
-                     max_shape_depth=integer(),
-                     max_sotrage_width=integer(),
-                     substitution_threshold=integer(),
-                     deviation=numeric())
-  for (criterion in c('cpu','total','mem')) {
-    opt <- data %>%  report_optimize(criterion, silent=silent)
-    r <- c(criterion=criterion,  opt$params)
-    optimals %<>% add_row(!!!r)
-  }
-  if (!silent)
-    print("=-=-=-=-=")
-  optimals
-}
-optimize_pars_for_benchmark_silent <- function(benchmark, data) optimize_pars_for_benchmark(benchmark, data, silent=TRUE)
-
-bench.optimals <- bench %>% nest %>%
-  # mutate(data=map2(benchmark, data, optimize_pars_for_benchmark)) %>%
-  mutate(data=map2(benchmark, data, optimize_pars_for_benchmark_silent)) %>%
-  unnest(cols=c(data))
-
-bench.optimals.c <- bench.optimals %>% ungroup %>% group_by(criterion) %>% arrange(criterion)
-
-bench.optimals.c %<>% filter(criterion!='total')
-
-
+"
 base_family='Helvetica'
-bench.optimals.c %>%
-  pivot_longer(c('max_shape_depth','max_sotrage_width','substitution_threshold'), names_to='parameter') %>%
-  ggplot(aes(
-    x=parameter,y=value
-  )) + default.theme.t(fakeLegend = FALSE) +
-  geom_boxplot() +
-  geom_jitter() +
-  scale_y_continuous(expand=c(0,0),
-                     limits=c(0,NA),
-                     breaks=function(x) { seq(floor(x[[1]]),ceiling(x[[2]]),1)},
-                     minor_breaks = NULL) +
-  facet_wrap(criterion~.)
+"
+# bench.optimals.c %>%
+#   pivot_longer(c('max_shape_depth','max_storage_width','substitution_threshold'), names_to='parameter') %>%
+#   ggplot(aes(
+#     x=parameter,y=value
+#   )) + default.theme.t(fakeLegend = FALSE) +
+#   geom_boxplot() +
+#   geom_jitter() +
+#   scale_y_continuous(expand=c(0,0),
+#                      limits=c(0,NA),
+#                      breaks=function(x) { seq(floor(x[[1]]),ceiling(x[[2]]),1)},
+#                      minor_breaks = NULL) +
+#   facet_wrap(criterion~.)
 
 "=-=-=-="
 
@@ -358,3 +337,232 @@ screenreg(l = list(l,ls,l2a,l2c,l4s))
 # options(datadist=NULL)
 # plot(summary(f), log=TRUE)
 
+bench.models <- bench %>% group_modify(function (x,y) {
+  .mc <- lm(cpu~max_shape_depth + max_storage_width + substitution_threshold, data=x)
+  .mm <-lm(mem~max_shape_depth + max_storage_width + substitution_threshold, data=x)
+  tribble(
+    ~model_cpu, ~anova_cpu, ~model_mem, ~anova_mem,
+    .mc, anova(.mc), .mm, anova(.mm))
+})
+
+bench.models.p <- bench.models %>% group_modify(function (x, y) {
+  cd <- x$anova_cpu[[1]]$`Pr(>F)`[1]
+  cw <- x$anova_cpu[[1]]$`Pr(>F)`[2]
+  ct <- x$anova_cpu[[1]]$`Pr(>F)`[3]
+  md <- x$anova_mem[[1]]$`Pr(>F)`[1]
+  mw <- x$anova_mem[[1]]$`Pr(>F)`[2]
+  mt <- x$anova_mem[[1]]$`Pr(>F)`[3]
+  tribble(
+    ~p_cpu_max_shape_depth,
+    ~p_cpu_max_storage_width,
+    ~p_cpu_substitution_threshold,
+    ~p_mem_max_shape_depth,
+    ~p_mem_max_storage_width,
+    ~p_mem_substitution_threshold,
+    cd,cw,ct,md,mw,mt)})
+
+# TODO: print model results
+# forall bench: non-correlation hypothesis cannot be rejected for any substitution_threshold.
+
+#--- >> -----
+bench.dw <- bench %>% single_out(-substitution_threshold, .keep_benchmark = TRUE, .make_min_default = TRUE)
+bench.dw.orig <- bench.dw %>% filter(TRUE)
+bench.dw %<>% (function(.data) {
+  # filer out order-of-magnitude outliers
+  if (nrow(.data[.data$benchmark == 'reverse[n]' & .data$cpu > 5e4,]) > 0) {
+    res <- .data %>% filter(TRUE)
+    res[res$benchmark == 'reverse[n]' & res$cpu > 5e4,]$cpu <- NA
+    res
+  } else {
+    .data
+  }
+})
+
+#--- << -----
+
+bench.cpu <- bench.dw %>% arrange(cpu, .by_group=TRUE) %>% top_n(-3,cpu)
+bench.mem <- bench.dw %>% arrange(mem, .by_group=TRUE) %>% top_n(-3,mem)
+
+bench.minimals <- rbind(
+  bench.cpu %>% mutate(criterion='cpu'),
+  bench.mem %>% mutate(criterion='mem')) %>%
+  mutate(criterion=as_factor(criterion))
+
+"
+base_family='Helvetica'
+"
+bench.minimals %>%
+  pivot_longer(c('max_shape_depth','max_storage_width'), names_to='parameter') %>%
+  ggplot(aes(
+    x=parameter,y=value
+  )) + default.theme.t(fakeLegend = FALSE) +
+  geom_boxplot() +
+  geom_dotplot(binaxis='y',
+               stackdir='center',
+               dotsize = .5,
+               fill="red") +
+  # geom_jitter() +
+  scale_y_continuous(expand=c(0,0),
+                     limits=c(0,NA),
+                     breaks=function(x) { seq(floor(x[[1]]),ceiling(x[[2]]),1)},
+                     minor_breaks = NULL) +
+  facet_null()
+  # facet_wrap(criterion~niladic)
+  # facet_wrap(criterion~.)
+  # facet_wrap(niladic~.)
+
+"
+bench.sw.pretend <- bench %>% ##! filter(max_storage_width<22) %>%
+  single_out(-substitution_threshold, .keep_benchmark = TRUE, .make_min_default=TRUE) %>%
+  single_out(-max_shape_depth, .keep_benchmark = TRUE)
+
+bench.sw.pretend %>%
+  mutate(is_min = min(cpu_min) == cpu_min) %>%
+  ggplot(aes(x=max_storage_width, y=cpu_min)) + default.theme.t() +
+    geom_col(fill='gray') +
+    geom_linerange(aes(ymin=cpu_min,ymax=cpu_max),  color=I('black'), size=.2) +
+    scale_x_continuous(expand=c(0,0),
+                       breaks=function (l) seq(0,ceiling(l[2]),5),
+                       minor_breaks=function (l) seq(0,ceiling(l[2]),1)) +
+    geom_point(aes(color = is_min)) +
+    scale_color_manual(values = c(NA, 'red'), guide=FALSE) +
+    coord_cartesian(ylim=c(0,10000)) +
+    facet_wrap(vars(benchmark),labeller=label_parsed,scales='free')
+
+bench.sw.pretend %>%
+  mutate(is_min = min(mem_min) == mem_min) %>%
+  ggplot(aes(x=max_storage_width, y=mem_min)) + default.theme.t() +
+    geom_col(fill='gray') +
+    geom_linerange(aes(ymin=mem_min,ymax=mem_max),  color=I('black'), size=.2) +
+    scale_x_continuous(expand=c(0,0),
+                       breaks=function (l) seq(0,ceiling(l[2]),5),
+                       minor_breaks=function (l) seq(0,ceiling(l[2]),1)) +
+    geom_point(aes(color = is_min)) +
+    scale_color_manual(values = c(NA, 'red'), guide=FALSE) +
+    coord_cartesian(ylim=c(0,1.7e6)) +
+    facet_wrap(vars(benchmark),labeller=label_parsed,scales='free')
+"
+
+# hist(bench.minimals$max_shape_depth, breaks=diff(range(bench.minimals$max_shape_depth)))
+#
+# hist(bench.minimals$max_storage_width, breaks=diff(range(bench.minimals$max_storage_width)))
+#
+# with(bench.minimals %>% filter(!niladic),
+#      hist(max_storage_width, breaks=diff(range(max_storage_width))))
+
+##plot(locfit(cpu~lp(max_shape_depth,max_storage_width,substitution_threshold,scale=TRUE,nn=.1),data=dat),col.regions=hcl.colors(diff(round(range(cpu)))*2,rev=TRUE))
+# plot(locfit(cpu~lp(max_shape_depth,max_storage_width,substitution_threshold,scale=TRUE,nn=.1),data=dat,family='qgamma',link='identity',kt='prod'),col.regions=hcl.colors(diff(round(range(dat$cpu)))*2,rev=TRUE))
+##plot(locfit(cpu~lp(max_shape_depth,max_storage_width,substitution_threshold,scale=TRUE,nn=.1),data=dat,family='qrgamma'),col.regions=hcl.colors(diff(round(range(cpu)))*2,rev=TRUE))
+
+# .l <-
+# with(bench.dw, {
+#   #.ll <- locfit(cpu~lp(max_shape_depth,max_storage_width,scale=TRUE,nn=.1),family='qgamma',link='identity')
+#   .ll <- locfit(cpu~lp(max_shape_depth,max_storage_width,scale=TRUE,nn=.1))
+#   .lp <- preplot(.ll, newdata=list(seq(2,25),seq(2,25)), get.data=TRUE)
+#   plot(.lp,
+#        type='image',
+#        col=hcl.colors(diff(round(range(cpu)))*2,rev=TRUE))
+#   list(locfit=.ll,preplot=.lp)})
+
+dat <- bench.dw %>% filter(benchmark == "map[n]")
+"
+dat <- bench.dw %>% filter(benchmark == 'tree[E]')
+dat <- bench.dw %>% filter(benchmark == 'tree[n]')
+dat <- bench.dw %>% filter(benchmark == 'append[E]')
+dat <- bench.dw %>% filter(benchmark == 'append[n]')
+dat <- bench.dw %>% filter(benchmark == 'map[E]')
+dat <- bench.dw %>% filter(benchmark == 'map[n]')
+dat <- bench.dw %>% filter(benchmark == 'reverse[E]')
+dat <- bench.dw %>% filter(benchmark == 'reverse[n]')
+dat <- bench.dw %>% filter(benchmark == 'filter[E]')
+dat <- bench.dw %>% filter(benchmark == 'filter[n]')
+#dat <- bench.dw %>% filter(benchmark == 'arbitraty_precision_ints')
+"
+
+bench2lfpreplot <- function(.data, criterion='cpu') {
+  #frml <- as.formula(paste0(criterion, '~lp(max_shape_depth,max_storage_width,scale=TRUE,nn=.1)'))
+  #.ll <- locfit(frml, family='qgamma',link='identity', data=.data)
+  .ll <- if(criterion=='mem')
+    locfit(mem~lp(max_shape_depth,max_storage_width,scale=TRUE,nn=.1), data=.data)
+  else
+    locfit(cpu~lp(max_shape_depth,max_storage_width,scale=TRUE,nn=.1), data=.data)
+
+  #.ll$call$formula <- frml
+  # .ll$call$data <- match.call()$.data
+  .lm <- locfit.matrix(.ll,data=.data)
+  .lp <- preplot(.ll, newdata=list(seq(2,25),seq(2,25)), what='coeff',where='grid')
+  .lp$data <- .lm
+  .lp
+}
+
+
+lfpreplot2tibble <- function (.preplot) {
+  original <- as_tibble(.preplot$data$x) %>%
+    mutate_all(as.integer) %>%
+    mutate(original=TRUE,value=round(.preplot$data$y))
+  result <- expand_grid(
+    !!.preplot$vnames[2] := .preplot$xev[[2]],
+    !!.preplot$vnames[1] := .preplot$xev[[1]]
+  ) %>%
+    mutate(!!.preplot$yname := .preplot$trans(.preplot$fit))
+  result %<>% left_join(original, by= c("max_shape_depth", "max_storage_width"))
+  result
+}
+
+bench.dw.raster <- bench.dw %>% group_modify(function (.data, .group) {
+  .t <-   lfpreplot2tibble(bench2lfpreplot(.data))
+  # print(.t)
+  .t
+})
+
+bench.dw.raster %>% group_walk(function(.pt, benchmark) {
+  .p <- ggplot(data=.pt,aes(x=max_shape_depth,y=max_storage_width)
+         ) + default.theme.t(fakeLegend = TRUE) +
+    #ggtitle(benchmark) +
+    geom_raster(aes(fill=cpu))+
+    #!#geom_point(aes(color=original), shape = 21, size=5,show.legend=FALSE,na.rm=TRUE) +
+    geom_text(aes(label=value),
+              lineheight=1,size=2,
+              na.rm = TRUE, color='grey50')+
+    scale_color_manual(values=c('white')) +
+    scale_fill_viridis_c(direction = -1) +
+    scale_x_continuous(expand=c(0,0)) +
+    scale_y_continuous(expand=c(0,0)) +
+    facet_null()
+  grid::grid.draw(.p)
+})%>% invisible
+
+
+bench.dw.raster.m <- bench.dw %>% group_modify(function (.data, .group) {
+  .t <-   lfpreplot2tibble(bench2lfpreplot(.data, criterion='mem'))
+  # print(.t)
+  .t
+})
+
+bench.dw.raster.m %>% group_walk(function(.pt, benchmark) {
+  .p <- ggplot(data=.pt,aes(x=max_shape_depth,y=max_storage_width)
+  ) + default.theme.t(fakeLegend = TRUE) +
+    #ggtitle(benchmark) +
+    geom_raster(aes(fill=mem))+
+    #!#geom_point(aes(color=original), shape = 21, size=5,show.legend=FALSE,na.rm=TRUE) +
+    geom_text(aes(label=value),
+              lineheight=1,size=2,
+              na.rm = TRUE, color='grey50')+
+    scale_color_manual(values=c('white')) +
+    scale_fill_viridis_c(direction = -1) +
+    scale_x_continuous(expand=c(0,0)) +
+    scale_y_continuous(expand=c(0,0)) +
+    facet_null()
+  grid::grid.draw(.p)
+})%>% invisible
+
+
+#facet_wrap(vars(benchmark),labeller=label_parsed)
+
+#handle reverse[n] extra.
+
+
+
+
+#
+# EOF
