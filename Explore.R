@@ -6,6 +6,7 @@ input_name.default <- 'output/20140307-cache-envs.tsv'
 input_name.default <- 'output/20140524-explore.tsv'
 input_name.default <- 'output/20140605-explore.tsv'
 input_name.default <- 'output/20190921-explore.tsv'
+input_name.default <- 'output/20190924-explore.tsv'
 "#
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -17,12 +18,12 @@ if (FALSE) {
 }
 
 pkgs = c(
-  "rgl",
-  "EnvStats",
-  "tidyverse",
-  "scatterplot3d",
-  "plot3Drgl",
-  "texreg",
+  'rgl',
+  'EnvStats',
+  'tidyverse',
+  'scatterplot3d',
+  'plot3Drgl',
+  'texreg',
   'locfit',
   NULL
 )
