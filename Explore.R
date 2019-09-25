@@ -26,6 +26,7 @@ pkgs = c(
   #'texreg',
   'locfit',
   'ztable',
+  'shadowtext',
   NULL
 )
 
@@ -488,9 +489,9 @@ bench2lfpreplot <- function(.data, criterion='cpu') {
   #frml <- as.formula(paste0(criterion, '~lp(max_shape_depth,max_storage_width,scale=TRUE,nn=.1)'))
   #.ll <- locfit(frml, family='qgamma',link='identity', data=.data)
   .ll <- if(criterion=='mem')
-    locfit(mem~lp(max_shape_depth,max_storage_width,scale=TRUE,nn=.1), data=.data)
+    locfit(mem~lp(max_shape_depth,max_storage_width,scale=TRUE,nn=.1), data=.data, mint=50, maxit=50)
   else
-    locfit(cpu~lp(max_shape_depth,max_storage_width,scale=TRUE,nn=.1), data=.data)
+    locfit(cpu~lp(max_shape_depth,max_storage_width,scale=TRUE,nn=.1), data=.data, mint=50, maxit=50)
 
   #.ll$call$formula <- frml
   # .ll$call$data <- match.call()$.data
@@ -504,13 +505,15 @@ bench2lfpreplot <- function(.data, criterion='cpu') {
 lfpreplot2tibble <- function (.preplot) {
   original <- as_tibble(.preplot$data$x) %>%
     mutate_all(as.integer) %>%
-    mutate(original=TRUE,value=round(.preplot$data$y))
+    mutate(original=TRUE,value=.preplot$data$y)
   result <- expand_grid(
     !!.preplot$vnames[2] := .preplot$xev[[2]],
     !!.preplot$vnames[1] := .preplot$xev[[1]]
   ) %>%
     mutate(!!.preplot$yname := .preplot$trans(.preplot$fit))
   result %<>% left_join(original, by= c("max_shape_depth", "max_storage_width"))
+  # retain the original values??
+  #result %<>% mutate(!!.preplot$yname := coalesce(value,!!as.name(.preplot$yname)))
   result
 }
 
@@ -518,41 +521,62 @@ lfpreplot2tibble <- function (.preplot) {
 base_family='Helvetica'
 rm(base_family)
 "
-explore.raster <- function(.data, criterion='Time', tick.unit='s',aspect=c('cpu','NONE')) {
+
+.explore.raster <- function(.data, criterion, aspect, frac, barwidth, bartitle=waiver(), text=FALSE, breaks=waiver(), labels=waiver(), color_option='D') {
+
+  topk <- .data %>% top_frac(-frac,!!sym(criterion)) %>% mutate(topk=TRUE)
+  .data %<>% left_join(topk,by=colnames(.data))
+
+  .b <- function(limits) seq(ceiling(limits[1]),floor(limits[2]))
+  .l <- function(x) {
+    br <- scales::extended_breaks()(range(x))
+    r <- rep("",length(x))
+    r[c(1,length(r))] <- x[c(1,length(x))]
+    r[x %in% br] <- x[x %in% br]
+    r
+  }
   p <- ggplot(data=.data,aes(x=max_shape_depth,y=max_storage_width)) +
-    default.theme.t(fakeLegend = TRUE) +
+    default.theme.t(fakeLegend = TRUE, axis.title.y =  element_blank(), plot.margin = unit(c(1,-0.1,0,-0.1),"mm"),) +
     # Thank you, Mac OS X, for being useless...
     # geom_raster(aes_string(fill=criterion)) +
     geom_tile(aes_string(fill=criterion)) +
-    geom_text(aes(label=Label),
-              lineheight=1,size=2.5,
-              na.rm = TRUE, color='grey95') +
-    scale_fill_viridis_c(direction = -1, labels=function (x) { paste(x, tick.unit) }) +
-    scale_x_continuous(expand=c(0,0),minor_breaks=function(limits) seq(limits[1],limits[2],1)) +
-    scale_y_continuous(expand=c(0,0),minor_breaks=function(limits) seq(limits[1],limits[2],1)) +
-    guides(fill = guide_colourbar(barwidth = unit(0.8,'npc'), label.position = 'top')) +
+    geom_point(aes(color=topk),
+               size=1,shape=16,
+               na.rm=TRUE,show.legend=FALSE,position=position_nudge(x = 0.25, y = 0.25)) +
+    scale_color_manual(values=c(Set1Paired[1])) +
+    scale_fill_viridis_c(direction = -1,option=color_option,breaks=breaks,labels=labels) +
+    scale_x_continuous(expand=c(0,0),breaks=.b,labels=.l) +
+    scale_y_continuous(expand=c(0,0),breaks=.b,labels=.l)+
+    guides(fill = guide_colourbar(barwidth = unit(barwidth,'npc'), label.position = 'top',title = bartitle)) +
     ylab('') +
     theme(legend.position = 'top') +
+    coord_fixed()+
     facet_null()
+  if (text) {
+    p <- p + geom_shadowtext(aes(label=Label),
+                             lineheight=1,size=1.8, nudge_y=-.1,
+                             na.rm = TRUE, color='grey95')
+  }
+  save.plot(basename=input.basename,aspect=aspect,plot=p,base_asp=0.9,base_height=5)
+
+}
+explore.raster <- function(.data, criterion='Time', tick.unit='s',aspect=c('cpu','NONE')) {
 
   b <- as.character(aspect[2]) %>% gsub('\\[(.+)\\]','-\\1', .)
   .aspect <- paste(aspect[1],b,sep='-')
-  save.plot(basename=input.basename,aspect=.aspect,plot=p)
+
+  .data %>%
+    .explore.raster(criterion, aspect=.aspect,
+                    frac=.01,barwidth=0.8,text=TRUE,
+                    labels=function (x) paste(x, tick.unit))
 }
 
 explore.raster.merge <- function(.data, criterion='cpu', aspect=c('cpu','NONE'),option='C') {
-  p <- ggplot(data=.data,aes(x=max_shape_depth,y=max_storage_width)) +
-    default.theme.t(fakeLegend = TRUE) +
-    geom_tile(aes_string(fill=criterion)) +
-    scale_fill_viridis_c(direction = -1,option=option,breaks=identity,labels=c('favorable','unfavorable')) +
-    scale_x_continuous(expand=c(0,0)) +
-    scale_y_continuous(expand=c(0,0)) +
-    guides(fill = guide_colourbar(barwidth = unit(0.6,'npc'), label.position = 'top',title = NULL)) +
-    ylab('') +
-    theme(legend.position = 'top') +
-    facet_null()
-  .aspect <- paste(aspect,collapse='-')
-  save.plot(basename=input.basename,aspect=.aspect,plot=p)
+  .data %>%
+    .explore.raster(criterion, aspect=paste(aspect,collapse='-'),
+                    frac=.02, barwidth=0.6, bartitle=NULL,
+                    breaks=identity, labels=c('favorable','unfavorable'),
+                    color_option=option)
 }
 
 bench.dw %>%
@@ -594,6 +618,7 @@ bench.dw.cpu <- bench.dw %>%
         explore.raster.merge('cpu', aspect=c('cpu', if_else(groups$niladic, 'E', 'n')))
     ) %>% invisible
 
+
 bench.dw.mem <- bench.dw %>%
   group_by(niladic,benchmark) %>%
   group_modify(~ lfpreplot2tibble(bench2lfpreplot(.x, criterion='mem'))) %>%
@@ -607,6 +632,8 @@ bench.dw.mem <- bench.dw %>%
       explore.raster.merge('mem', aspect=c('mem', if_else(groups$niladic, 'E', 'n')))
   ) %>% invisible
 
+
+
 bench.dw.nilladic <- full_join(
   bench.dw.cpu, bench.dw.mem, c("niladic", "max_storage_width", "max_shape_depth")
 ) %>%
@@ -619,6 +646,7 @@ bench.dw.nilladic <- full_join(
       explore.raster.merge('value', aspect=c(if_else(groups$niladic, 'E', 'n')))
   ) %>% invisible
 
+
 result <- bench.dw.nilladic %>%
   # pronounce non-niladic
   mutate(value=ifelse(niladic,value,value*3)) %>%
@@ -626,7 +654,7 @@ result <- bench.dw.nilladic %>%
   summarize(value=sum(value)) %>% ungroup %>%
   mutate(value=scales::rescale(value)) %>%
   (function(.data) {
-    explore.raster.merge(.data, 'value', aspect=c('result'),option='A')
+    explore.raster.merge(.data, 'value', aspect=c('result'),option='B')
     .data
   })
 
