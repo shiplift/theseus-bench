@@ -108,7 +108,7 @@ process_executiontime <- function(dat, basename='plot', partname=NULL, omitLegen
   ymax <- ceiling_steps(dat.max, .y.max.steps) * .scale
   p <- ggplot(data = dat,
               aes(x=benchmark,y=cpu_mean*.scale,group=interaction(benchmark,vm),fill=vm,shape=vm)
-  ) + default.theme.t(fakeLegend=omitLegend) +
+  ) + default.theme.t(fakeLegend=omitLegend, omit_x_title=TRUE) +
     geom_col(position=dodge, width=.75)+
     geom_errorbar(aes(ymin=(cpu_mean - cpu_err095) * .scale, ymax=(cpu_mean + cpu_err095) * .scale),  position=dodge, color=I("black"), size=.2, width=.6) +
     scale_y_continuous(
@@ -198,7 +198,7 @@ process_memory <- function(dat, basename='plot', partname=NULL, omitLegend=TRUE,
   ymax <- ceiling_steps(dat.max, .y.max.steps) *.scale
   p <- ggplot(data = dat,
               aes(x=benchmark,y=mem_mean*.scale,group=interaction(benchmark,vm),fill=vm,shape=vm)
-  ) + default.theme.t(fakeLegend=omitLegend) +
+  ) + default.theme.t(fakeLegend=omitLegend, omit_x_title=TRUE) +
     geom_col(position=dodge, width=.75)+
     scale_y_continuous(
       trans=mem_trans(low=0,high=ymax,step=.y.max.steps,viewlimit=c(0,.ylim),scale=.scale,viewscale=.viewscale),
