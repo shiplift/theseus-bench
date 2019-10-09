@@ -31,7 +31,7 @@
 
 (define (check t)
   (if (leaf? t)
-      E
+      e
       (begin
         (check (node-left t))
         (check (node-right t)))))
