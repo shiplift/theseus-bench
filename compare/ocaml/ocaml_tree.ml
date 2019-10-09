@@ -9,12 +9,12 @@
  * Adapted for lamb-bench by Tobias Pape
  *)
 
-type 'a element = E of 'a | F of 'a ;;
+type element = E | F ;;
 
 type 'a tree = Leaf of 'a | Node of 'a tree * 'a * 'a tree
 
-let e = E([false])
-and f = F([false])
+let e = E
+and f = F
 ;;
 
 let rec make d e =

@@ -1,10 +1,14 @@
 structure SMLReversen =
 struct
 
+
 datatype 'a Lst = Nil | Cons of 'a * 'a Lst;
 exception Empty;
 
-val e = 1;
+
+
+val e = 17;
+
 
 fun cons a b = Cons (a, b);
 fun head Nil = raise Empty

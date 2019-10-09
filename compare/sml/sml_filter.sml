@@ -1,14 +1,14 @@
 structure SMLFilter =
 struct
 
-datatype 'a element = E of 'a | F of 'a;
+datatype element = E | F;
 datatype 'a Lst = Nil | Cons of 'a * 'a Lst;
 exception Empty;
 
 datatype ('a, 'b) box = Box of 'a * 'b;
-val e = E([false]);
-val f = F([false]);
 
+val e = E;
+val f = F;
 
 fun cons a b = Cons (a, b);
 fun head Nil = raise Empty
@@ -46,7 +46,8 @@ fun make_list num =
 
 
 
-fun flt x = (x = e);
+fun flt E = true 
+  | flt F = false;
 
 fun len lst =
     let

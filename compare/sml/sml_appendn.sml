@@ -1,12 +1,14 @@
 structure SMLAppendn =
 struct
 
+
 datatype 'a Lst = Nil | Cons of 'a * 'a Lst;
 exception Empty;
 
 datatype ('a, 'b) box = Box of 'a * 'b;
 
-val e =17;
+val e = 17;
+
 
 fun cons a b = Cons (a, b);
 fun head Nil = raise Empty

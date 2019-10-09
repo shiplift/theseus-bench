@@ -20,7 +20,8 @@
 
 (struct node (left val right))
 (struct leaf (val))
-(define E 17)
+
+(define e 17)
 
 (define (make item d)
   (if (= d 0)
@@ -42,15 +43,15 @@
       (lambda (num)
         (letrec ((max-depth num)
                  (stretch-depth (+ max-depth 1))
-                 (_ (make E stretch-depth))
-                 (long-lived-tree (make E max-depth))
+                 (_ (make e stretch-depth))
+                 (long-lived-tree (make e max-depth))
                  (depth-loop (lambda (d)
                                (letrec ([iterations (expt 2 (- max-depth d))]
                                         [iter (lambda (i)
                                                 (when (<= i iterations)
                                                   (begin
-                                                    (make E d)
-                                                    (make E d)
+                                                    (make e d)
+                                                    (make e d)
                                                     (iter (+ 1 i)))))])
                                  (iter 1)
                                  (when (< d max-depth)

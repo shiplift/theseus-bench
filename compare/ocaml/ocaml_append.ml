@@ -1,4 +1,4 @@
-type 'a element = E of 'a;;
+type element = E;;
 
 type 'a lst = Nil | Cons of  'a * 'a lst ;;
 exception Empty;;
@@ -16,7 +16,7 @@ let tail = function
   | Cons(a, b) -> b
 ;;
 
-let e = E([false])
+let e = E
 ;;
 
 (* let rec ocaml_append a b = *)

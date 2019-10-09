@@ -1,4 +1,5 @@
 
+
 type 'a lst = Nil | Cons of  'a * 'a lst ;;
 exception Empty;;
 
@@ -14,7 +15,6 @@ let tail = function
     Nil -> raise Empty
   | (Cons(a, b)) -> b
 ;;
-
 
 let e = 17
 and f = 36

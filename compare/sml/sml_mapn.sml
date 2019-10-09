@@ -1,12 +1,14 @@
 structure SMLMapn =
 struct
 
+
 datatype 'a Lst = Nil | Cons of 'a * 'a Lst;
 exception Empty;
 
 datatype ('a, 'b) box = Box of 'a * 'b;
-val e =17;
-val f =36;
+
+val e = 17;
+val f = 36;
 
 fun cons a b = Cons (a, b);
 fun head Nil = raise Empty

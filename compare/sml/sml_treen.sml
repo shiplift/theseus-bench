@@ -11,10 +11,11 @@
 structure SMLTreen =
 struct
 
+
 datatype 'a tree = Leaf of 'a | Node of 'a tree * 'a * 'a tree
 
-val e =17;
-val f =36;
+val e = 17;
+val f = 36;
 
 
 fun make 0 e = Leaf (e)
@@ -68,6 +69,7 @@ fun treenum [] = 18
   | treenum (x::xs) = (min_depth - 1) + (Option.valOf (Int.fromString x) div 1000000);
 
 fun tst x = if (x = e) then f else e;
+
 
 fun main (prog_name, args) =
     let

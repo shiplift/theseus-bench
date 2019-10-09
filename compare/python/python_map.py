@@ -39,12 +39,14 @@ class Cons(object):
 
 null = Cons(None, None)
 
-class Element(object):
-    def __init__(self, v):
-        self.v = v
+class EElement(object):
+    pass
+class FElement(object):
+    pass
 
-E = Element([False])
-F = Element([False])
+E = EElement()
+F = FElement()
+
 
 
 def swap(x):

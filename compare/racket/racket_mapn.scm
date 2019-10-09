@@ -12,6 +12,9 @@
            (printf "0:RESULT-cpu:ms: ~a.0\n0:RESULT-total:ms: ~a.0\n0:RESULT-gc:ms: ~a.0\n"
                    cpu user gc)
            (apply values v)))])))
+
+
+
 (letrec
     ([e 17]
      [f 36]
@@ -22,7 +25,7 @@
                        '()
                        (cons (f (head l)) (racket-map f (tail l)))))]
      [swap (lambda (x)
-             (if (eq? x e) f e))]
+             (if (= x e) f e))]
      [listnum (lambda (l)
                 (let*
                     ([pairish (r:pair? l)]

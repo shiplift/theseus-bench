@@ -35,7 +35,7 @@ class Cons(object):
 
 null = Cons(None, None)
 
-E = 1
+E = 17
 
 def make_list(number, acc=null):
     while number >= 0:

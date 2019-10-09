@@ -1,13 +1,14 @@
 structure SMLMap =
 struct
 
-datatype 'a element = E of 'a | F of 'a;
+datatype element = E | F;
 datatype 'a Lst = Nil | Cons of 'a * 'a Lst;
 exception Empty;
 
 datatype ('a, 'b) box = Box of 'a * 'b;
-val e = E([false]);
-val f = F([false]);
+
+val e = E;
+val f = F;
 
 fun cons a b = Cons (a, b);
 fun head Nil = raise Empty
@@ -45,7 +46,8 @@ fun make_list num =
     end;
 
 
-fun swap x = if (x = e) then f else e;
+fun swap E = F
+  | swap F = E;
 
 fun len lst =
     let

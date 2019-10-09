@@ -35,12 +35,10 @@ class Cons(object):
 
 null = Cons(None, None)
 
-class Element(object):
-    def __init__(self, v):
-        self.v = v
+class EElement(object):
+    pass
 
-E = Element([False])
-F = Element([False])
+E = EElement()
 
 
 def make_list(number, acc=null):

@@ -1,4 +1,4 @@
-type 'a element = E of 'a | F of 'a ;;
+type element = E | F ;;
 
 type 'a lst = Nil | Cons of  'a * 'a lst ;;
 exception Empty;;
@@ -16,9 +16,8 @@ let tail = function
   | (Cons(a, b)) -> b
 ;;
 
-
-let e = E([false])
-and f = F([false])
+let e = E
+and f = F
 ;;
 
 let rec ocaml_filter p = function

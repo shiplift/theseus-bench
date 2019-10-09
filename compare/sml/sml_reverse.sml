@@ -1,11 +1,14 @@
 structure SMLReverse =
 struct
 
-datatype 'a element = E of 'a;
+datatype element = E;
 datatype 'a Lst = Nil | Cons of 'a * 'a Lst;
 exception Empty;
 
-val e = E([false]);
+
+
+val e = E;
+
 
 fun cons a b = Cons (a, b);
 fun head Nil = raise Empty

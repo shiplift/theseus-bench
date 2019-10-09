@@ -9,6 +9,8 @@
  * Adapted for lamb-bench by Tobias Pape
  *)
 
+
+
 type 'a tree = Leaf of 'a | Node of 'a tree * 'a * 'a tree
 
 let e = 17

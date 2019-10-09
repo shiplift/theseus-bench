@@ -12,6 +12,9 @@
            (printf "0:RESULT-cpu:ms: ~a.0\n0:RESULT-total:ms: ~a.0\n0:RESULT-gc:ms: ~a.0\n"
                    cpu user gc)
            (apply values v)))])))
+
+
+
 (letrec
     ([e 17]
      [f 36]
@@ -28,7 +31,7 @@
                                       (aux (- m 1) (cons (if (odd? m) e f) acc))))))
                     (aux n '())))]
      [flt (lambda (x)
-             (eq? x e))]
+             (= x e))]
      [listnum (lambda (l)
                 (let*
                     ([pairish (r:pair? l)]

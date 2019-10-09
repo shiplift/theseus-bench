@@ -44,7 +44,7 @@ F = 36
 
 
 def swap(x):
-    return F if x is E else E
+    return F if x == E else E
 
 def make_list(number, acc=null):
     while number >= 0:

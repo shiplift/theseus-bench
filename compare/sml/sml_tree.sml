@@ -11,11 +11,11 @@
 structure SMLTree =
 struct
 
-datatype 'a element = E of 'a | F of 'a;
+datatype element = E | F;
 datatype 'a tree = Leaf of 'a | Node of 'a tree * 'a * 'a tree
 
-val e = E([false]);
-val f = F([false]);
+val e = E;
+val f = F;
 
 
 fun make 0 e = Leaf (e)
@@ -68,8 +68,8 @@ fun sml_tree num =
 fun treenum [] = 18
   | treenum (x::xs) = (min_depth - 1) + (Option.valOf (Int.fromString x) div 1000000);
 
-fun tst (E _) = 1
-  | tst (F _) = 0;
+fun tst E = 1
+  | tst F = 0;
 
 fun main (prog_name, args) =
     let

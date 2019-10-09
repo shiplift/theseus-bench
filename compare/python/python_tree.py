@@ -39,12 +39,9 @@ class Node(object):
     def is_leaf(self):
         return False
 
-class Element(object):
-    def __init__(self, v):
-        self.v = v
-
-E = Element([False])
-F = Element([False])
+class EElement(object):
+    pass
+E = EElement()
 
 
 def make(item, d):

@@ -40,7 +40,6 @@ class Node(object):
         return False
 
 E = 17
-F = 36
 
 
 def make(item, d):
