@@ -14,6 +14,9 @@ input_name.default <- 'output/20190828-nanobenches-all.tsv'
 input_name.default <- 'output/20190829c-nanobenches-all.tsv'
 input_name.default <- 'output/20190902-nanobenches-all.tsv'
 
+input_name.default <- 'output/20191008-nanobenches-all.tsv'
+
+
 input_name.squeak <- 'output/20190902-squeakparadigmtest.tsv'
 "#
 
@@ -44,8 +47,12 @@ source("./help.R")
 print(paste0(">> ", input.basename))
 
 
-bench <- read_benchmark(input_name)
 
+bench <- read_benchmark(input_name)
+"
+bench <- read_benchmark(clipboard())
+convert_rebench(clipboard(),'output/converted_to.tsv')
+"
 bench.summary.s <- bench %>% benchmark_summarize
 benches.summary.s <- bench.summary.s %>% benchmark_nest
 
