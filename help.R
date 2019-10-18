@@ -344,6 +344,14 @@ convert_rebench <- function(in_name, out_name) {
   result %>% write_tsv(out_name,na='',col_names=FALSE,quote_escape=FALSE)
   invisible(result)
 }
+stratify_rebench <-  function(in_name, out_name) {
+  result <-
+    read_tsv(in_name, comment = "#", col_names=rebench.col_names, col_types=rebench.col_types) %>%     mutate(criterion=fct_relevel(criterion, 'cpu','gc','mem','total')) %>%
+    mutate(criterion=fct_relevel(criterion, 'cpu','gc','mem','total')) %>%
+    arrange(benchmark,vm,suite,invocation,criterion)
+  result %>% write_tsv(out_name,na='',col_names=FALSE,quote_escape=FALSE)
+  invisible(result)
+}
 
 .new.levels <- function(.f, levels) {
   new_levels <- c()
@@ -384,9 +392,11 @@ Spec.vms.default <- tribble(
   'LambUncachedMulti',       'Prototype',                         5,     1,
   'LambNoopt',               'Prototype (not optimized)',         9,     2,
   'PycketShapes',            'Pycket (optimized)',                1,     3,
+  'PycketShapesMulti',       'Pycket (optimized)',                1,     3,
   'PycketOrig',              'Pycket (original)',                10,     4,
   'Racket',                  'Racket',                           13,     8,
   'RSqueakShapes',           'RSqueak (optimized)',               0,     5,
+  'RSqueakShapesMulti',      'RSqueak (optimized)',               0,     5,
   'RSqueakOrig',             'RSqueak (original)',               12,     6,
   'RSqueakFunctionalShapes', 'RSqueak (optimized), functional',   4,    13,
   'RSqueakFunctionalOrig',   'RSqueak (original), functional',    8,    14,
@@ -402,7 +412,7 @@ Spec.vms.default <- tribble(
 report_vms <- function(spec_vms=Spec.vms.default,color_set=Set1Paired, file="",width=3.2,height=4.3) {
   .fnt <- base_family
   .szs <- 14
-  spec <- spec_vms %>%
+  spec <- spec_vms %>% distinct(name, .keep_all=TRUE) %>%
     mutate(Implementation=fct_relevel(factor(name),name)) %>%
     mutate(color=sapply(color, function (x) {color_set[x]})) %>%
     select(Implementation,pch,color)
@@ -670,6 +680,9 @@ overall.labeller <- function(var, value) {
   }
 }
 
+global_colwidth <- .78
+global_dodgewidth <- .82
+global_iconsize <- 1.5
 #-- SAVE PLOT ------------------
 
 save.plot <- function(basename,aspect,type='pdf',plot=ggplot2::last_plot(), ...) {

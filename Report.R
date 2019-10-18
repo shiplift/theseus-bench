@@ -6,7 +6,8 @@ figure.width <- 16/cm(1) # (28 picas +  (28*0.25) picas + (3*11) point)  in cm
 figure.height <- 11.5/cm(1) # 28 pica in cm ~ 11.85 -> 11.5
 
 
-input_name.default <- "output/current.tsv"
+input_name.default <- 'output/current.tsv'
+input_name.squeak <- 'output/squeakparadigmtest.tsv'
 "#
 input_name.default <- 'output/20190803-nanobenches-all.tsv'
 input_name.default <- 'output/20190807-nanobenches-all.tsv'
@@ -15,9 +16,10 @@ input_name.default <- 'output/20190829c-nanobenches-all.tsv'
 input_name.default <- 'output/20190902-nanobenches-all.tsv'
 
 input_name.default <- 'output/20191008-nanobenches-all.tsv'
-
-
 input_name.squeak <- 'output/20190902-squeakparadigmtest.tsv'
+
+input_name.default <- 'output/20191011-nanobenches-all.tsv'
+input_name.squeak <- 'output/20191011-squeakparadigmtest.tsv'
 "#
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -33,7 +35,7 @@ pkgs = c(
   "EnvStats",
   "tidyverse",
   "boot",
-  "Hmisc",
+  #"Hmisc",
   "tools",
   "cowplot",
   "ggpubr",
@@ -52,6 +54,7 @@ bench <- read_benchmark(input_name)
 "
 bench <- read_benchmark(clipboard())
 convert_rebench(clipboard(),'output/converted_to.tsv')
+stratify_rebench(clipboard(),'output/strat.tsv')
 "
 bench.summary.s <- bench %>% benchmark_summarize
 benches.summary.s <- bench.summary.s %>% benchmark_nest
@@ -69,9 +72,9 @@ bench.summary <- bench.summary.s %>% filter(vm %ni% c('SML/NJ', 'MLton', 'OCaml'
 benches.summary <- benches.summary.s %>% filter(TRUE)
 
 
-dodge <- position_dodge(width=.8)
+dodge <- position_dodge(width=global_dodgewidth)
 
-process_executiontime <- function(dat, basename='plot', partname=NULL, omitLegend=TRUE, ...) {
+process_executiontime <- function(dat, basename='plot', partname=NULL, omitLegend=TRUE, capping=NULL, ...) {
 
   dat %<>% filter(TRUE)
   "
@@ -90,9 +93,10 @@ process_executiontime <- function(dat, basename='plot', partname=NULL, omitLegen
     gather %>%
     filter(!is.na(value)) %>% pull
 
-  n.outliers <- rosnerTest(dat.maxima,k=min(10, floor(length(dat.maxima) * 0.1)),warn=FALSE)$n.outliers
-
-  CAPPING <- if (n.outliers <= 0) { Inf } else { sort(dat.maxima,decreasing=TRUE)[n.outliers + 1] }
+  CAPPING <- if (!is.null(capping)) capping else {
+    n.outliers <- rosnerTest(dat.maxima,k=min(10, floor(length(dat.maxima) * 0.1)),warn=FALSE)$n.outliers
+    CAPPING <- if (n.outliers <= 0) { Inf } else { sort(dat.maxima,decreasing=TRUE)[min(n.outliers+2,length(dat.maxima))]}
+  }
   .capped <- CAPPING < Inf
 
   if (dat.mean > 1000) {
@@ -102,7 +106,7 @@ process_executiontime <- function(dat, basename='plot', partname=NULL, omitLegen
     .scale = 1
     .ylab <- "Execution time (ms)"
   }
-  .y.icon.max <- 100
+  .y.icon.max <- 200
   .ylim <- if(.capped) { ceiling(CAPPING*.scale) } else { Inf }
   .y.max.steps <- if (.ylim > 15) {2500} else {1000}
 
@@ -116,7 +120,7 @@ process_executiontime <- function(dat, basename='plot', partname=NULL, omitLegen
   p <- ggplot(data = dat,
               aes(x=benchmark,y=cpu_mean*.scale,group=interaction(benchmark,vm),fill=vm,shape=vm)
   ) + default.theme.t(fakeLegend=omitLegend, omit_x_title=TRUE) +
-    geom_col(position=dodge, width=.75)+
+    geom_col(position=dodge, width=global_colwidth)+
     geom_errorbar(aes(ymin=(cpu_mean - cpu_err095) * .scale, ymax=(cpu_mean + cpu_err095) * .scale),  position=dodge, color=I("black"), size=.2, width=.6) +
     scale_y_continuous(
       trans=timing_trans(low=0,high=ymax,step=.y.max.steps*.scale,viewlimit=c(0,.ylim),scale=.scale),
@@ -124,10 +128,11 @@ process_executiontime <- function(dat, basename='plot', partname=NULL, omitLegen
       #   breaks=seq(0, ymax, .y.max.steps * .scale),
         limits=c(0,ymax),
         expand=c(0,0)) +
-    geom_col(position=dodge, width=.75, fill="white", alpha=0.25, aes(y=gc_mean*.scale))+
+    scale_x_discrete(labels = ggplot2:::parse_safe) +
+    geom_col(position=dodge, width=global_colwidth, fill="white", alpha=0.25, aes(y=gc_mean*.scale))+
     geom_errorbar(aes(ymin=(gc_mean - gc_err095) * .scale, ymax=(gc_mean + gc_err095) * .scale),  position=dodge, color="black", alpha=.5, size=.2, width=.6) +
 
-    geom_point(position=dodge,aes(y=max(.y.icon.max*.scale,min(cpu_mean*.scale))),size=2, color="grey90",stat="identity") +
+    geom_point(position=dodge,aes(y=max(.y.icon.max*.scale,min(cpu_mean*.scale))),size=global_iconsize, color="grey90",stat="identity") +
     scale_fill_manual(name = "Implementation",values=as.character(dat$color)) +
     scale_shape_manual(name = "Implementation",values=dat$shape) +
     coord_cartesian(ylim=(if (.capped) c(0,.ylim) else NULL))  +
@@ -161,13 +166,13 @@ process_memory <- function(dat, basename='plot', partname=NULL, omitLegend=TRUE,
 
   n.outliers <- rosnerTest(dat.maxima,k=min(10, floor(length(dat.maxima) * 0.1)),warn=FALSE)$n.outliers
   #CAPPING <- if (n.outliers <= 0) { Inf } else { geomean(sort(dat.maxima,decreasing=TRUE)[n.outliers:(n.outliers+1)]) }
-  .capped <- CAPPING < Inf
+  #.capped <- CAPPING < Inf
   if (n.outliers <= 0) {
     CAPPING <- Inf
     .capped <- FALSE
   } else {
     #geomean(sort(dat.maxima,decreasing=TRUE)[n.outliers:(n.outliers+1)])
-    CAPPING <- sort(dat.maxima,decreasing=TRUE)[min(n.outliers+1,length(dat.maxima))]
+    CAPPING <- sort(dat.maxima,decreasing=TRUE)[min(n.outliers+2,length(dat.maxima))]
     .capped <- TRUE
   }
 
@@ -206,12 +211,13 @@ process_memory <- function(dat, basename='plot', partname=NULL, omitLegend=TRUE,
   p <- ggplot(data = dat,
               aes(x=benchmark,y=mem_mean*.scale,group=interaction(benchmark,vm),fill=vm,shape=vm)
   ) + default.theme.t(fakeLegend=omitLegend, omit_x_title=TRUE) +
-    geom_col(position=dodge, width=.75)+
+    geom_col(position=dodge, width=global_colwidth)+
     scale_y_continuous(
       trans=mem_trans(low=0,high=ymax,step=.y.max.steps,viewlimit=c(0,.ylim),scale=.scale,viewscale=.viewscale),
       limits=c(0,ymax),
       expand=c(0,0)) +
-    geom_point(position=dodge,aes(y=.y.icon.max),size=2, color="grey90",stat="identity") +
+    scale_x_discrete(labels = ggplot2:::parse_safe) +
+    geom_point(position=dodge,aes(y=.y.icon.max),size=global_iconsize, color="grey90",stat="identity") +
     scale_fill_manual(name = "Implementation",values=as.character(dat$color)) +
     scale_shape_manual(name = "Implementation",values=dat$shape) +
     coord_cartesian(ylim=(if(.capped) c(0,.ylim) else NULL)) +
@@ -319,7 +325,7 @@ report_dflt_vms(file = paste0(input.basename.pure, '-legend.pdf'))
 report_squeak_vms(file = paste0(input.basename.pure, '-squeak-legend.pdf'))
 
 "base_family <- 'Helvetica'"
-process_executiontime(bench.summary, basename=input.basename)
+process_executiontime(bench.summary, basename=input.basename,capping=1.5e4)
 process_memory(bench.summary, basename=input.basename)
 
 pwalk(benches.summary, function(benchmark,data){
