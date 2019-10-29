@@ -171,7 +171,7 @@ bench2grid <- function(.data, criterion='cpu') {
 base_family='Helvetica'
 "
 
-.explore.raster <- function(.data, criterion, aspect, frac, barwidth, bartitle=waiver(), text=FALSE, breaks=waiver(), labels=waiver(), color_option='D') {
+.explore.raster <- function(.data, criterion, aspect, frac, barwidth, bartitle=waiver(), text=FALSE, breaks=waiver(), labels=waiver(), color_option='D',guides_right=TRUE) {
 
   topk <- .data %>% top_frac(-frac,!!sym(criterion)) %>% mutate(topk=TRUE)
   .data %<>% left_join(topk,by=colnames(.data))
@@ -193,23 +193,37 @@ base_family='Helvetica'
     geom_point(aes(color=topk), size=1.5, stroke=0,
                shape=16, na.rm=TRUE,show.legend=FALSE,position=.pos.point) +
     scale_color_manual(values=c(Set1Paired[1])) +
-    scale_fill_viridis_c(direction = -1,option=color_option,breaks=breaks,labels=labels,na.value='grey95') +
+    scale_fill_viridis_c(direction = -1,option=color_option,breaks=breaks,labels=labels,na.value='grey80') +
     scale_x_continuous(expand=c(0,0),breaks=.b,labels=.l,minor_breaks=NULL) +
     scale_y_continuous(expand=c(0,0),breaks=.b,labels=.l,minor_breaks=NULL)+
-    guides(fill = guide_colourbar(barwidth = unit(barwidth,'npc'), label.position = 'top',title = bartitle)) +
     ylab('') +
-    theme(legend.position = 'top') +
     coord_fixed()+
     facet_null()
+  if (guides_right) {
+    asp <- 1.15
+    p <- p +
+      theme(legend.position='right') +
+      guides(fill=guide_colourbar(barheight=unit(barwidth,'npc'), label.position='right', title=bartitle, reverse=!text))
+  } else {
+    asp <- 0.9
+    p <- p +
+      theme(legend.position='top') +
+      guides(fill=guide_colourbar(barwidth=unit(barwidth,'npc'), label.position='top', title=bartitle))
+  }
   if (text) {
     p <- p + geom_shadowtext(aes(label=Label),
-                             lineheight=1,size=1.8, nudge_y=-.1,
-                             na.rm = TRUE, color='grey95')
+                             # bg.colour='grey50',
+                             bg.r=0.1,
+                             lineheight=1,size=2, nudge_y=-.1,
+                             na.rm = TRUE,
+                             # color='grey95'
+                             color='white'
+                             )
   }
-  save.plot(basename=input.basename,aspect=aspect,plot=p,base_asp=0.9,base_height=5)
+  save.plot(basename=input.basename,aspect=aspect,plot=p,base_asp=asp,base_height=5)
 }
 
-explore.raster <- function(.data, criterion='Time', tick.unit='s',aspect=c('cpu','NONE')) {
+explore.raster <- function(.data, criterion='Time', tick.unit='s',aspect=c('cpu','NONE'), guides_right=TRUE) {
   b <- as.character(aspect[2]) %>% gsub('\\[(.+)\\]','-\\1', .)
   .aspect <- paste(aspect[1],b,sep='-')
   if (length(aspect) >= 3) {
@@ -219,20 +233,21 @@ explore.raster <- function(.data, criterion='Time', tick.unit='s',aspect=c('cpu'
   .data %>%
     .explore.raster(criterion, aspect=.aspect,
                     frac=.02,barwidth=0.8,text=TRUE,
-                    labels=function (x) paste(x, tick.unit))
+                    labels=function (x) paste(x, tick.unit),guides_right=guides_right)
 }
 
-explore.raster.merge <- function(.data, criterion='cpu', aspect=c('cpu','NONE'),option='C') {
+explore.raster.merge <- function(.data, criterion='cpu', aspect=c('cpu','NONE'),option='C', guides_right=TRUE,verbose=FALSE) {
   .aspect <- paste(aspect[1:2],collapse='-')
   if (length(aspect) >= 3) {
     .which <- as.character(aspect[3]) %>% gsub('\\ .+','',.) %>% tolower
     .aspect <- paste(.which, .aspect,sep='-')
   }
+  .lbl <- if(verbose) c('favorable', 'unfavorable') else c('+','-')
   .data %>%
     .explore.raster(criterion, aspect=.aspect,
                     frac=.02, barwidth=0.6, bartitle=NULL,
-                    breaks=identity, labels=c('favorable','unfavorable'),
-                    color_option=option)
+                    breaks=identity, labels=.lbl,
+                    color_option=option,guides_right=guides_right)
 }
 
 # ----- print all the things! -----
@@ -240,9 +255,17 @@ explore.raster.merge <- function(.data, criterion='cpu', aspect=c('cpu','NONE'),
 bench.dw %>%
   group_modify(~ bench2grid(.x, criterion='cpu')) %>%
   group_walk(function(.data, groups) {
+    .factor <-  if (.data %>% .$original_value %>% max(na.rm=TRUE) %>% log10 > 3.5) {
+      .001
+    } else { 1 }
+    .unit <- if (.factor<1) 's' else 'ms'
+    .r <- function(x) {if(.factor<1) {round(x*.factor,digits=case_when(
+      x*.factor>10 ~ 0,
+      x*.factor>5 ~ 1,
+      TRUE ~ 2))} else {round(x)}}
     .data %>%
-      mutate(Time=round(cpu),Label=round(original_value)) %>%  #ms
-      explore.raster('Time', 'ms', aspect=c('cpu', as.character(groups$benchmark[1]), as.character(groups$vm[1])))
+      mutate(Time=.r(cpu),Label=.r(original_value)) %>%  #ms
+      explore.raster('Time', .unit, aspect=c('cpu', as.character(groups$benchmark[1]), as.character(groups$vm[1])))
   }) %>% invisible
 
 
@@ -312,7 +335,7 @@ result <- bench.dw.nilladic %>%
   summarize(value=sum(value)) %>% ungroup %>% #filter(!is.na(value))
   mutate(value=scales::rescale(value)) %>%
   (function(.data) {
-    explore.raster.merge(.data, 'value', aspect=c('result'),option='B')
+    explore.raster.merge(.data, 'value', aspect=c('result'),option='B',guides_right=FALSE,verbose=TRUE)
     .data
   })
 

@@ -122,13 +122,13 @@ confInterval095Error <- function (samples) {
     qt(0.975, df=length(samples)-1) * sd(samples) / sqrt(length(samples))
 }
 
-div_mean_x_y = function(data, indices, extraid) {
+div_mean_x_y <- function(data, indices, extraid) {
     indexx = indices[extraid == "x"]
     indexy = indices[extraid == "y"]
     mean(data[indexx]) / mean(data[indexy])
 }
 
-normalize_value_bootstrap_confidence = function(x, y, R=1000) {
+normalize_value_bootstrap_confidence <- function(x, y, R=1000) {
     # x and y need to be *vectors* of all the values
     # the result is the confidence interval of mean(x) / mean(y)
     total <- c(x,y)
@@ -136,43 +136,8 @@ normalize_value_bootstrap_confidence = function(x, y, R=1000) {
 
     b <- boot(total, div_mean_x_y, strata=id, R=R, extraid=id)
     norm <- boot.ci(b, type=c("norm"))$normal
-    dimnames(norm) <- list(NULL,c("conf", "upper", "lower"))
+    dimnames(norm) <- list(NULL,c("conf", "lower", "upper"))
     norm
-}
-
-bootstrapTo <- function(df, supergroup, group, val, var) {
-  cmp <- df[(df[[group]] == val),]
-  doIt <- function(X) {
-    .X <- X[(!is.na(X[[var]])),]
-    if (1 > nrow(.X)) {
-      return(as.matrix(data.frame(conf=NA, upper=NA, lower=NA)))
-    }
-    ident <- (X[[supergroup]])[[1]]
-    subs <- cmp[(cmp[[supergroup]] == ident),]
-    comparee <- subs[[var]]
-#     print(X[[group]][[1]])
-#     print(ident)
-#     print(is.na(comparee))
-    if (length(comparee[!is.na(comparee)]) != length(comparee)) {
-      return(as.matrix(data.frame(conf=NA, upper=NA, lower=NA)))
-    }
-    normalize_value_bootstrap_confidence(.X[[var]], comparee)
-  }
-  ddply(df, c(supergroup,group), doIt)
-}
-
-normalizeTo <- function(df, supergroup, group, val, var, vars=c(var)) {
-  data <- df
-  sg <- droplevels(df[[supergroup]])
-  indexes <- which(df[[group]] == val)
-  norm.factor <- (df[[var]])[indexes]
-  names(norm.factor) <- droplevels(sg[indexes])
-  for (normvar in vars) {
-    divis <- norm.factor[ sg ]
-    res <- df[[normvar]]/divis
-    data[[paste0(normvar,".norm")]] <- res
-  }
-  data
 }
 
 geomean <- function(X, na.rm=FALSE) {
@@ -188,94 +153,6 @@ latexify <- function(df.sel, var){
   rownames(df.ltx) <- df.sel[[var]]
   colnames(df.ltx) <- sapply(colnames(df.ltx), function(x) {sedit(x, '_', ' ')})
   df.ltx
-}
-
-fill.missing <- function(bench, rigorous=FALSE) {
-  bench.corr = data.frame()
-  vars = if (is.factor(bench$variable_values)) { levels(bench$variable_values) } else { c(NA) }
-  for (var in vars) {
-    for (crit in levels(bench$criterion)) {
-      for (vm in levels(bench$vm)) {
-        for (benchmark in levels(bench$benchmark)) {
-          if (1 > nrow(bench[(
-            bench$variable_values == var &
-              bench$criterion == crit &
-              bench$vm == vm &
-              bench$benchmark == benchmark
-          ),,])) {
-            .x <- if (is.na(var)) {
-              data.frame(criterion=crit,vm=vm,benchmark=benchmark,value=NA)
-            } else {
-              data.frame(criterion=crit,vm=vm,benchmark=benchmark,value=NA,variable_values=var)
-            }
-            bench.corr <- rbind(bench.corr, .x)
-            if (rigorous) {
-              bench.corr <- rbind(bench.corr, .x)
-              bench.corr <- rbind(bench.corr, .x)
-              bench.corr <- rbind(bench.corr, .x)
-              bench.corr <- rbind(bench.corr, .x)
-              bench.corr <- rbind(bench.corr, .x)
-              bench.corr <- rbind(bench.corr, .x)
-              bench.corr <- rbind(bench.corr, .x)
-              bench.corr <- rbind(bench.corr, .x)
-              bench.corr <- rbind(bench.corr, .x)
-
-            }
-          }
-        }
-      }
-    }
-  }
- rbind(bench, bench.corr)
-}
-
-summarize.bench <- function(bench, rigorous, multi.variate, group.by, reference.vm) {
-  if (rigorous) {
-    bench.summary <- ddply(bench, group.by, plyr::summarize,
-                           overall=FALSE,
-                           mean=mean(value),
-                           median=median(value),
-                           stdev=sd(value),
-                           err095=confInterval095Error(value),
-                           cnfIntHigh = mean(value) + (confInterval095Error(value)),
-                           cnfIntLow = mean(value) - (confInterval095Error(value))
-    )
-    if (multi.variate) {
-      df <- data.frame()
-      for (var.val in levels(factor(bench.summary$variable_values))) {
-        .sum <- droplevels(bench.summary[bench.summary$variable_values == var.val,,drop=TRUE])
-        .tot <- droplevels(bench[bench$variable_values == var.val,,drop=TRUE])
-        .err <- bootstrapTo(.tot, 'benchmark', 'vm', reference.vm, 'value')
-        .norm <- normalizeTo(.sum, 'benchmark', 'vm', reference.vm, 'mean')
-        .merge <- merge(.norm, .err)
-        df <- rbind(df, .merge)
-      }
-      bench.summary <- df
-    } else {
-      bench.err <- bootstrapTo(bench, 'benchmark', 'vm', reference.vm, 'value')
-      bench.summary <- merge(
-        normalizeTo(bench.summary, 'benchmark', 'vm', reference.vm, 'mean'),
-        bench.err
-      )
-    }
-  } else {
-    bench.summary <- ddply(bench, group.by, plyr::summarize,
-                           overall=FALSE,
-                           mean=mean(value),
-                           median=median(value)
-    )
-    if (multi.variate) {
-      df <- data.frame()
-      for (var.val in levels(factor(bench.summary$variable_values))) {
-        b <- droplevels(bench.summary[bench.summary$variable_values == var.val,,drop=TRUE])
-        df <- rbind(df, normalizeTo(b, 'benchmark', 'vm', reference.vm, 'mean'))
-      }
-      bench.summary <- df
-    } else {
-      bench.summary <- normalizeTo(bench.summary, 'benchmark', 'vm', reference.vm, 'mean')
-    }
-  }
-  bench.summary
 }
 
 makeCappingInfo <- function(tbl, cols, capping=CAPPING, scale=1, viewscale=scale) {
@@ -306,7 +183,8 @@ makeCappingInfo <- function(tbl, cols, capping=CAPPING, scale=1, viewscale=scale
 
 .make_Set1Paired <- function() {
   .Set1 <- c(RColorBrewer::brewer.pal(8, "Set1"), '#999999')
-  .paired <- c(unlist(mapply(c,lighten(.Set1,0.33),.Set1)))
+  # .paired <- c(unlist(mapply(c,lighten(.Set1,0.33),.Set1)))
+  .paired <- c(unlist(mapply(c,lighten(.Set1,0.25),.Set1)))
   #names(.paired) <- as.character(seq(1,18))
   .paired
 }
@@ -315,7 +193,7 @@ Set1Paired_pal <- function(num) { Set1Paired[seq(1,num)] }
 
 .make_Set1Triad <- function() {
   .Set1 <- c(RColorBrewer::brewer.pal(8, "Set1"), '#999999')
-  .triad <- c(unlist(mapply(c,lighten(.Set1,0.33),.Set1,darken(.Set1,.33))))
+  .triad <- c(unlist(mapply(c,lighten(.Set1,0.25),.Set1,darken(.Set1,.15))))
   #names(.paired) <- as.character(seq(1,18))
   .triad
 }
@@ -353,22 +231,6 @@ stratify_rebench <-  function(in_name, out_name) {
   invisible(result)
 }
 
-.new.levels <- function(.f, levels) {
-  new_levels <- c()
-  old_levels <- as.vector(.f)
-  for (level in levels) {
-    if (level %in% old_levels) {
-      new_levels <- c(new_levels, level)
-    }
-  }
-  missing <- levels[levels %ni% new_levels]
-  new_levels <- c(new_levels, missing)
-  new_levels
-}
-new_levels <- function(levels) {
-  function(.f) { .new.levels(.f, levels) }
-}
-
 #== Bench specs ============================
 
 Spec.benchmarks.default <- tribble(
@@ -382,34 +244,62 @@ Spec.benchmarks.default <- tribble(
   "filter",   "filter[E]",
   "filtern",  "filter[n]",
   "tree",     "tree[E]",
-  "treen",    "tree[n]"
+  "treen",    "tree[n]",
+  "geomean",  "geometic\nmean" #that one is artificial but ok.
 )
 
 Spec.vms.default <- tribble(
- ~level,                    ~name,                               ~pch,  ~color,
-  'Lamb',                    'Prototype',                         5,     1,
-  'LambUncached',            'Prototype',                         5,     1,
-  'LambUncachedMulti',       'Prototype',                         5,     1,
-  'LambNoopt',               'Prototype (not optimized)',         9,     2,
-  'PycketShapes',            'Pycket (optimized)',                1,     3,
-  'PycketShapesMulti',       'Pycket (optimized)',                1,     3,
-  'PycketOrig',              'Pycket (original)',                10,     4,
-  'Racket',                  'Racket',                           13,     8,
-  'RSqueakShapes',           'RSqueak (optimized)',               0,     5,
-  'RSqueakShapesMulti',      'RSqueak (optimized)',               0,     5,
-  'RSqueakOrig',             'RSqueak (original)',               12,     6,
-  'RSqueakFunctionalShapes', 'RSqueak (optimized), functional',   4,    13,
-  'RSqueakFunctionalOrig',   'RSqueak (original), functional',    8,    14,
-  'Squeak',                  'Squeak',                            7,     9,
-  'SqueakFunctional',        'Squeak, functional',                3,    10,
-  'Pypy',                    'PyPy',                             15,    11,
-  'Python',                  'Python',                           18,    12,
-  'MLton',                   'MLton',                             2,     7,
-  'OCaml',                   'OCaml',                             6,    15,
-  'SMLNJ',                   'SML/NJ',                           11,    16
+  ~level,                    ~group,       ~name,                               ~pch,  ~color,
+  'Lamb',                    'Prototype',  'Prototype',                         5,     1,
+  'LambUncached',            'Prototype',  'Prototype',                         5,     1,
+  'LambUncachedMulti',       'Prototype',  'Prototype',                         5,     1,
+  'LambNoopt',               'Prototype',  'Prototype (not optimized)',         9,     2,
+  'PycketShapes',            'Pycket',     'Pycket (optimized)',                1,     3,
+  'PycketShapesMulti',       'Pycket',     'Pycket (optimized)',                1,     3,
+  'PycketOrig',              'Pycket',     'Pycket (original)',                10,     4,
+  'Racket',                  'Pycket',     'Racket',                           13,     8,#8->
+  'RSqueakShapes',           'RSqueak',    'RSqueak (optimized)',               0,     5,
+  'RSqueakShapesMulti',      'RSqueak',    'RSqueak (optimized)',               0,     5,
+  'RSqueakOrig',             'RSqueak',    'RSqueak (original)',               12,     6,
+# 'RSqueakFunctionalShapes', 'RSqueak',    'RSqueak (optimized), functional',   4,    13,
+# 'RSqueakFunctionalOrig',   'RSqueak',    'RSqueak (original), functional',    8,    14,
+  'Squeak',                  'RSqueak',    'Squeak',                            7,     7,#9->
+# 'SqueakFunctional',        'RSqueak',    'Squeak, functional',                3,    10,
+  'Pypy',                    'Other',      'PyPy',                             15,     9,#11->9
+  'Python',                  'Other',      'Python',                           18,    10,#12->10
+  'MLton',                   'Other',      'MLton',                             2,    13,#7->
+  'OCaml',                   'Other',      'OCaml',                             6,    11,#15->
+  'SMLNJ',                   'Other',      'SML/NJ',                           11,    12,#16->
 )
 
-report_vms <- function(spec_vms=Spec.vms.default,color_set=Set1Paired, file="",width=3.2,height=4.3) {
+iconize_vms <- function(spec_vms=Spec.vms.default,color_set=Set1Paired, file="") {
+  iconize <- function(vmnum, row){
+    p <- ggplot(row,aes(x=Implementation,y=Implementation,fill=Implementation,shape=Implementation))+
+      theme_void()+
+      theme(plot.title=element_blank(),text=element_blank()
+            ,plot.margin = unit(c(-1, -1,-1, -1), "pt")
+            )+
+      geom_tile(na.rm=TRUE)+
+      geom_point(size=2, color="grey90")+
+      labs(NULL) +
+      coord_fixed()+
+      scale_shape_manual(values=row$pch,guide=FALSE) +
+      scale_fill_manual(values=row$color,guide=FALSE) +
+      facet_null()
+    ggsave(filename=paste0(file,'-',vmnum,'.pdf'), width=10/72,height=10/72, plot=p, useDingbats=FALSE)
+    embed_fonts(file=paste0(file,'-',vmnum,'.pdf'), options=pdf.embed.options)
+    invisible(p)
+  }
+  spec <- spec_vms %>% distinct(name, .keep_all=TRUE) %>%
+    mutate(Implementation=fct_relevel(factor(name),name)) %>%
+    mutate(color=sapply(color, function (x) {color_set[x]})) %>%
+    select(Implementation,pch,color)
+  for (i in seq_len(nrow(spec))) {
+    iconize(i,spec[i,,drop=FALSE])
+  }
+}
+report_vms <- function(spec_vms=Spec.vms.default,color_set=Set1Paired, file="",width=2.6,height=3.4) {
+
   .fnt <- base_family
   .szs <- 14
   spec <- spec_vms %>% distinct(name, .keep_all=TRUE) %>%
@@ -462,12 +352,13 @@ report_vms <- function(spec_vms=Spec.vms.default,color_set=Set1Paired, file="",w
   legend <- cowplot::get_legend(plot)
   ggsave(filename=file, width=width,height=height, plot=legend, useDingbats=FALSE)
   embed_fonts(file=file, options=pdf.embed.options)
+
   invisible(plot)
 }
-report_squeak_vms <- function(spec_vms=Spec.vms.default,color_set=Set1Paired, file="",width=3.2,height=1.8) {
-  spec <- spec_vms %>% filter(str_detect(name, 'Squeak'))
-  report_vms(spec_vms=spec,file=file,width=width,height=height)
-}
+# report_squeak_vms <- function(spec_vms=Spec.vms.default,color_set=Set1Paired, file="",width=3.2,height=1.8) {
+#   spec <- spec_vms %>% filter(str_detect(name, 'Squeak'))
+#   report_vms(spec_vms=spec,file=file,width=width,height=height)
+# }
 
 report_dflt_vms <- function(spec_vms=Spec.vms.default,color_set=Set1Paired, file="",width=2.7,height=1.8) {
   v <- c(
@@ -483,23 +374,35 @@ report_dflt_vms <- function(spec_vms=Spec.vms.default,color_set=Set1Paired, file
 }
 
 # Data transformer ====================================================
-factorize <- function(.data,
-                    spec_benchmarks=Spec.benchmarks.default,
-                    spec_vms=Spec.vms.default,
-                    color_set=Set1Paired,
-                    .add_visuals=TRUE
-                    ) {
-  spec_vms %<>% mutate(color=sapply(color, function (x) {color_set[x]}))
 
-  spec_benchmarks %<>% filter(level %in% !!.data$benchmark)
-  spec_vms %<>% filter(level %in% !!.data$vm)
+factorize_bench <- function(.data, spec_benchmarks=Spec.benchmarks.default) {
+  #spec_benchmarks %<>% filter(level %in% !!.data$benchmark)
+  .data %>%
+    mutate(niladic=if_else(benchmark == 'geomean', NA, !endsWith(as.character(benchmark),'n'))) %>%
+    mutate(benchmark = lvls_expand(benchmark, !!spec_benchmarks$level)) %>%
+    mutate(benchmark = fct_relevel(benchmark, !!!spec_benchmarks$level)) %>%
+    mutate(benchmark = fct_recode(benchmark, !!!(deframe(spec_benchmarks%>%select(name,level)))))
+}
+factorize_vm <- function(.data, spec_vms=Spec.vms.default) {
+  .data %>%
+    mutate(vm = lvls_expand(vm, !!spec_vms$level)) %>%
+    mutate(vm = fct_relevel(vm, !!!spec_vms$level)) %>%
+    mutate(vm = fct_recode(vm, !!!(deframe(spec_vms%>%select(name,level))))) %>%
+    mutate(vm_group = recode(vm, !!!(deframe(spec_vms%>%select(name,group)))))
+}
+
+factorize <- function(.data,
+                      spec_benchmarks=Spec.benchmarks.default,
+                      spec_vms=Spec.vms.default,
+                      color_set=Set1Paired,
+                      .add_visuals=TRUE
+) {
+  spec_vms %<>% mutate(color=sapply(color, function (x) {color_set[x]}))
+  #spec_vms %<>% filter(level %in% !!.data$vm)
 
   result <- .data %>%
-    mutate(niladic=!endsWith(as.character(benchmark),'n')) %>%
-    mutate(benchmark = fct_relevel(benchmark, !!!spec_benchmarks$level)) %>%
-    mutate(benchmark = fct_recode(benchmark, !!!(deframe(spec_benchmarks%>%select(name,level))))) %>%
-    mutate(vm = fct_relevel(vm, !!!spec_vms$level)) %>%
-    mutate(vm = fct_recode(vm, !!!(deframe(spec_vms%>%select(name,level)))))
+    factorize_vm(spec_vms=spec_vms) %>%
+    factorize_bench(spec_benchmarks=spec_benchmarks)
 
   result <- if (!.add_visuals) result else {
     result %>%
@@ -535,13 +438,13 @@ read_benchmark <- function(filename, cols_to_keep=c('vm','benchmark','criterion'
 }
 
 benchmark_summarize <- function(.data) {
-  .data %>% group_by(benchmark, vm, color, shape) %>%
+  .data %>% group_by_at(vars(benchmark, starts_with("vm"), color, shape)) %>%
     summarize_at(vars(cpu,total,gc,mem), list(
-      ~mean(.),~median(.),stdev=sd,
+      ~mean(.),~median(.),stdev=sd,full=list,
       err095=confInterval095Error,
       max=~max(mean(.)+confInterval095Error(.),median(.)+confInterval095Error(.),
                mean(.)+sd(.),median(.)+sd(.)))) %>%
-    select(benchmark, vm, starts_with("total"), starts_with("cpu"), starts_with("gc"), starts_with("mem"),
+    select(benchmark, starts_with("vm"), starts_with("total"), starts_with("cpu"), starts_with("gc"), starts_with("mem"),
             matches('color'), matches('shape'))
 }
 
@@ -557,6 +460,70 @@ benchmark_nest <- function(.data) {
     mutate(data=map(data, function (x) { x%>% group_by(!!!.grouping)}))
 }
 
+
+.paste_name <- function(...) { as.name(paste0(...))}
+.un_full <- function(.df, crit) {
+  .c <- as.name(paste0(crit, '_full'))
+  .df %>% getElement(.c) %>% unlist
+}
+
+
+normalize_group <- function(.data,criteria=c('cpu','total','mem')) {
+
+  .source <- .data %>% ungroup %>% filter(TRUE)
+
+  cmp_vm <- tail(.source$vm,n=1)
+  cmp <- .source %>% filter(vm==cmp_vm)  %>% as.list
+
+  rest <- .source %>% filter(vm!=cmp_vm)
+  result <- rest %>% filter(TRUE)
+
+  for (criterion in lapply(criteria, as.name)) {
+    .c <- .paste_name(criterion, '_mean')
+    crit_norm <- rest %>% group_by(vm) %>% group_modify(function(.d, .g) {
+      .boot <- .d %>%
+        .un_full(criterion) %>%
+        normalize_value_bootstrap_confidence(cmp %>% .un_full(criterion)) %>%
+        as_tibble
+      .d %>% transmute(
+        !!(.paste_name(criterion, '_norm_mean')) := !!.c / (!!(cmp[[.c]])),
+        !!(.paste_name(criterion, '_norm_lower')) := getElement(.boot, 'lower'),
+        !!(.paste_name(criterion, '_norm_upper')) := getElement(.boot, 'upper'))})
+    rest %<>% left_join(crit_norm, by='vm')
+  }
+  rest
+}
+
+add_gc_rate <- function(.data) {
+  .data %>%  ungroup %>% group_by(benchmark, vm) %>%
+    group_modify(function(.d, .g) {
+      .boot <- .d %>%
+        .un_full('gc') %>%
+        normalize_value_bootstrap_confidence(.d %>% .un_full('cpu')) %>%
+        as_tibble
+      .d %>% mutate(
+        gc_rate_mean=gc_mean / cpu_mean,
+        gc_rate_lower=getElement(.boot, 'lower'),
+        gc_rate_upper=getElement(.boot, 'upper'))})
+}
+
+normalize_benches <- function(.data) {
+  # a tad expensive
+  .data.norm <- .data %>%
+    group_by(benchmark,vm_group) %>%
+    group_modify(~normalize_group(.x,criteria=c('cpu','total','mem'))) %>%
+    mutate(overall=FALSE)
+
+  .data.norm.all <- .data.norm %>%
+    group_by(color,shape,vm_group) %>%
+    summarize_at(vars(ends_with('_norm_mean')), list(geomean)) %>%
+    mutate(overall=TRUE, benchmark='geomean') %>%
+    factorize_bench
+
+  .data.norm %<>% bind_rows(.data.norm.all) %>%
+    select(benchmark,vm_group,matches('_norm_'),color,shape,overall)
+  .data.norm
+}
 
 #- Plot themes and visuals  ----------------------------------------------
 
@@ -592,13 +559,16 @@ default.theme.t  <- function(fakeLegend=FALSE, base_family=NULL, omit_x_title=FA
       axis.text.x  = element_text(size=8),
       axis.title.y = element_text(face="bold", size=8),
       axis.text.y  = element_text(size=8), #angle=45, hjust=0.2, vjust=0.5,
-      plot.margin = unit(c(1,-0.1,0,0),"mm"),
+      plot.margin = unit(c(1,0,0,0),"mm"),
       legend.text = element_text(size=7),
       legend.title = element_text(size=7, face="bold"),
       legend.background = element_rect(fill="gray90", size=0),
       legend.spacing = unit(-.5, "cm"),
       legend.key=element_rect(fill="white"),
-      legend.key.size=unit(3,"mm"))
+      legend.key.size=unit(3,"mm"),
+      strip.background = element_blank(),# facet
+      strip.text.x = element_blank()#facet
+      )
   if (!fakeLegend) {t <- t + theme(legend.position=c(0.75, .65))}
   t + theme(...)
 }
@@ -678,6 +648,10 @@ overall.labeller <- function(var, value) {
   } else {
     label_value(var, value)
   }
+}
+
+parse_label <- function(x) {
+  ifelse(grepl('\n',x), x, ggplot2:::parse_safe(x))
 }
 
 global_colwidth <- .78
