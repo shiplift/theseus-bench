@@ -3,6 +3,7 @@
 # figure.width <- 3.5
 # figure.height <- 2
 # figure.width <- 16/cm(1) # (28 picas +  (28*0.25) picas + (3*11) point)  in cm
+# figure.width <- 14.5/cm(1) # ((27 * 1.2) picas + (2*11) point)  in cm
 # figure.height <- 11.5/cm(1) # 28 pica in cm ~ 11.85 -> 11.5
 
 
