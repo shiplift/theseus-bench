@@ -293,83 +293,6 @@ plot_gc <- function(dat, basename='plot', partname=NULL, omitLegend=TRUE, ...) {
 }
 
 
-"
-
-ltx <- function(t,ref,name, X) {
-  len <- ncol(t)/2
-  .just = rep(c('r',paste0('@{}>{\\smaller\\ensuremath{\\pm}}r@{\\,\\si{', X , '}}')), len)
-  .just = c('@{}r', .just[2:length(.just)])
-  out <- latex(t
-              ,file=name
-              ,rowlabel='Benchmark'
-              ,rowlabel.just='@{}l'
-              ,booktabs=TRUE
-              ,table.env=FALSE, center='none'
-              ,size='scriptsize'
-               ,colheads=rep(c('mean','error'), len)
-              ,col.just=.just
-              ,cgroup=levels(as.factor(ref$vm))
-              ,cdec=rep(0, len*2))
-  }
-
-
-cpu.ref <-data.frame(benchmark=bench.summary$benchmark,
-                            vm=droplevels(bench.summary$vm),
-                            mean=bench.summary$mean,
-                            error=bench.summary$err095)
-.c <- dcast(melt(cpu.ref,
-                 id.vars = c('benchmark', 'vm')),
-            benchmark ~ vm + variable)
-cpu <- .c[2:length(.c)]
-colnames(cpu) <-  sapply(colnames(cpu), function (x) {sedit(x, '_', ' ')})
-rownames(cpu) <- .c$benchmark
-
-ltx(cpu,cpu.ref,paste0(input.basename, '-cpu-numbers.tex'), '\\milli\\second')
-
-mem.ref <-data.frame(benchmark=bench.summary.mem$benchmark,
-                            vm=droplevels(bench.summary.mem$vm),
-                            mean=bench.summary.mem$mean,
-                            error=bench.summary.mem$err095)
-.m <- dcast(melt(mem.ref,
-                 id.vars = c('benchmark', 'vm')),
-            benchmark ~ vm + variable)
-mem <- .m[2:length(.m)]
-colnames(mem) <-  sapply(colnames(mem), function (x) {sedit(x, '_', ' ')})
-rownames(mem) <- .m$benchmark
-
-ltx(mem,mem.ref,paste0(input.basename, '-mem-numbers.tex'), '\\kilo\\byte')
-
-
-  #'@{\\,\\si{\\mega\\byte}}>{\\smaller\\ensuremath{\\pm}}r@{\\,\\si{\\kilo\\byte}}'
-#   f <- (function() {
-#     c <- bench.summary[bench.summary$vm != 'SML/NJ' & bench.summary$vm != 'LambUncached',]
-#     m <- bench.summary.mem[bench.summary.mem$vm != 'SML/NJ' & bench.summary.mem$vm != 'LambUncached',]
-#     m$mean = m$mean / 1024
-#     data.frame(benchmark=c$benchmark, vm=droplevels(c$vm), time_mean=c$mean, time_error=c$err095,memory_mean=m$mean, memory_error=m$err095) })()
-#
-#   g <- dcast(melt(f, id.vars=c('benchmark','vm')), benchmark ~ vm + variable)
-#   d <- g[2:length(g)]
-#   rownames(d) <- g$benchmark
-#   colnames(d) <- sapply(colnames(d), function(x) {sedit(x, '_', ' ')})
-#
-#
-#   (function() {
-#     len <- length(d)/2
-#     out <- latex(d
-#                 ,file=paste0(input.basename, '-numbers.tex')
-#                 ,rowlabel='Benchmark'
-#                 ,rowlabel.just='@{}l'
-#                 ,booktabs=TRUE
-#                 ,table.env=FALSE, center='none'
-#                 #,size='footnotesize'
-#                 ,size='scriptsize'
-#                 ,colheads=rep(c('time', '', 'memory', ''), len/2)
-#                 ,col.just=rep(c('@{}r','@{}>{\\smaller\\ensuremath{\\pm}}r','@{\\,\\si{\\milli\\second}}r','@{\\,\\si{\\mega\\byte}}>{\\smaller\\ensuremath{\\pm}}r@{\\,\\si{\\kilo\\byte}}'), len/2)
-#                 ,cgroup=levels(f$vm)
-#                 ,cdec=rep(0, len*2)
-#     )})()
-
-"
 
 "make"
 
@@ -409,7 +332,84 @@ process_executiontime(bench.sq.summary, basename=input.basename)
 process_memory(bench.sq.summary, basename=input.basename)
 }
 "
+vm_name_to_ltx <- function(what) case_when(
+  what == 'Prototype'                 ~ 'PrototypeO',
+  what == 'Prototype (not optimized)' ~ 'PrototypeU',
+  what == 'Pycket (optimized)'        ~ 'PycketO',
+  what == 'Pycket (original)'         ~ 'PycketU',
+  what == 'RSqueak (optimized)'       ~ 'RSqueakO',
+  what == 'RSqueak (original)'        ~ 'RSqueakU',
+  what == 'SML/NJ'                    ~ 'SMLNJ',
+  TRUE ~ what)
+vm_to_ltx <- function(what) what %>% as.character %>% vm_name_to_ltx %>% paste0('\\DB{',.,'}')
 
+to_ltx <- function(.data, ..., callback=NULL) {
+  argnames <- unlist(lapply(lapply(substitute(list(...))[-1], deparse), as.character))
+  ltxb <- .data %>% ungroup %>% select(benchmark) %>% pull %>% unique %>% as.character
+  r <- .data %>%
+    ungroup %>%
+    mutate(vm=vm_to_ltx(vm)) %>%
+    select(benchmark, vm, ...) %>%
+    pivot_wider(names_from=benchmark,values_from=c(argnames)) %>%
+    select_at(vars(vm, unlist(sapply(ltxb, ends_with))))
+
+  crit <- gsub('_.+','', argnames[1])
+  namepart <- if (...length() > 2) { 'norm' } else { 'all' }
+
+  r %>% write_delim(paste0(paste0(c(input.basename.parts,namepart,crit),collapse='-'),'.dat'),
+                    delim='&',na='{---}',col_names=TRUE,quote_escape=FALSE)
+  invisible(r)
+}
+
+bench.summary.s %>% to_ltx(cpu_mean, cpu_err095)
+bench.summary.s %>% mutate(mem_mean=mem_mean/1024,mem_err095=mem_err095/1024) %>% to_ltx(mem_mean, mem_err095)
+bench.summary.s %>% to_ltx(gc_mean, gc_err095)
+
+
+bench.summary.gc %>% (function(.data) {
+  ltxvm <- .data %>% ungroup %>% select(vm) %>% pull %>% unique %>% vm_to_ltx
+  .data %>%
+    ungroup %>%
+    mutate(vm=vm_to_ltx(vm)) %>%
+    select(benchmark, vm, gc_rate_mean, gc_rate_lower, gc_rate_upper) %>%
+    mutate(gc_rate_down=gc_rate_mean-gc_rate_lower,gc_rate_up=gc_rate_upper-gc_rate_mean) %>%
+    select(-gc_rate_lower,-gc_rate_upper) %>%
+    pivot_wider(names_from=vm,values_from=c(gc_rate_mean, gc_rate_down, gc_rate_up)) %>%
+    select_at(vars(benchmark, unlist(sapply(ltxvm, ends_with)))) %>%
+    mutate(benchmark=gsub('\\[(.)\\]','\\\\textsubscript{\\1}',benchmark)) %>%
+    write_delim(paste0(input.basename.parts, '-norm-gc.dat'),
+                delim='&',na='{---}',col_names=TRUE,quote_escape=FALSE)
+})
+
+bench.summary.norm %>% (function(.data) {
+  ltxvm <- .data %>% ungroup %>% select(vm_group) %>% pull %>% unique %>% vm_to_ltx
+  .data %>%
+    ungroup %>%
+    mutate(vm=vm_to_ltx(vm_group)) %>%
+    select(benchmark, vm, cpu_norm_mean, cpu_norm_lower, cpu_norm_upper) %>%
+    mutate(cpu_norm_down=cpu_norm_mean-cpu_norm_lower,cpu_norm_up=cpu_norm_upper-cpu_norm_mean) %>%
+    select(-cpu_norm_lower,-cpu_norm_upper) %>%
+    pivot_wider(names_from=vm,values_from=c(cpu_norm_mean, cpu_norm_down, cpu_norm_up)) %>%
+    select_at(vars(benchmark, unlist(sapply(ltxvm, ends_with)))) %>%
+    mutate(benchmark=gsub('\\[(.)\\]','\\\\textsubscript{\\1}',benchmark)) %>%
+    write_delim(paste0(input.basename.parts, '-norm-cpu.dat'),
+                delim='&',na='{---}',col_names=TRUE,quote_escape=FALSE)
+})
+
+bench.summary.norm %>% (function(.data) {
+  ltxvm <- .data %>% ungroup %>% select(vm_group) %>% pull %>% unique %>% vm_to_ltx
+  .data %>%
+    ungroup %>%
+    mutate(vm=vm_to_ltx(vm_group)) %>%
+    select(benchmark, vm, mem_norm_mean, mem_norm_lower, mem_norm_upper) %>%
+    mutate(mem_norm_down=mem_norm_mean-mem_norm_lower,mem_norm_up=mem_norm_upper-mem_norm_mean) %>%
+    select(-mem_norm_lower,-mem_norm_upper) %>%
+    pivot_wider(names_from=vm,values_from=c(mem_norm_mean, mem_norm_down, mem_norm_up)) %>%
+    select_at(vars(benchmark, unlist(sapply(ltxvm, ends_with)))) %>%
+    mutate(benchmark=gsub('\\[(.)\\]','\\\\textsubscript{\\1}',benchmark)) %>%
+    write_delim(paste0(input.basename.parts, '-norm-mem.dat'),
+                delim='&',na='{---}',col_names=TRUE,quote_escape=FALSE)
+})
 
 print(">> done")
 #

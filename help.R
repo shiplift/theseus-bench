@@ -234,18 +234,18 @@ stratify_rebench <-  function(in_name, out_name) {
 #== Bench specs ============================
 
 Spec.benchmarks.default <- tribble(
-  ~level,     ~name,
-  "reverse",  "reverse[E]",
-  "reversen", "reverse[n]",
-  "append",   "append[E]",
-  "appendn",  "append[n]",
-  "map",      "map[E]",
-  "mapn",     "map[n]",
-  "filter",   "filter[E]",
-  "filtern",  "filter[n]",
-  "tree",     "tree[E]",
-  "treen",    "tree[n]",
-  "geomean",  "geometic\nmean" #that one is artificial but ok.
+  ~level,     ~group,     ~name,
+  'reverse',  'reverse',  'reverse[E]',
+  'reversen', 'reverse',  'reverse[n]',
+  'append',   'append',   'append[E]',
+  'appendn',  'append',   'append[n]',
+  'map',      'map',      'map[E]',
+  'mapn',     'map',      'map[n]',
+  'filter',   'filter',   'filter[E]',
+  'filtern',  'filter',   'filter[n]',
+  'tree',     'tree',     'tree[E]',
+  'treen',    'tree',     'tree[n]',
+  'geomean',  'geomean',  'geometic\nmean' #that one is artificial but ok.
 )
 
 Spec.vms.default <- tribble(
@@ -381,6 +381,7 @@ factorize_bench <- function(.data, spec_benchmarks=Spec.benchmarks.default) {
     mutate(niladic=if_else(benchmark == 'geomean', NA, !endsWith(as.character(benchmark),'n'))) %>%
     mutate(benchmark = lvls_expand(benchmark, !!spec_benchmarks$level)) %>%
     mutate(benchmark = fct_relevel(benchmark, !!!spec_benchmarks$level)) %>%
+    mutate(benchmark_group = fct_recode(benchmark, !!!(deframe(spec_benchmarks%>%select(group,level))))) %>%
     mutate(benchmark = fct_recode(benchmark, !!!(deframe(spec_benchmarks%>%select(name,level)))))
 }
 factorize_vm <- function(.data, spec_vms=Spec.vms.default) {
@@ -438,14 +439,15 @@ read_benchmark <- function(filename, cols_to_keep=c('vm','benchmark','criterion'
 }
 
 benchmark_summarize <- function(.data) {
-  .data %>% group_by_at(vars(benchmark, starts_with("vm"), color, shape)) %>%
+  .data %>% group_by_at(vars(benchmark, benchmark_group, niladic, starts_with("vm"), color, shape)) %>%
     summarize_at(vars(cpu,total,gc,mem), list(
       ~mean(.),~median(.),stdev=sd,full=list,
       err095=confInterval095Error,
       max=~max(mean(.)+confInterval095Error(.),median(.)+confInterval095Error(.),
                mean(.)+sd(.),median(.)+sd(.)))) %>%
-    select(benchmark, starts_with("vm"), starts_with("total"), starts_with("cpu"), starts_with("gc"), starts_with("mem"),
-            matches('color'), matches('shape'))
+    select(benchmark, benchmark_group, niladic,
+           starts_with("vm"), starts_with("total"), starts_with("cpu"), starts_with("gc"), starts_with("mem"),
+           matches('color'), matches('shape'))
 }
 
 
