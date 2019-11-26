@@ -34,7 +34,7 @@ if (length(fonts()) == 0) {
 # ---- cmd line ----
 
 if (FALSE) {
-  setwd("/Users/tobias/dev/pypy/lamb-bench")
+  setwd("/Users/tobias/dev/pypy/theseus-bench")
 }
 
 if (length(commandArgs(trailingOnly=TRUE)) > 0) {

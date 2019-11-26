@@ -18,7 +18,7 @@ input_name.default <- 'output/20191018-explore.tsv'
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 if (FALSE) {
-  setwd("/Users/tobias/dev/pypy/lamb-bench")
+  setwd("/Users/tobias/dev/pypy/theseus-bench")
   cmd.line <- FALSE
 } else {
   cmd.line <- TRUE
