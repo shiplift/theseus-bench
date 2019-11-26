@@ -663,7 +663,7 @@ global_iconsize <- 1.5
 
 save.plot <- function(basename,aspect,type='pdf',plot=ggplot2::last_plot(), ...) {
   .gg.file <- paste0(basename, '-', aspect, '.', type)
-  save_plot(.gg.file, plot=plot, base_asp = 2, title=aspect, ...)
+  save_plot(.gg.file, plot=plot, title=aspect, ...)
   embed_fonts(.gg.file, options=pdf.embed.options)
 }
 

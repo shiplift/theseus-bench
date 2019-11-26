@@ -151,7 +151,7 @@ process_executiontime <- function(dat, basename='plot', partname=NULL, omitLegen
   }
 
   aspect <- if (!is.null(partname)) { paste0(partname, '-', 'cpu' )} else { 'cpu' }
-  save.plot(basename=basename,aspect=aspect,plot=p, ...)
+  save.plot(basename=basename,aspect=aspect,plot=p, base_asp=2,...)
   #gg.file <- paste0(basename, "-cpu-pic.tex")
   #ggsave(gg.file, device=tikz, width=figure.width, height=figure.height, units=c("in"))
   p
@@ -237,7 +237,7 @@ process_memory <- function(dat, basename='plot', partname=NULL, omitLegend=TRUE,
   p <- p + theme(legend.position="none")
   p
   aspect <-if (!is.null(partname)) { paste0(partname, '-', 'mem' )} else { 'mem' }
-  save.plot(basename=basename,aspect=aspect,plot=p, ...)
+  save.plot(basename=basename,aspect=aspect,plot=p, base_asp=2, ...)
   p
 }
 
@@ -263,7 +263,7 @@ plot_normalized <- function(dat, basename='plot', criterion='cpu', partname=NULL
   p <- p + theme(legend.position="none")
   p
   aspect <-if (!is.null(partname)) { paste0(partname, '-', criterion )} else { criterion }
-  save.plot(basename=basename,aspect=paste0(aspect,'-norm'),plot=p, ...)
+  save.plot(basename=basename,aspect=paste0(aspect,'-norm'),plot=p, base_asp=2, ...)
   p
 }
 
@@ -288,7 +288,7 @@ plot_gc <- function(dat, basename='plot', partname=NULL, omitLegend=TRUE, ...) {
   p <- p + theme(legend.position="none")
   p
   aspect <-if (!is.null(partname)) { paste0(partname, '-', 'gc' )} else { 'gc' }
-  save.plot(basename=basename,aspect=aspect,plot=p, ...)
+  save.plot(basename=basename,aspect=aspect,plot=p, base_asp=2, ...)
   p
 }
 

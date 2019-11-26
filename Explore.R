@@ -171,7 +171,7 @@ bench2grid <- function(.data, criterion='cpu') {
 base_family='Helvetica'
 "
 
-.explore.raster <- function(.data, criterion, aspect, frac, barwidth, bartitle=waiver(), text=FALSE, breaks=waiver(), labels=waiver(), color_option='D',guides_right=TRUE) {
+.explore.raster <- function(.data, criterion, aspect, frac, barwidth, bartitle=waiver(), text=FALSE, breaks=waiver(), labels=waiver(), color_option='D',guides_right=TRUE,force_asp=NULL) {
 
   topk <- .data %>% top_frac(-frac,!!sym(criterion)) %>% mutate(topk=TRUE)
   .data %<>% left_join(topk,by=colnames(.data))
@@ -220,10 +220,13 @@ base_family='Helvetica'
                              color='white'
                              )
   }
+  if (!is.null(force_asp)) {
+    asp <- force_asp
+  }
   save.plot(basename=input.basename,aspect=aspect,plot=p,base_asp=asp,base_height=5)
 }
 
-explore.raster <- function(.data, criterion='Time', tick.unit='s',aspect=c('cpu','NONE'), guides_right=TRUE) {
+explore.raster <- function(.data, criterion='Time', tick.unit='s',aspect=c('cpu','NONE'), guides_right=TRUE,...) {
   b <- as.character(aspect[2]) %>% gsub('\\[(.+)\\]','-\\1', .)
   .aspect <- paste(aspect[1],b,sep='-')
   if (length(aspect) >= 3) {
@@ -233,10 +236,10 @@ explore.raster <- function(.data, criterion='Time', tick.unit='s',aspect=c('cpu'
   .data %>%
     .explore.raster(criterion, aspect=.aspect,
                     frac=.02,barwidth=0.8,text=TRUE,
-                    labels=function (x) paste(x, tick.unit),guides_right=guides_right)
+                    labels=function (x) paste(x, tick.unit),guides_right=guides_right,...)
 }
 
-explore.raster.merge <- function(.data, criterion='cpu', aspect=c('cpu','NONE'),option='C', guides_right=TRUE,verbose=FALSE) {
+explore.raster.merge <- function(.data, criterion='cpu', aspect=c('cpu','NONE'),option='C', guides_right=TRUE,verbose=FALSE,frac=.02,...) {
   .aspect <- paste(aspect[1:2],collapse='-')
   if (length(aspect) >= 3) {
     .which <- as.character(aspect[3]) %>% gsub('\\ .+','',.) %>% tolower
@@ -245,9 +248,9 @@ explore.raster.merge <- function(.data, criterion='cpu', aspect=c('cpu','NONE'),
   .lbl <- if(verbose) c('favorable', 'unfavorable') else c('+','-')
   .data %>%
     .explore.raster(criterion, aspect=.aspect,
-                    frac=.02, barwidth=0.6, bartitle=NULL,
+                    frac=frac, barwidth=0.6, bartitle=NULL,
                     breaks=identity, labels=.lbl,
-                    color_option=option,guides_right=guides_right)
+                    color_option=option,guides_right=guides_right,...)
 }
 
 # ----- print all the things! -----
@@ -339,6 +342,16 @@ result <- bench.dw.nilladic %>%
     .data
   })
 
+narrow <- result %>% filter(!is.na(value)) %>% rename(fav=value)
+narrow_result <-  expand_grid(max_storage_width=do.call("seq",as.list(range(narrow$max_storage_width))),
+            max_shape_depth=do.call("seq",as.list(range(narrow$max_shape_depth)))) %>%
+            mutate(value=NA_real_) %>%
+    left_join(narrow, by= c("max_shape_depth", "max_storage_width")) %>%
+    mutate(value=coalesce(value,fav))
+narrow_result %>% (function(.data) {
+    explore.raster.merge(.data, 'value', aspect=c('result-slice'),option='B',guides_right=TRUE,verbose=FALSE,force_asp=0.4,frac=.075)
+    .data
+  }) %>% invisible
 
 #
 # EOF
