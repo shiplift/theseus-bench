@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/224303592.svg)](https://zenodo.org/badge/latestdoi/224303592)
+
 Contents
 ========
 
