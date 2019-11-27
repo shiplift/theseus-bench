@@ -6,7 +6,7 @@
  *  - tree type more compact
  *  - better GC parameters
  *  - loops replaced by recursive functions
- * Adapted for lamb-bench by Tobias Pape
+ * Adapted for theseus-bench by Tobias Pape
  *)
 
 type element = E | F ;;

@@ -1,4 +1,4 @@
-#!/usr/bin/env lamb
+#!/usr/bin/env theseus
 
 print_int ≔ ⟪print_int⟫
 print ≔ ⟪print_string⟫

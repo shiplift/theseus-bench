@@ -6,7 +6,7 @@
  *  - tree type more compact
  *  - better GC parameters
  *  - loops replaced by recursive functions
- * Adapted for lamb-bench and SML by Tobias Pape
+ * Adapted for theseus-bench and SML by Tobias Pape
  *)
 structure SMLTree =
 struct

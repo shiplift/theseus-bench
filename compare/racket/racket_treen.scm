@@ -5,7 +5,7 @@
 
 ;;; Derived from the Chicken variant by Sven Hartrumpf
 ;;; contributed by Matthew Flatt
-;;; Adapted for lamb-bench by Tobias Pape
+;;; Adapted for theseus-bench by Tobias Pape
 
 (define-syntax time
   (lambda (stx)

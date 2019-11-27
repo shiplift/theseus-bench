@@ -333,13 +333,13 @@ process_memory(bench.sq.summary, basename=input.basename)
 }
 "
 vm_name_to_ltx <- function(what) case_when(
-  what == 'Prototype'                 ~ 'PrototypeO',
-  what == 'Prototype (not optimized)' ~ 'PrototypeU',
-  what == 'Pycket (optimized)'        ~ 'PycketO',
-  what == 'Pycket (original)'         ~ 'PycketU',
-  what == 'RSqueak (optimized)'       ~ 'RSqueakO',
-  what == 'RSqueak (original)'        ~ 'RSqueakU',
-  what == 'SML/NJ'                    ~ 'SMLNJ',
+  what == 'Theseus'                 ~ 'TheseusO',
+  what == 'Theseus (not optimized)' ~ 'TheseusU',
+  what == 'Pycket (optimized)'      ~ 'PycketO',
+  what == 'Pycket (original)'       ~ 'PycketU',
+  what == 'RSqueak (optimized)'     ~ 'RSqueakO',
+  what == 'RSqueak (original)'      ~ 'RSqueakU',
+  what == 'SML/NJ'                  ~ 'SMLNJ',
   TRUE ~ what)
 vm_to_ltx <- function(what) what %>% as.character %>% vm_name_to_ltx %>% paste0('\\DB{',.,'}')
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env lamb
+#!/usr/bin/env theseus
 
 p ≔ ⟪print_result_string⟫
 clock ≔ ⟪clock⟫

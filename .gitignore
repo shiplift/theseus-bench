@@ -1,6 +1,7 @@
 *-c
 .coverage
 *.lambc
+*.docked
 *.o
 *.cmi
 *.cmx

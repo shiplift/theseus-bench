@@ -2,10 +2,10 @@ Contents
 ========
 
  * compare — Comparison benchmarks for 
-     * prototype with lamb
+     * prototype with theseus
      * racket with rackert and pycket
      * python with pypy (and cpython)
      * ocaml with ocaml
      * (sml with mlton and sml/nj)
 
-See krono/lamb for the implementation of the prototype
+See [Theseus](/shiplift/theseus) for the implementation of the prototype

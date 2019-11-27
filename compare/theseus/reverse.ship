@@ -1,9 +1,10 @@
-#!/usr/bin/env lamb
+#!/usr/bin/env theseus
 
 p ≔ ⟪print_result_string⟫
 clock ≔ ⟪clock⟫
 gctime ≔ ⟪gctime⟫
-# type E | F.
+
+# type E.
 
 # type Nil, Cons(,)
 cons ≔ λ. A, B ↦ Cons(A, B)
@@ -11,16 +12,11 @@ head ≔ λ. Cons(A, B) ↦ A
 tail ≔ λ. Cons(A, B) ↦ B
 
 make_list$aux ≔ λ.
-                1. acc, 0, _ ↦ acc
-                2. acc, n, 1 ↦ μ(make_list$aux,
-                                 μ(cons, E(), acc),
-                                 μ(⟪minus_int⟫, n, 1),
-                                 0)
-                3. acc, n, 0 ↦ μ(make_list$aux,
-                                 μ(cons, F(), acc),
-                                 μ(⟪minus_int⟫, n, 1),
-                                 1)
-make_list ≔ λ. n ↦ μ(make_list$aux, Nil(), n, 1)
+                1. acc, 0 ↦ acc
+                2. acc, n ↦ μ(make_list$aux,
+                              μ(cons, E(), acc),
+                              μ(⟪minus_int⟫, n, 1))
+make_list ≔ λ. n ↦ μ(make_list$aux, Nil(), n)
 
 
 time$cont6 ≔ λ. res, _                ↦ res
@@ -39,22 +35,15 @@ time$cont1 ≔ λ. fun, arg, gc1, t1     ↦ μ(time$cont2, μ(fun, arg), gc1, t
 time$cont0 ≔ λ. fun, arg, gc1         ↦ μ(time$cont1, fun, arg, gc1, μ(clock))
 time       ≔ λ. fun, arg              ↦ μ(time$cont0, fun, arg, μ(gctime))
 
-f ≔ λ.
-    1. _,    Nil(),     _       ↦ Nil()
-    2. pred, Cons(h,t), True()  ↦ Cons(h, μ(f, pred, t, Nil()))
-    3. pred, Cons(h,t), False() ↦ μ(f, pred, t, Nil())
-    4. pred, Cons(h,t), _       ↦ μ(f, pred, Cons(h, t), μ(pred, h))
-filter ≔ λ. pred, lst ↦ μ(f, pred, lst, Nil())
 
-flt ≔ λ.
-      1. E() ↦ True()
-      2. _   ↦ False()
+lamb_reverse$aux ≔ λ.
+                   1. acc, Nil()      ↦ acc
+                   2. acc, Cons(h, t) ↦ μ(lamb_reverse$aux, Cons(h, acc), t)
 
-main$cont ≔ λ. Box(fun, l) ↦ μ(filter, fun, l)
+lamb_reverse ≔ λ. 1. l ↦ μ(lamb_reverse$aux, Nil(), l)
 
 num ≔ μ(λ.
-        1. nil()      ↦ 5000000
+        1. nil()      ↦ 20000000
         2. cons(h, _) ↦ μ(⟪strtol⟫, h), arguments)
 l ≔ μ(make_list, num)
-# l ≔ μ(make_list, 20000000)
-μ(time, main$cont, Box(flt, l))
+μ(time, lamb_reverse, l)

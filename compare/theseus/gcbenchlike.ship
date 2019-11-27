@@ -1,4 +1,4 @@
-#!/usr/bin/env lamb
+#!/usr/bin/env theseus
 
 currentmilliseconds ≔ ⟪currentmilliseconds⟫
 print_int ≔ ⟪print_int⟫

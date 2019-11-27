@@ -7,17 +7,17 @@ while [ "`expr \"x$1\" : \"x\(.\{2\}\)\"`" = "-A" ]; do
   shift
 done
 
-FIL="$1.lamb"
+FIL="$1.ship"
 shift
 
 if [ "`basename $PWD`" = "compare" ]; then
-    cd lamb
+    cd theseus
 fi
 
-if [ ! -x lamb ]; then
+if [ ! -x theseus ]; then
   exit 1
 fi
-LAMB=./lamb
+THESEUS=./theseus
 
 OS=`uname -s`
 if [ "$OS" = "Linux" ]; then
@@ -26,9 +26,9 @@ if [ "$OS" = "Linux" ]; then
   DOIT=/usr/bin/time
 fi
 
-rm -f $FIL.lambc
-$LAMB -R $ARGS "$FIL" "$@" 2>&1 >/dev/null
+rm -f $FIL.docked
+$THESEUS -R $ARGS "$FIL" "$@" 2>&1 >/dev/null
 export PYPY_GC_MIN=1GB
 export PYPY_GC_GROWTH=2.5
 
-exec $DOIT $LAMB -W $ARGS "$FIL" "$@"
+exec $DOIT $THESEUS -W $ARGS "$FIL" "$@"

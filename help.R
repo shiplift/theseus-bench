@@ -250,10 +250,14 @@ Spec.benchmarks.default <- tribble(
 
 Spec.vms.default <- tribble(
   ~level,                    ~group,       ~name,                               ~pch,  ~color,
-  'Lamb',                    'Prototype',  'Prototype',                         5,     1,
-  'LambUncached',            'Prototype',  'Prototype',                         5,     1,
-  'LambUncachedMulti',       'Prototype',  'Prototype',                         5,     1,
-  'LambNoopt',               'Prototype',  'Prototype (not optimized)',         9,     2,
+  # 'Lamb',                    'Theseus',  'Theseus',                         5,     1,
+  # 'LambUncached',            'Theseus',  'Theseus',                         5,     1,
+  # 'LambUncachedMulti',       'Theseus',  'Theseus',                         5,     1,
+  # 'LambNoopt',               'Theseus',  'Theseus (not optimized)',         9,     2,
+  'Lamb',                    'Theseus',  'Theseus',                         5,     1,
+  'LambUncached',            'Theseus',  'Theseus',                         5,     1,
+  'LambUncachedMulti',       'Theseus',  'Theseus',                         5,     1,
+  'LambNoopt',               'Theseus',  'Theseus (not optimized)',         9,     2,
   'PycketShapes',            'Pycket',     'Pycket (optimized)',                1,     3,
   'PycketShapesMulti',       'Pycket',     'Pycket (optimized)',                1,     3,
   'PycketOrig',              'Pycket',     'Pycket (original)',                10,     4,
@@ -362,8 +366,8 @@ report_vms <- function(spec_vms=Spec.vms.default,color_set=Set1Paired, file="",w
 
 report_dflt_vms <- function(spec_vms=Spec.vms.default,color_set=Set1Paired, file="",width=2.7,height=1.8) {
   v <- c(
-    'Prototype',
-    'Prototype (not optimized)',
+    'Theseus',
+    'Theseus (not optimized)',
     'Pycket (optimized)',
     'Pycket (original)',
     'RSqueak (optimized)',

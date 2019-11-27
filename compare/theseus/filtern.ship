@@ -1,10 +1,9 @@
-#!/usr/bin/env lamb
+#!/usr/bin/env theseus
 
 p ≔ ⟪print_result_string⟫
 clock ≔ ⟪clock⟫
 gctime ≔ ⟪gctime⟫
-
-# type E.
+# type E | F.
 
 # type Nil, Cons(,)
 cons ≔ λ. A, B ↦ Cons(A, B)
@@ -12,11 +11,16 @@ head ≔ λ. Cons(A, B) ↦ A
 tail ≔ λ. Cons(A, B) ↦ B
 
 make_list$aux ≔ λ.
-                1. acc, 0 ↦ acc
-                2. acc, n ↦ μ(make_list$aux,
-                              μ(cons, 17, acc),
-                              μ(⟪minus_int⟫, n, 1))
-make_list ≔ λ. n ↦ μ(make_list$aux, Nil(), n)
+                1. acc, 0, _ ↦ acc
+                2. acc, n, 1 ↦ μ(make_list$aux,
+                                 μ(cons, 17, acc),
+                                 μ(⟪minus_int⟫, n, 1),
+                                 0)
+                3. acc, n, 0 ↦ μ(make_list$aux,
+                                 μ(cons, 31, acc),
+                                 μ(⟪minus_int⟫, n, 1),
+                                 1)
+make_list ≔ λ. n ↦ μ(make_list$aux, Nil(), n, 1)
 
 
 time$cont6 ≔ λ. res, _                ↦ res
@@ -35,26 +39,22 @@ time$cont1 ≔ λ. fun, arg, gc1, t1     ↦ μ(time$cont2, μ(fun, arg), gc1, t
 time$cont0 ≔ λ. fun, arg, gc1         ↦ μ(time$cont1, fun, arg, gc1, μ(clock))
 time       ≔ λ. fun, arg              ↦ μ(time$cont0, fun, arg, μ(gctime))
 
-# lamb_reverse$aux ≔ λ.
-#                    1. acc, Nil()      ↦ acc
-#                    2. acc, Cons(h, t) ↦ μ(lamb_reverse$aux, Cons(h, acc), t)
+f ≔ λ.
+    1. _,    Nil(),     _       ↦ Nil()
+    2. pred, Cons(h,t), True()  ↦ Cons(h, μ(f, pred, t, Nil()))
+    3. pred, Cons(h,t), False() ↦ μ(f, pred, t, Nil())
+    4. pred, Cons(h,t), _       ↦ μ(f, pred, Cons(h, t), μ(pred, h))
+filter ≔ λ. pred, lst ↦ μ(f, pred, lst, Nil())
 
-# lamb_reverse ≔ λ. 1. l ↦ μ(lamb_reverse$aux, Nil(), l)
+flt ≔ λ.
+      1. 17 ↦ True()
+      2. _  ↦ False()
 
-# lamb_append$aux ≔ λ.
-#                    1. acc, Nil()      ↦ acc
-#                    2. acc, Cons(h, t) ↦ μ(lamb_append$aux, Cons(h, acc), t)
-# lamb_append ≔ λ. 1. l, m ↦ μ(lamb_append$aux, m, μ(lamb_reverse, l))
-
-
-lamb_append ≔ λ.
-              1. Nil(), B      ↦ B
-              2. Cons(h, t), B ↦ Cons(h, μ(lamb_append, t, B))
-main$cont ≔ λ. Box(l, m) ↦ μ(lamb_append, l, m)
+main$cont ≔ λ. Box(fun, l) ↦ μ(filter, fun, l)
 
 num ≔ μ(λ.
-        1. nil()      ↦ 10000000
+        1. nil()      ↦ 5000000
         2. cons(h, _) ↦ μ(⟪strtol⟫, h), arguments)
 l ≔ μ(make_list, num)
-m ≔ μ(make_list, num)
-μ(time, main$cont, Box(l, m))
+# l ≔ μ(make_list, 20000000)
+μ(time, main$cont, Box(flt, l))

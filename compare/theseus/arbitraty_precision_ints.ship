@@ -1,4 +1,4 @@
-#!/usr/bin/env lamb
+#!/usr/bin/env theseus
 #Aribtraty precision integers via binary representation. LSB( … ( … ( …  MSB())))
 
 print_int ≔ ⟪print_int⟫
