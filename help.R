@@ -48,7 +48,8 @@ if (!exists('base_family')) {
 options(ggplot2.continuous.fill='viridis')
 
 
-pdf.embed.options <- "-dEmbedAllFonts=true -dPDFSETTINGS=/prepress -dCompatibilityLevel=1.4 -dSubsetFonts=true -dHaveTrueTypeFonts=true"
+#pdf.embed.options <- "-dEmbedAllFonts=true -dPDFSETTINGS=/prepress -dCompatibilityLevel=1.4 -dSubsetFonts=true -dHaveTrueTypeFonts=true"
+#pdf.embed.options <- "-dPDFSETTINGS=/prepress -dCompatibilityLevel=1.5 -dEmbedAllFonts=true -dSubsetFonts=true -dHaveTrueTypeFonts=true"
 
 # --- DATA ---------
 
@@ -667,8 +668,9 @@ global_iconsize <- 1.5
 
 save.plot <- function(basename,aspect,type='pdf',plot=ggplot2::last_plot(), ...) {
   .gg.file <- paste0(basename, '-', aspect, '.', type)
-  save_plot(.gg.file, plot=plot, title=aspect, ...)
-  embed_fonts(.gg.file, options=pdf.embed.options)
+  #save_plot(.gg.file, plot=plot, title=aspect, ...)
+  save_plot(.gg.file, plot=plot, device=cairo_pdf,...)
+  #embed_fonts(.gg.file, options=pdf.embed.options)
 }
 
 #-- Exploration ----------------

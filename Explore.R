@@ -32,8 +32,9 @@ pkgs = c(
   'plot3Drgl',
   #'texreg',
   'locfit',
-  'ztable',
+  #'ztable',
   'shadowtext',
+  'numform',
   NULL
 )
 
@@ -117,20 +118,6 @@ bench %>% filter(cpu < 15000) %$% hist(cpu)
 
 bench.dw <- bench %>%  select(-substitution_threshold)
 
-
-"
-bench.dw.orig <- bench.dw %>% filter(TRUE)
-bench.dw %<>% (function(.data) {
-  # filer out order-of-magnitude outliers
-  if (nrow(.data[.data$benchmark == 'reverse[n]' & .data$cpu > 5e4,]) > 0) {
-    res <- .data %>% filter(TRUE)
-    res[res$benchmark == 'reverse[n]' & res$cpu > 5e4,]$cpu <- NA
-    res
-  } else {
-    .data
-  }
-})
-"
 #--- << -----
 "
 base_family='Helvetica'
@@ -154,7 +141,7 @@ dat <- bench.dw %>% filter(benchmark == 'filter[n]')
 
 disaster_filter <- function(var) {
   #if_else(var > 3*min(var), NA_real_, var)
-  if_else(var > 5*min(var), NA_real_, var)
+  if_else(var > 5*min(var,na.rm=TRUE), NA_real_, var)
 }
 
 bench2grid <- function(.data, criterion='cpu') {
@@ -186,7 +173,10 @@ base_family='Helvetica'
   }
   .pos.point <- if (text) position_nudge(x = 0.25, y = 0.25) else position_identity()
   p <- ggplot(data=.data, aes(x=max_shape_depth,y=max_storage_width)) +
-    default.theme.t(fakeLegend = TRUE, omit_x_title=TRUE, axis.title.y =  element_blank(), plot.margin = unit(c(1,-0.1,0,-0.1),"mm"),) +
+    default.theme.t(fakeLegend = TRUE,
+                    omit_x_title=TRUE,
+                    axis.title.y =  element_blank(),
+                    plot.margin = unit(c(1,-0.1,0,-0.1),"mm")) +
     # Thank you, Mac OS X, for being useless...
     # geom_raster(aes_string(fill=criterion)) +
     geom_tile(aes(fill=!!(as.name(criterion)))) +
@@ -212,9 +202,10 @@ base_family='Helvetica'
   }
   if (text) {
     p <- p + geom_shadowtext(aes(label=Label),
+                             family=base_family,
                              # bg.colour='grey50',
-                             bg.r=0.1,
-                             lineheight=1,size=2, nudge_y=-.1,
+                             bg.r=0.075,
+                             lineheight=1,size=2.7, nudge_y=-.08,
                              na.rm = TRUE,
                              # color='grey95'
                              color='white'
@@ -262,22 +253,36 @@ bench.dw %>%
       .001
     } else { 1 }
     .unit <- if (.factor<1) 's' else 'ms'
-    .r <- function(x) {if(.factor<1) {round(x*.factor,digits=case_when(
-      x*.factor>10 ~ 0,
-      x*.factor>5 ~ 1,
-      TRUE ~ 2))} else {round(x)}}
+    .r <- function(y) y %>% sapply(function(x) f_num(x*.factor,digits=case_when(
+      .factor>=1 ~ 0,
+      .factor<1 & x*.factor>10 ~ 0,
+      .factor<1 & x*.factor>5 ~ 1,
+      .factor<1 & x*.factor<1 ~ 3,
+      TRUE ~ 2)))
     .data %>%
-      mutate(Time=.r(cpu),Label=.r(original_value)) %>%  #ms
-      explore.raster('Time', .unit, aspect=c('cpu', as.character(groups$benchmark[1]), as.character(groups$vm[1])))
+      mutate(Time=cpu*.factor,Label=.r(original_value)) %>%  #ms
+      explore.raster('Time', tick.unit=.unit, aspect=c('cpu', as.character(groups$benchmark[1]), as.character(groups$vm[1])))
   }) %>% invisible
 
 
 bench.dw %>%
   group_modify(~ bench2grid(.x, criterion='mem')) %>%
   group_walk(function(.data, groups) {
+    if (.data %>% .$value %>% max(na.rm=TRUE) > (1100*1024)) {
+      .divisor <- 1024^2
+      .unit <- 'GB'
+    } else {
+      .divisor <-  1024
+      .unit <- 'MB'
+    }
+    .r <- function(y) y %>% sapply(function(x) f_num(x/.divisor,digits=case_when(
+      .unit == 'GB' & x >= (1024^2 * 10) ~ 1,
+      .unit == 'GB' & x >= 1024^2 ~ 2,
+      .unit == 'GB' & x < 1024^2 ~ 3,
+      TRUE ~ 0)))
     .data %>%
-      mutate(Memory=round(mem/1024),Label=round(value/1024)) %>%  #kbyte->mbyte
-      explore.raster('Memory', 'MB', aspect=c('mem', as.character(groups$benchmark[1]), as.character(groups$vm[1])))
+      mutate(Memory=mem/.divisor,Label=.r(value)) %>%
+      explore.raster('Memory', tick.unit=.unit, aspect=c('mem', as.character(groups$benchmark[1]), as.character(groups$vm[1])))
   }) %>% invisible
 
 
